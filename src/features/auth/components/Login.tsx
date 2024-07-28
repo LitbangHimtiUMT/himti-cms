@@ -1,7 +1,7 @@
-import { Input, Button, Typography } from "@material-tailwind/react";
+import { AuthLoginBodyModel } from "@core/model/auth";
+import { Button, Input, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { useAuthLogin } from "../hooks/useAuth";
-import { AuthLoginBodyModel } from "@core/model/auth";
 
 const InitialValue = {
   email: "",
@@ -12,8 +12,7 @@ const Login: React.FC = () => {
   const [authBody, setAuthBody] = useState<AuthLoginBodyModel>({
     ...InitialValue,
   });
-  const [errors, setErrors] = useState<AuthLoginBodyModel>({ ...InitialValue });
-  console.log(errors);
+  const [, setErrors] = useState<AuthLoginBodyModel>({ ...InitialValue });
 
   const mutation = useAuthLogin();
 
@@ -39,7 +38,7 @@ const Login: React.FC = () => {
     await mutation.mutateAsync(authBody);
   };
   return (
-    <form className="mt-8 mb-2 mx-auto w-full"onSubmit={handleSubmit}>
+    <form className="mt-8 mb-2 mx-auto w-full" onSubmit={handleSubmit}>
       <div className="mb-1 flex flex-col gap-2">
         <Typography
           variant="small"
@@ -85,7 +84,12 @@ const Login: React.FC = () => {
           value={authBody.password}
         />
       </div>
-      <Button type="submit" className="mt-6" fullWidth disabled={mutation.isPending}>
+      <Button
+        type="submit"
+        className="mt-6"
+        fullWidth
+        disabled={mutation.isPending}
+      >
         Log In
       </Button>
     </form>
