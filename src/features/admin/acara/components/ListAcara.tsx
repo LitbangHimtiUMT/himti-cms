@@ -1,6 +1,5 @@
 import EmptyData from "@features/_global/EmptyData";
-import { useAcara, useAcaraCreation } from "@features/_global/hooks/useAcara";
-import { convertQueryParamsToObject } from "@features/_global/lib";
+import { useAcara } from "@features/_global/hooks/useAcara";
 import {
   Card,
   CardBody,
@@ -8,7 +7,6 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import React from "react";
-import { useSearchParams } from "react-router-dom";
 
 export const authorsTableData = [
   {
@@ -65,20 +63,20 @@ const Thead = ["Nama", "Mulai Acara", "Selesai Acara", "Gambar", "Status", ""];
 
 const ListAcara: React.FC = () => {
   const { data: acara, isLoading } = useAcara();
-  const mutation = useAcaraCreation();
+  // const mutation = useAcaraCreation();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const queryParams = convertQueryParamsToObject(searchParams.toString());
-  const handleChangePage = (page: number) => {
-    setSearchParams({ ...queryParams, page: String(page) });
-  };
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const queryParams = convertQueryParamsToObject(searchParams.toString());
+  // const handleChangePage = (page: number) => {
+  //   setSearchParams({ ...queryParams, page: String(page) });
+  // };
 
-  const handleDelete = async (id: string) => {
-    await mutation.mutateAsync({
-      type: "delete",
-      id,
-    });
-  };
+  // const handleDelete = async (id: string) => {
+  //   await mutation.mutateAsync({
+  //     type: "delete",
+  //     id,
+  //   });
+  // };
   return (
     <>
       <Card>
