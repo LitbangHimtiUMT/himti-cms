@@ -6,13 +6,12 @@ import {
   Card,
   CardBody,
   Typography,
-  Avatar,
-  Chip,
   Button,
 } from "@material-tailwind/react";
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import ItemAcara from "./ItemAcara";
+import { Pagination } from "@features/_global/components/Pagination";
 
 const Thead = ["Nama", "Waktu Acara", "Gambar", "Status", ""];
 
@@ -113,6 +112,11 @@ const ListAcara: React.FC = () => {
           </tbody>
         </table>
       </CardBody>
+      <Pagination
+        currentPage={acara?.meta?.page as number}
+        totalPages={acara?.meta?.totalPages as number}
+        onPageChange={handleChangePage}
+      />
     </Card>
   );
 };
