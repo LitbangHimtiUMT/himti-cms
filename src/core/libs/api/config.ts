@@ -24,6 +24,14 @@ async function createRequest<Res = unknown, Req = unknown>(
   apiOption?: ApiOption,
   body?: Req
 ) {
+
+  const defaultValue = { ...apiOption }
+
+  const token = localStorage.getItem("token") || ""
+  if (token) {
+    defaultValue.bearerToken = token
+  }
+
   const res: Response = await fetch(
     generateEndpoint(endpoint as string, apiOption?.path || "", {
       ...apiOption?.queryParams,

@@ -1,4 +1,4 @@
-declare module "@material-tailwind/react" {
+declare module '@material-tailwind/react' {
   export const Input: any;
   export const Checkbox: any;
   export const Button: any;

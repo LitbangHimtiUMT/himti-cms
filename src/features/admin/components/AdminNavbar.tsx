@@ -1,13 +1,33 @@
+import { convertQueryParamsToObject } from "@features/_global/helper";
 import { openSidenavAtom } from "@features/admin/store/sidenav";
-import { IconButton, Navbar, Typography } from "@material-tailwind/react";
-import { Breadcrumbs } from "@material-tailwind/react";
+import {
+  Breadcrumbs,
+  IconButton,
+  Navbar,
+  Typography,
+} from "@material-tailwind/react";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { useCallback } from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
-const AdminNavbar: React.FC<{ page: string; layout: string; }> = ({ page, layout }) => {
-  const [openSidenav ,setOpenSidenav] = useAtom(openSidenavAtom);
+const AdminNavbar: React.FC<{
+  page: string;
+  layout: string;
+  searchField?: boolean;
+}> = ({ page, layout, searchField = false }) => {
+  const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParams = convertQueryParamsToObject(searchParams.toString());
+
+  const handeSearchChange: React.ChangeEventHandler<HTMLInputElement> =
+    useCallback(
+      (e) => {
+        setSearchParams({ ...queryParams, search: e.target.value });
+      },
+      [searchField, searchParams]
+    );
+
   return (
     <Navbar
       color="transparent"
@@ -15,28 +35,40 @@ const AdminNavbar: React.FC<{ page: string; layout: string; }> = ({ page, layout
       fullWidth
     >
       <div className="flex justify-between gap-6 flex-row items-center">
-        <div className="capitalize">
-          <Breadcrumbs className={`bg-transparent p-0 transition-all`}>
-            <Link to={`/admin/${layout}`}>
+        <div className="flex items-end justify-between capitalize w-full px-5">
+          <div className="flex flex-col gap-3">
+            <Breadcrumbs className={`bg-transparent p-0 transition-all`}>
+              <Link to={`/admin/${layout}`}>
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100"
+                >
+                  {layout}
+                </Typography>
+              </Link>
               <Typography
                 variant="small"
                 color="blue-gray"
-                className="font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100"
+                className="font-normal"
               >
-                {layout}
+                {page}
               </Typography>
-            </Link>
-            <Typography
-              variant="small"
-              color="blue-gray"
-              className="font-normal"
-            >
+            </Breadcrumbs>
+            <Typography variant="h6" color="blue-gray">
               {page}
             </Typography>
-          </Breadcrumbs>
-          <Typography variant="h6" color="blue-gray">
-            {page}
-          </Typography>
+          </div>
+          {searchField && (
+            <div className="w-72">
+              <input
+                onChange={handeSearchChange}
+                type="text"
+                placeholder="Search Anggota"
+                className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
+              />
+            </div>
+          )}
         </div>
         <div className="flex items-center">
           <IconButton

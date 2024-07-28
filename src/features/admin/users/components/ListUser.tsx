@@ -22,14 +22,14 @@ export const ListUser: React.FC = () => {
       <Card>
         <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
           <Typography variant="h6" color="white">
-            Authors Table
+            Users
           </Typography>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           <table className="w-full min-w-[640px] table-auto">
             <thead>
               <tr>
-                {["author", "function", "status", "employed", ""].map((el) => (
+                {["Name", "NIM", "Email", "Role", "Action"].map((el) => (
                   <th
                     key={el}
                     className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -93,19 +93,17 @@ export const ListUser: React.FC = () => {
                             className="py-0.5 px-2 text-[11px] font-medium w-fit"
                           />
                         </td>
+
                         <td className={className}>
-                          <Typography className="text-xs font-semibold text-blue-gray-600">
-                            {role}
-                          </Typography>
-                        </td>
-                        <td className={className}>
-                          <Typography
-                            as="a"
-                            href="#"
-                            className="text-xs font-semibold text-blue-gray-600"
-                          >
-                            Edit
-                          </Typography>
+                          {role.toUpperCase() !== "ADMIN" && (
+                            <Typography
+                              as="a"
+                              href="#"
+                              className="text-xs font-semibold text-blue-gray-600"
+                            >
+                              Edit
+                            </Typography>
+                          )}
                         </td>
                       </tr>
                     );

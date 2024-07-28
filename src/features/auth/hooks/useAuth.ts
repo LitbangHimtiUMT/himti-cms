@@ -11,7 +11,7 @@ export function useAuthLogin() {
         onSuccess: (res) => {
             console.log(res)
             localStorage.setItem("token", res?.data?.access_token as string)
-            navigate("/admin/dashboard")
+            navigate("/admin/acara")
         },
         onError: (err: ApiErrorResponse<ApiResponse>) => {
             console.log(err);

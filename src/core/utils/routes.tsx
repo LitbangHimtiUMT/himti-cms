@@ -1,6 +1,7 @@
 import AcaraView from "@features/admin/acara/view/acara";
 import AddAcaraView from "@features/admin/acara/view/addAcara";
 import { UserView } from "@features/admin/users/view/users";
+import { AnggotaView } from "@features/admin/anggota/view/Anggotas";
 import AdminView from "@features/admin/view/Admin";
 import LoginView from "@features/auth/view/LoginView";
 import { createBrowserRouter } from "react-router-dom";
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/user",
         element: <UserView />,
+      },
+      {
+        path: "/admin/anggota",
+        element: <AnggotaView />,
       },
     ],
   },
