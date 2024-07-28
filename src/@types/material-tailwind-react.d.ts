@@ -1,3 +1,4 @@
+
 declare module '@material-tailwind/react' {
   export const Input: any;
   export const Checkbox: any;

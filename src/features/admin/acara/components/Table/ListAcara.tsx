@@ -1,30 +1,26 @@
 import EmptyData from "@features/_global/EmptyData";
 import { useAcara, useAcaraCreation } from "@features/_global/hooks/useAcara";
-import { convertQueryParamsToObject } from "@features/_global/lib";
 import {
-  CardHeader,
+  Button,
   Card,
   CardBody,
+  CardHeader,
   Typography,
-  Avatar,
-  Chip,
-  Button,
 } from "@material-tailwind/react";
-import React, { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import React from "react";
 import ItemAcara from "./ItemAcara";
 
-const Thead = ["Nama", "Waktu Acara", "Gambar", "Status", ""];
+const Thead = ["Image", "Name", "Time", "Status", "Action"];
 
 const ListAcara: React.FC = () => {
   const { data: acara, isLoading } = useAcara();
   const mutation = useAcaraCreation();
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const queryParams = convertQueryParamsToObject(searchParams.toString());
-  const handleChangePage = (page: number) => {
-    setSearchParams({ ...queryParams, page: String(page) });
-  };
+  // const [searchParams, setSearchParams] = useSearchParams();
+  // const queryParams = convertQueryParamsToObject(searchParams.toString());
+  // const handleChangePage = (page: number) => {
+  //   setSearchParams({ ...queryParams, page: String(page) });
+  // };
 
   const handleDelete = async (id: string) => {
     await mutation.mutateAsync({
@@ -35,11 +31,17 @@ const ListAcara: React.FC = () => {
   return (
     <>
       <Card>
-        <CardHeader variant="gradient" color="gray" className="mb-8 p-6 flex justify-between items-center">
+        <CardHeader
+          variant="gradient"
+          color="gray"
+          className="mb-8 p-6 flex justify-between items-center"
+        >
           <Typography variant="h6" color="white">
             List Acara
           </Typography>
-          <Button color="blue" variant="gradient">Tambah Acara</Button>
+          <Button color="blue" variant="gradient">
+            Tambah Acara
+          </Button>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           <table className="w-full min-w-[640px] table-auto">

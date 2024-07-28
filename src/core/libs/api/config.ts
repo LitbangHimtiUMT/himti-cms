@@ -25,6 +25,12 @@ async function createRequest<Res = unknown, Req = unknown>(
   body?: Req
 ) {
 
+  const defaultValue = { ...apiOption }
+
+  const token = localStorage.getItem("token") || ""
+  if (token) {
+    defaultValue.bearerToken = token
+  }
 
   const res: Response = await fetch(
     generateEndpoint(endpoint as string, apiOption?.path || "", {
@@ -35,9 +41,9 @@ async function createRequest<Res = unknown, Req = unknown>(
 
       headers: {
         "Content-Type": getContentType(apiOption?.contentType || "json"),
-        ...(apiOption?.bearerToken &&
-          typeof apiOption.bearerToken !== "undefined" && {
-          Authorization: `Bearer ${apiOption.bearerToken}`,
+        ...(defaultValue?.bearerToken &&
+          typeof defaultValue.bearerToken !== "undefined" && {
+          Authorization: `Bearer ${defaultValue.bearerToken}`,
         }),
         ...apiOption?.headers,
       },

@@ -1,7 +1,15 @@
 import { Typography } from "@material-tailwind/react";
 import React from "react";
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 
 const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const auth = useAuth();
+
+  if (auth?.token) {
+    return <Navigate to={"/admin/acara"} replace />;
+  }
+
   return (
     <section className="relative flex min-h-screen justify-center items-center w-full">
       <div className="w-full md:w-96 m-8">
