@@ -1,3 +1,5 @@
+import { Pagination } from "@features/_global/components/Pagination";
+import { convertQueryParamsToObject } from "@features/_global/helper";
 import {
   Card,
   CardBody,
@@ -6,12 +8,17 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import React from "react";
+import { useSearchParams } from "react-router-dom";
 import { useUser } from "../hooks/useUser";
 
 export const ListUser: React.FC = () => {
-  const { data: users } = useUser();
+  const { data: users, isLoading } = useUser();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParams = convertQueryParamsToObject(searchParams.toString());
+  const onChangePage = (page: number) =>
+    setSearchParams({ ...queryParams, page: page.toString() });
   return (
-    <>
+    <div>
       <Card>
         <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
           <Typography variant="h6" color="white">
@@ -38,65 +45,82 @@ export const ListUser: React.FC = () => {
               </tr>
             </thead>
             <tbody>
-              {users?.data?.map(({ name, nim, email, role }, key) => {
-                const className = `py-3 px-5 ${
-                  key === (users?.data?.length as number) - 1
-                    ? ""
-                    : "border-b border-blue-gray-50"
-                }`;
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5}>
+                    <div className="flex items-center justify-center w-full h-[300px]">
+                      <p>Loading...</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                <>
+                  {users?.data?.map(({ name, nim, email, role }, key) => {
+                    const className = `py-3 px-5 ${
+                      key === (users?.data?.length as number) - 1
+                        ? ""
+                        : "border-b border-blue-gray-50"
+                    }`;
 
-                return (
-                  <tr key={name}>
-                    <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {name}
-                      </Typography>
-                    </td>
-                    <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {nim}
-                      </Typography>
-                    </td>
-                    <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {email}
-                      </Typography>
-                    </td>
-                    <td className={className}>
-                      <Chip
-                        variant="gradient"
-                        color={
-                          role === "ANGGOTA"
-                            ? "green"
-                            : role === "ADMIN"
-                            ? "blue-gray"
-                            : "red"
-                        }
-                        value={role}
-                        className="py-0.5 px-2 text-[11px] font-medium w-fit"
-                      />
-                    </td>
-                    <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {role}
-                      </Typography>
-                    </td>
-                    <td className={className}>
-                      <Typography
-                        as="a"
-                        href="#"
-                        className="text-xs font-semibold text-blue-gray-600"
-                      >
-                        Edit
-                      </Typography>
-                    </td>
-                  </tr>
-                );
-              })}
+                    return (
+                      <tr key={name}>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {name}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {nim}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {email}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Chip
+                            variant="gradient"
+                            color={
+                              role === "ANGGOTA"
+                                ? "green"
+                                : role === "ADMIN"
+                                ? "blue"
+                                : "red"
+                            }
+                            value={role}
+                            className="py-0.5 px-2 text-[11px] font-medium w-fit"
+                          />
+                        </td>
+                        <td className={className}>
+                          <Typography className="text-xs font-semibold text-blue-gray-600">
+                            {role}
+                          </Typography>
+                        </td>
+                        <td className={className}>
+                          <Typography
+                            as="a"
+                            href="#"
+                            className="text-xs font-semibold text-blue-gray-600"
+                          >
+                            Edit
+                          </Typography>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </>
+              )}
             </tbody>
           </table>
         </CardBody>
       </Card>
-    </>
+      <Pagination
+        currentPage={users?.meta?.page as number}
+        totalPages={users?.meta?.totalPages as number}
+        onPageChange={onChangePage}
+      />
+    </div>
   );
 };

@@ -1,9 +1,10 @@
 import { MenuAdminConfig } from "@features/_global/types/MenuTypes";
-import { Button, IconButton } from "@material-tailwind/react";
+import { IconButton } from "@material-tailwind/react";
 import { Typography } from "@material-tailwind/react";
 import React from "react";
 import { IoMdClose } from "react-icons/io";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
+import ItemSidenav from "./item";
 
 const Sidenav: React.FC<{
   Menus: MenuAdminConfig;
@@ -35,27 +36,8 @@ const Sidenav: React.FC<{
       </div>
       <div className="m-4">
         <ul className="mb-4 flex flex-col gap-1">
-          {Menus.map(({ icon, name, to }) => (
-            <li key={name}>
-              <NavLink to={to}>
-                {({ isActive }) => (
-                  <Button
-                    variant={isActive ? "gradient" : "text"}
-                    color={isActive ? "black" : "white"}
-                    className="flex items-center gap-4 px-4 capitalize"
-                    fullWidth
-                  >
-                    {icon}
-                    <Typography
-                      color="inherit"
-                      className="font-medium capitalize"
-                    >
-                      {name}
-                    </Typography>
-                  </Button>
-                )}
-              </NavLink>
-            </li>
+          {Menus.map(({ icon, name, to }, index) => (
+            <ItemSidenav key={index} name={name} to={to} icon={icon} />
           ))}
         </ul>
       </div>

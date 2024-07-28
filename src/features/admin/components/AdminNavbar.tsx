@@ -1,10 +1,13 @@
+import { openSidenavAtom } from "@features/admin/store/sidenav";
 import { IconButton, Navbar, Typography } from "@material-tailwind/react";
 import { Breadcrumbs } from "@material-tailwind/react";
+import { useAtom } from "jotai";
 import React from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { Link } from "react-router-dom";
 
 const AdminNavbar: React.FC<{ page: string; layout: string; }> = ({ page, layout }) => {
+  const [openSidenav ,setOpenSidenav] = useAtom(openSidenavAtom);
   return (
     <Navbar
       color="transparent"
@@ -40,7 +43,7 @@ const AdminNavbar: React.FC<{ page: string; layout: string; }> = ({ page, layout
             variant="text"
             color="blue-gray"
             className="grid xl:hidden"
-            // onClick={setOpenSidenav}
+            onClick={() => setOpenSidenav(!openSidenav)}
           >
             <RxHamburgerMenu className="h-6 w-6 text-blue-gray-500" />
           </IconButton>
