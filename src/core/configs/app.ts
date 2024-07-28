@@ -5,4 +5,5 @@ export const CONFIG_APP = {
 
 export const API_ENDPOINT = {
   login: `${CONFIG_APP.BASE_URL}/auth/login`,
+  acara: `${CONFIG_APP.BASE_URL}/acara`,
 }

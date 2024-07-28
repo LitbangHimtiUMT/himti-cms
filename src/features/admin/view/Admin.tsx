@@ -1,13 +1,15 @@
-import Footer from "@features/_global/components/admin/Footer";
-import Sidenav from "@features/_global/components/admin/Sidenav";
+import Footer from "@features/admin/components/Footer";
 import { CONFIG_MENU_ADMIN } from "@features/_global/config";
 import { useAuth } from "@features/auth/hooks/useAuth";
-import React, { useState } from "react";
+import { useAtom } from "jotai";
+import React from "react";
 import { Navigate, Outlet, ScrollRestoration } from "react-router-dom";
+import { openSidenavAtom } from "../store/sidenav";
+import Sidenav from "../components/Sidenav";
 
 
-const AdminView: React.FC = ({  }) => {
-  const [openSidenav, setOpenSidenav] = useState(true);
+const AdminView: React.FC = () => {
+  const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
   const auth = useAuth();
 
   if (!auth?.token) {
@@ -23,7 +25,7 @@ const AdminView: React.FC = ({  }) => {
         setOpenSidenav={handleOpenSidenav}
         Menus={CONFIG_MENU_ADMIN}
       />
-      <div className="p-4 xl:ml-80">
+      <div className="p-4 min-h-screen flex flex-col justify-between xl:ml-80">
         <Outlet />
         <ScrollRestoration />
         <div className="text-blue-gray-600">

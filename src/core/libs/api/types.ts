@@ -1,32 +1,39 @@
+export interface QueryParams {
+  page?: number;
+  perPage?: number;
+  search?: string;
+}
+
 export interface ApiOption {
   contentType?: "json" | "form-data" | "url-encoded";
   bearerToken?: string;
   headers?: HeadersInit;
   path?: string;
+  queryParams?: QueryParams;
 }
 
 export interface MetaResponse {
-  page?: number,
-  perPage?: number,
-  totalData?: number,
-  totalPages?: number
+  page?: number;
+  perPage?: number;
+  totalData?: number;
+  totalPages?: number;
 }
 
 export interface ApiResponse<Res = unknown> {
-  status?: number,
-  code?: string
-  message?: string,
-  data?: Res,
-  meta?: MetaResponse
+  status?: number;
+  code?: string;
+  message?: string;
+  data?: Res;
+  meta?: MetaResponse;
 }
 
 export interface ApiErrorResponse<Res = unknown> {
-  code?: string,
-  status?: number,
-  statusText?: string,
+  code?: string;
+  status?: number;
+  statusText?: string;
   response?: {
-    data: Res
-  }
+    data: Res;
+  };
 }
 
 export const getContentType = (type?: ApiOption["contentType"]) => {
