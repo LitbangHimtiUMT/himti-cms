@@ -1,6 +1,6 @@
 import React from "react";
-import ListAcara from "../components/ListAcara";
 import AdminNavbar from "@features/admin/components/AdminNavbar";
+import ListAcara from "../components/Table/ListAcara";
 
 const AcaraView: React.FC = () => {
   return (

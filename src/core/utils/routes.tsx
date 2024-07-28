@@ -6,7 +6,7 @@ import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
   {
-    path: "/auth/login",
+    path: "/admin/login",
     element: <LoginView />,
   },
   {
