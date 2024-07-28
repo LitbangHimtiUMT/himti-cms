@@ -1,0 +1,14 @@
+declare module '@material-tailwind/react' {
+  export const Input: any;
+  export const Checkbox: any;
+  export const Button: any;
+  export const Typography: any;
+  export const IconButton: any;
+  export const Breadcrumbs: any;
+  export const Navbar: any;
+  export const Card: any;
+  export const CardBody: any;
+  export const CardHeader: any;
+  export const Avatar: any;
+  export const Chip: any;
+}
