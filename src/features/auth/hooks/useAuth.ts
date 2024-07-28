@@ -10,7 +10,7 @@ export function useAuthLogin() {
         mutationFn: (body: AuthLoginBodyModel) => authService.login(body),
         onSuccess: (res) => {
             console.log(res)
-            localStorage.setItem("token", res?.data?.accessToken as string)
+            localStorage.setItem("token", res?.data?.access_token as string)
             navigate("/admin/dashboard")
         },
         onError: (err: ApiErrorResponse<ApiResponse>) => {

@@ -1,7 +1,7 @@
 import { API_ENDPOINT } from "@core/configs/app";
 import { HTTP_REQUEST } from "@core/libs/api/config";
 import { ApiResponse } from "@core/libs/api/types";
-import { AcaraDTO, AcaraModel } from "@features/admin/acara/model/acara";
+import { AcaraModel } from "@features/admin/acara/model/acara";
 
 export const acaraService = {
   get: HTTP_REQUEST.get<ApiResponse<AcaraModel[]>>(API_ENDPOINT.acara),

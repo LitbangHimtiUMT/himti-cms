@@ -8,6 +8,7 @@ import {
   Typography,
   Avatar,
   Chip,
+  Button,
 } from "@material-tailwind/react";
 import React, { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -34,10 +35,11 @@ const ListAcara: React.FC = () => {
   return (
     <>
       <Card>
-        <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
+        <CardHeader variant="gradient" color="gray" className="mb-8 p-6 flex justify-between items-center">
           <Typography variant="h6" color="white">
             List Acara
           </Typography>
+          <Button color="blue" variant="gradient">Tambah Acara</Button>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           <table className="w-full min-w-[640px] table-auto">
@@ -85,17 +87,19 @@ const ListAcara: React.FC = () => {
                         : "border-b border-blue-gray-50"
                     }`;
 
-                    return <ItemAcara
-                      key={index}
-                      className={className}
-                      name={name as string}
-                      startTime={startTime as Date}
-                      endTime={endTime as Date}
-                      isOpen={isOpen as boolean}
-                      image={image as string}
-                      handleDelete={handleDelete}
-                      id={id as string}
-                    />;
+                    return (
+                      <ItemAcara
+                        key={index}
+                        className={className}
+                        name={name as string}
+                        startTime={startTime as Date}
+                        endTime={endTime as Date}
+                        isOpen={isOpen as boolean}
+                        image={image as string}
+                        handleDelete={handleDelete}
+                        id={id as string}
+                      />
+                    );
                   }
                 )
               )}

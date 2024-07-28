@@ -2,6 +2,7 @@ import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { acaraService } from "@core/services/acara";
+import { useAuth } from "@features/auth/hooks/useAuth";
 
 interface Options {
   page?: number,
@@ -33,19 +34,20 @@ export function useAcara(options?: Options) {
 }
 
 export function useAcaraCreation() {
+  const auth = useAuth();
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const mutation = useMutation({
     mutationFn: async ({ data, type, id }: AcaraCreation) => {
       switch (type) {
         case 'create':
-          return acaraService.post(data, { contentType: "form-data" })
+          return acaraService.post(data, { contentType: "form-data", bearerToken: auth?.token })
         case 'update':
-          return acaraService.put(data, { contentType: "form-data", path: id })
+          return acaraService.put(data, { contentType: "form-data", path: id, bearerToken: auth?.token })
         case 'delete':
-          return acaraService.delete({ path: id })
+          return acaraService.delete({ path: id, bearerToken: auth?.token })
         default:
-          return acaraService.post(data, { contentType: "form-data" })
+          return acaraService.post(data, { contentType: "form-data", bearerToken: auth?.token })
       }
     },
     onSuccess: (res) => {

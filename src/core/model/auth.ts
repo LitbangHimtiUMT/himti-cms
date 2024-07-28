@@ -1,5 +1,5 @@
 export interface AuthLoginModel {
-    accessToken?: string
+    access_token?: string
 }
 
 export interface AuthLoginBodyModel {
