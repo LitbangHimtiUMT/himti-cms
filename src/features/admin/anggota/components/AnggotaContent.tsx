@@ -26,6 +26,10 @@ export const AnggotaContent: React.FC = () => {
   return (
     <PageLayout
       title="Anggota"
+      action={{
+        show: true,
+        buttonTitle: "Create Anggota",
+      }}
       showPagination={
         !!(
           anggotas?.data?.length &&

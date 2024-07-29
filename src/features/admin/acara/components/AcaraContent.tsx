@@ -42,7 +42,8 @@ export const AcaraContent: React.FC = () => {
       <PageLayout
         action={{
           show: true,
-          buttonTitle: "Tambah Acara",
+          buttonTitle: "Create Acara",
+          link: { to: "/admin/acara/create" },
         }}
         title="Acara"
         showPagination={

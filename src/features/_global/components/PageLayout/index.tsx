@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { ButtonHTMLAttributes, PropsWithChildren } from "react";
+import { Link } from "react-router-dom";
 import { Pagination } from "../Pagination";
 
 interface ButtonProps
@@ -24,6 +25,9 @@ interface IPageLayoutProps extends PropsWithChildren {
     buttonProps?: ButtonProps;
     buttonTitle?: string;
     show?: boolean;
+    link?: {
+      to?: string;
+    };
   };
 }
 
@@ -34,6 +38,27 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   title,
   action,
 }) => {
+  const renderAction = () => {
+    if (action?.show && action.link) {
+      return (
+        <Link to={action.link.to as string}>
+          <Button {...action?.buttonProps} color="blue" variant="gradient">
+            {action?.buttonTitle}
+          </Button>
+        </Link>
+      );
+    }
+
+    if (action?.show) {
+      return (
+        <Button {...action?.buttonProps} color="blue" variant="gradient">
+          {action?.buttonTitle}
+        </Button>
+      );
+    }
+    return null;
+  };
+
   return (
     <div>
       <Card>
@@ -47,11 +72,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
               {title}
             </Typography>
           )}
-          {action?.show && (
-            <Button {...action?.buttonProps} color="blue" variant="gradient">
-              {action?.buttonTitle}
-            </Button>
-          )}
+          {renderAction()}
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           {children}
