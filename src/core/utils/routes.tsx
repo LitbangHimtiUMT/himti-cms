@@ -1,4 +1,4 @@
-import AcaraView from "@features/admin/acara/view/acara";
+import AcaraView from "@features/admin/acara/view/Acara";
 import { AnggotaView } from "@features/admin/anggota/view/Anggotas";
 import { UserView } from "@features/admin/users/view/Users";
 import AdminView from "@features/admin/view/Admin";

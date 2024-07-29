@@ -3,7 +3,7 @@ import { Chip, Typography } from "@material-tailwind/react";
 import React from "react";
 
 interface ItemAcaraProps {
-  className?: string;
+  show?: boolean;
   name: string;
   startTime: Date;
   endTime: Date;
@@ -13,26 +13,26 @@ interface ItemAcaraProps {
   id: string;
 }
 
-const ItemAcara: React.FC<ItemAcaraProps> = ({
-  className,
+export const TableItem: React.FC<ItemAcaraProps> = ({
+  show,
   name,
   startTime,
   endTime,
   isOpen,
   image,
   handleDelete,
-  id
+  id,
 }) => {
   return (
-    <tr>
-      <td className={className}>
+    <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
+      <td className="py-3 px-5">
         <img
           src={image}
           alt={name}
           className="max-w-[150px] max-h-[150px] object-cover rounded-md"
         />
       </td>
-      <td className={className}>
+      <td className="py-3 px-5">
         <div className="flex items-center gap-4">
           <Typography
             variant="small"
@@ -43,12 +43,12 @@ const ItemAcara: React.FC<ItemAcaraProps> = ({
           </Typography>
         </div>
       </td>
-      <td className={className}>
+      <td className="py-3 px-5">
         <Typography className="text-xs font-semibold text-blue-gray-600">
           {formatDate(startTime)} - {formatDate(endTime)}
         </Typography>
       </td>
-      <td className={className}>
+      <td className="py-3 px-5">
         <Chip
           variant="gradient"
           color={isOpen ? "green" : "red"}
@@ -56,7 +56,7 @@ const ItemAcara: React.FC<ItemAcaraProps> = ({
           className="py-0.5 px-2 text-[11px] font-medium w-fit"
         />
       </td>
-      <td className={className}>
+      <td className="py-3 px-5">
         <div className="flex items-center gap-2">
           <Typography
             as="a"
@@ -85,5 +85,3 @@ const ItemAcara: React.FC<ItemAcaraProps> = ({
     </tr>
   );
 };
-
-export default ItemAcara;
