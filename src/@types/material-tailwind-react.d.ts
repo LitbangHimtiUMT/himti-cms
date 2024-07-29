@@ -1,4 +1,3 @@
-
 declare module '@material-tailwind/react' {
   export const Input: any;
   export const Checkbox: any;
@@ -11,5 +10,11 @@ declare module '@material-tailwind/react' {
   export const CardBody: any;
   export const CardHeader: any;
   export const Avatar: any;
+  export const Select: any;
+  export const Option: any;
+  export const Textarea: any;
   export const Chip: any;
+  export const Popover: any;
+  export const PopoverContent: any;
+  export const PopoverHandler: any;
 }

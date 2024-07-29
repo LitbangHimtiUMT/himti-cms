@@ -25,7 +25,7 @@ async function createRequest<Res = unknown, Req = unknown>(
   body?: Req
 ) {
 
-  const defaultValue = { ...apiOption }
+  const defaultValue = { ...apiOption, }
 
   const token = localStorage.getItem("token") || ""
   if (token) {
@@ -38,16 +38,16 @@ async function createRequest<Res = unknown, Req = unknown>(
     }),
     {
       method,
-
       headers: {
-        "Content-Type": getContentType(apiOption?.contentType || "json"),
-        ...(defaultValue?.bearerToken &&
-          typeof defaultValue.bearerToken !== "undefined" && {
-          Authorization: `Bearer ${defaultValue.bearerToken}`,
-        }),
-        ...apiOption?.headers,
+        "Content-Type": getContentType(defaultValue?.contentType || "json"),
+        ...(defaultValue?.bearerToken && typeof defaultValue.bearerToken !== "undefined" &&
+          { Authorization: `Bearer ${defaultValue.bearerToken}` }),
+        ...defaultValue?.headers,
       },
-      body: JSON.stringify(body),
+      body:
+        getContentType(defaultValue?.contentType || "json") === "application/json"
+          ? JSON.stringify(body)
+          : (body as BodyInit),
     }
   );
   const data: Res = await res.json();
@@ -56,7 +56,6 @@ async function createRequest<Res = unknown, Req = unknown>(
   }
   return data as Res;
 }
-
 
 export const HTTP_REQUEST = {
   get:

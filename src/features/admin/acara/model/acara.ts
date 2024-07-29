@@ -13,8 +13,8 @@ export interface AcaraModel {
 export interface AcaraDTO {
   name?: string
   description?: string
-  isOpen?: boolean
+  isOpen?: boolean | string;
   image?: File | string
-  startTime?: Date
-  endTime?: Date
+  startTime?: Date | string
+  endTime?: Date | string
 }

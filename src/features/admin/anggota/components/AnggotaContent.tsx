@@ -30,7 +30,7 @@ export const AnggotaContent: React.FC = () => {
         !!(
           anggotas?.data?.length &&
           !isLoading &&
-          (anggotas?.data?.length as number) >
+          (anggotas.meta?.totalData as number) >
             (anggotas?.meta?.perPage as number)
         )
       }

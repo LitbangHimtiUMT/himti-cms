@@ -28,7 +28,7 @@ export const UserContent = () => {
         !!(
           users?.data?.length &&
           !isLoading &&
-          (users?.data?.length as number) > (users?.meta?.perPage as number)
+          (users.meta?.totalData as number) > (users?.meta?.perPage as number)
         )
       }
       pagination={pagination}

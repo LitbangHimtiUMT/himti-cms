@@ -40,12 +40,16 @@ export const AcaraContent: React.FC = () => {
   return (
     <>
       <PageLayout
+        action={{
+          show: true,
+          buttonTitle: "Tambah Acara",
+        }}
         title="Acara"
         showPagination={
           !!(
             acara?.data?.length &&
             !isLoading &&
-            (acara?.data?.length as number) > (acara?.meta?.perPage as number)
+            (acara.meta?.totalData as number) > (acara?.meta?.perPage as number)
           )
         }
         pagination={pagination}
