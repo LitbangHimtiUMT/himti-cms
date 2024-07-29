@@ -39,13 +39,13 @@ async function createRequest<Res = unknown, Req = unknown>(
     {
       method,
       headers: {
-        "Content-Type": getContentType(defaultValue?.contentType || "json"),
+        ...(defaultValue.contentType !== 'form-data' && { "Content-Type": getContentType(defaultValue?.contentType) }),
         ...(defaultValue?.bearerToken && typeof defaultValue.bearerToken !== "undefined" &&
           { Authorization: `Bearer ${defaultValue.bearerToken}` }),
         ...defaultValue?.headers,
       },
       body:
-        getContentType(defaultValue?.contentType || "json") === "application/json"
+        getContentType(defaultValue?.contentType) === "application/json"
           ? JSON.stringify(body)
           : (body as BodyInit),
     }

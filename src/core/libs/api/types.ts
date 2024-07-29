@@ -39,7 +39,7 @@ export interface ApiErrorResponse<Res = unknown> {
 export const getContentType = (type?: ApiOption["contentType"]) => {
   switch (type) {
     case "form-data":
-      return "multipart/form-data";
+      return undefined;
     case "url-encoded":
       return "application/x-www-form-urlencoded";
     default:
