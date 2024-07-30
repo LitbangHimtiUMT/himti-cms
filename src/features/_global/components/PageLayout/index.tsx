@@ -29,6 +29,7 @@ interface IPageLayoutProps extends PropsWithChildren {
       to?: string;
     };
   };
+  headBackground?: string;
 }
 
 export const PageLayout: React.FC<IPageLayoutProps> = ({
@@ -37,6 +38,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   showPagination,
   title,
   action,
+  headBackground="gray",
 }) => {
   const renderAction = () => {
     if (action?.show && action.link) {
@@ -64,7 +66,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
       <Card>
         <CardHeader
           variant="gradient"
-          color="gray"
+          color={headBackground}
           className="mb-8 p-6 flex justify-between items-center"
         >
           {title && (
@@ -74,7 +76,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
           )}
           {renderAction()}
         </CardHeader>
-        <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
+        <CardBody className="overflow-x-scroll px-4 pt-0 pb-2">
           {children}
         </CardBody>
       </Card>

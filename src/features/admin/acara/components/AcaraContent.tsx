@@ -12,10 +12,10 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { TableItem } from "./Table/TableItem";
 
-const Thead = ["Gambar", "Nama", "Waktu Acara", "Status", ""];
+const Thead = ["Image", "Name", "Time", "Status", ""];
 
 export const AcaraContent: React.FC = () => {
-  const { data: acara, isLoading } = useAcara({ perPage: 1 });
+  const { data: acara, isLoading } = useAcara();
 
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
@@ -68,14 +68,14 @@ export const AcaraContent: React.FC = () => {
               </tr>
             ) : (
               acara?.data.map(
-                ({ name, startTime, endTime, isOpen, image, id }, index) => (
+                ({ name, startTime, endTime, isOpenAbsen, image, id }, index) => (
                   <TableItem
                     key={index}
                     show={index !== (acara?.data?.length as number) - 1}
                     name={name as string}
                     startTime={startTime as Date}
                     endTime={endTime as Date}
-                    isOpen={isOpen as boolean}
+                    isOpen={isOpenAbsen as boolean}
                     image={image as string}
                     handleDelete={handleDelete}
                     id={id as string}
