@@ -158,7 +158,7 @@ const FormAddAcara: React.FC = () => {
               onChange={(e: string) => {
                 setAcaraBody({
                   ...acaraBody,
-                  isOpen: e === "yes",
+                  isOpen: e === "yes" ? "yes" : "no",
                 });
               }}
             >
@@ -191,7 +191,6 @@ const FormAddAcara: React.FC = () => {
                 className="w-full"
                 label="End Time"
                 value={acaraBody.endTime}
-                minDate={new Date(acaraBody.startTime as string)}
                 minDateTime={new Date(acaraBody.startTime as string)}
                 // minDateTime={new Date(acaraBody.startTime as string)}
                 // minTime={new Date(acaraBody.startTime as string)}
