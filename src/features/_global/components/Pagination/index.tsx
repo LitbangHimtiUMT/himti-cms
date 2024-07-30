@@ -32,8 +32,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
         onClick={() => handlePageChange(1)}
         className={
           currentPage === 1
-            ? "border border-solid bg-blue-400 border-blue-400 w-8 h-8 rounded-md"
-            : "border border-solid border-blue-400 w-8 h-8 rounded-md text-black"
+            ? "border border-solid bg-gradient-to-tr from-gray-900 to-gray-800 border-gray-800 w-8 h-8 rounded-md text-white"
+            : "border border-solid border-gray-800 w-8 h-8 rounded-md text-black"
         }
       >
         1
@@ -51,8 +51,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
           onClick={() => handlePageChange(i)}
           className={
             i === currentPage
-              ? "border border-solid bg-blue-400 border-blue-400 w-8 h-8 rounded-md"
-              : "border border-solid border-blue-400 w-8 h-8 rounded-md text-black"
+              ? "border border-solid bg-gradient-to-tr from-gray-900 to-gray-800 border-gray-800 w-8 h-8 rounded-md text-white"
+              : "border border-solid border-gray-800 w-8 h-8 rounded-md text-black"
           }
         >
           {i}
@@ -71,8 +71,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
           onClick={() => handlePageChange(totalPages)}
           className={
             currentPage === totalPages
-              ? "border border-solid bg-blue-400 border-blue-400 w-8 h-8 rounded-md"
-              : "border border-solid border-blue-400 w-8 h-8 rounded-md text-black"
+              ? "border border-solid bg-gradient-to-tr from-gray-900 to-gray-800 border-gray-800 w-8 h-8 rounded-md text-white"
+              : "border border-solid border-gray-800 w-8 h-8 rounded-md text-black"
           }
         >
           {totalPages}
@@ -90,8 +90,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
         disabled={currentPage === 1}
         className={
           currentPage === 1
-            ? "border border-solid bg-gray-400 border-gray-400 h-8 rounded-md px-2 text-xs"
-            : "border border-solid border-blue-400 h-8 rounded-md px-2 text-black text-xs"
+            ? "border border-solid bg-gray-400 border-gray-400 h-8 rounded-md px-2 text-xs text-white"
+            : "border border-solid border-gray-800 h-8 rounded-md px-2 text-black text-xs"
         }
       >
         Previous
@@ -102,8 +102,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
         disabled={currentPage === totalPages}
         className={
           currentPage === totalPages
-            ? "border border-solid bg-gray-400 border-gray-400 h-8 rounded-md px-2 text-xs"
-            : "border border-solid border-blue-400 h-8 rounded-md px-2 text-black text-xs"
+            ? "border border-solid bg-gray-400 border-gray-400 h-8 rounded-md px-2 text-xs text-white"
+            : "border border-solid border-gray-800 h-8 rounded-md px-2 text-black text-xs"
         }
       >
         Next
