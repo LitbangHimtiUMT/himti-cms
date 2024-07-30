@@ -1,5 +1,6 @@
 import AcaraView from "@features/admin/acara/view/Acara";
 import AddAcaraView from "@features/admin/acara/view/addAcara";
+import DetailAcaraView from "@features/admin/acara/view/detailAcara";
 import { AnggotaView } from "@features/admin/anggota/view/Anggotas";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
 import { UserView } from "@features/admin/users/view/Users";
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/acara/create",
         element: <AddAcaraView />,
+      },
+      {
+        path: "/admin/acara/:id",
+        element: <DetailAcaraView />,
       },
       {
         path: "/admin/user",

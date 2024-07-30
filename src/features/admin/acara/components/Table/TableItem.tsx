@@ -1,6 +1,7 @@
 import { formatDate } from "@features/_global/lib/FormatTime";
 import { Chip, Typography } from "@material-tailwind/react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface ItemAcaraProps {
   show?: boolean;
@@ -58,25 +59,31 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
       </td>
       <td className="py-3 px-5">
         <div className="flex items-center gap-2">
+          <Link to={`/admin/acara/${id}`}>
+            <Typography
+              as="button"
+              className="text-xs font-semibold text-blue-600"
+            >
+              View
+            </Typography>
+          </Link>
+          <Link to={`/admin/acara/edit/${id}`}>
+            <Typography
+              as="button"
+              className="text-xs font-semibold text-yellow-900"
+            >
+              Edit
+            </Typography>
+          </Link>
           <Typography
-            as="a"
-            href="#"
-            className="text-xs font-semibold text-blue-gray-600"
-          >
-            View
-          </Typography>
-          <Typography
-            as="a"
-            href="#"
-            className="text-xs font-semibold text-blue-gray-600"
-          >
-            Edit
-          </Typography>
-          <Typography
-            as="a"
-            href="#"
-            className="text-xs font-semibold text-blue-gray-600"
-            onClick={() => handleDelete(id)}
+            className="text-xs font-semibold text-red-600"
+            onClick={() => {
+              const confirm = window.confirm(
+                "Are you sure you want to delete this acara?"
+              );
+              if (!confirm) return;
+              handleDelete(id);
+            }}
           >
             Delete
           </Typography>

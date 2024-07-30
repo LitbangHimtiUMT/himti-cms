@@ -2,7 +2,7 @@ export interface AcaraModel {
   id?: string,
   name?: string
   description?: string
-  isOpen?: boolean
+  isOpenAbsen?: boolean
   image?: File | string
   startTime?: Date
   endTime?: Date
@@ -13,7 +13,8 @@ export interface AcaraModel {
 export interface AcaraDTO {
   name?: string
   description?: string
-  isOpen?: boolean | string;
+  isOpenAbsen?: boolean | string;
+  isOpenRegister?: boolean | string;
   image?: File | string
   startTime?: Date | string
   endTime?: Date | string
