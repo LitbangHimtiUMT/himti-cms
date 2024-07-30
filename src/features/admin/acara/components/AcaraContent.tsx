@@ -12,7 +12,7 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { TableItem } from "./Table/TableItem";
 
-const Thead = ["Nama", "Mulai Acara", "Selesai Acara", "Gambar", "Status", ""];
+const Thead = ["Gambar", "Nama", "Waktu Acara", "Status", ""];
 
 export const AcaraContent: React.FC = () => {
   const { data: acara, isLoading } = useAcara({ perPage: 1 });
