@@ -15,7 +15,7 @@ import { TableItem } from "./Table/TableItem";
 const Thead = ["Nama", "Mulai Acara", "Selesai Acara", "Gambar", "Status", ""];
 
 export const AcaraContent: React.FC = () => {
-  const { data: acara, isLoading } = useAcara();
+  const { data: acara, isLoading } = useAcara({ perPage: 1 });
 
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());

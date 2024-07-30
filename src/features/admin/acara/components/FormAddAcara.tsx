@@ -8,25 +8,22 @@ import {
   Select,
   Option,
   Textarea,
-  Popover,
-  PopoverContent,
-  PopoverHandler,
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { AcaraDTO } from "../model/acara";
 import { useAcaraCreation } from "@features/_global/hooks/useAcara";
 import DefaultImage from "@core/assets/default-image.png";
-import { DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
-import { formatDate } from "@features/_global/lib/FormatTime";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { TextField } from "@mui/material";
+import { utcToZonedTime } from "date-fns-tz";
 
 const InitialValue: AcaraDTO = {
   name: "",
   description: "",
   isOpen: "",
   image: "",
-  startTime: new Date().toISOString(),
-  endTime: new Date().toISOString(),
+  startTime: utcToZonedTime(new Date(), 'Asia/Jakarta'),
+  endTime: utcToZonedTime(new Date(), 'Asia/Jakarta'),
 };
 
 interface ImageFile extends File {
@@ -71,8 +68,6 @@ const FormAddAcara: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     const formData = new FormData();
-    if(acaraBody.startTime && acaraBody.endTime){
-    }
     Object.entries(acaraBody).forEach(([key, value]) => {
       formData.append(key, value as any);
     });
@@ -159,15 +154,15 @@ const FormAddAcara: React.FC = () => {
           <div className="mb-4">
             <Select
               label="Status"
-              value={acaraBody.isOpen ? "yes" : "no"}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+              value={acaraBody.isOpen ? acaraBody.isOpen ? "yes" : "no" : ""}
+              onChange={(e: string) => {
                 setAcaraBody({
                   ...acaraBody,
-                  isOpen: e.target.value === "yes",
-                })
-              }
+                  isOpen: e === "yes",
+                });
+              }}
             >
-              <Option value="yes">Pilih Status</Option>
+              <Option value="">Pilih Status</Option>
               <Option value="yes">Open</Option>
               <Option value="no">Close</Option>
             </Select>
@@ -175,60 +170,42 @@ const FormAddAcara: React.FC = () => {
 
           <div className="flex gap-4 mb-4">
             <div className="flex-1">
-              <Popover placement="bottom">
-                <PopoverHandler>
-                  <Input
-                    label="Select a Date"
-                    onChange={() => null}
-                    value={
-                      acaraBody.startTime ? formatDate(acaraBody.startTime as Date) : ""
-                    }
-                  />
-                </PopoverHandler>
-                <PopoverContent>
-                  <DayPicker
-                    selected={acaraBody.startTime as Date}
-                    onSelect={(date) =>
-                      setAcaraBody({ ...acaraBody, startTime: date?.toISOString() as string })
-                    }
-                    mode="single"
-                    className="w-full"
-                  />
-                  {errors.startTime && (
-                    <p className="text-[#DC2626] text-xs">{errors.startTime}</p>
-                  )}
-                </PopoverContent>
-              </Popover>
+              <DateTimePicker
+                className="w-full"
+                label="Start Time"
+                value={acaraBody.startTime}
+                onChange={(value: Date | null) => {
+                  if (value) {
+                    setAcaraBody({
+                      ...acaraBody,
+                      startTime: value.toISOString(),
+                    });
+                  }
+                }}
+                ampm={false}
+                renderInput={(params) => <TextField {...params} />}
+              />
             </div>
             <div className="flex-1">
-              <Popover placement="bottom">
-                <PopoverHandler>
-                  <Input
-                    label="Select a Date"
-                    onChange={() => null}
-                    value={
-                      acaraBody.endTime ? formatDate(acaraBody.endTime as Date) : ""
-                    }
-                  />
-                </PopoverHandler>
-                <PopoverContent>
-                  <DayPicker
-                    selected={acaraBody.endTime as Date}
-                    onSelect={(date) =>
-                      setAcaraBody({ ...acaraBody, endTime: date?.toISOString() as string })
-                    }
-                    mode="single"
-                    classNames={{
-                      day_selected:
-                        "rounded bg-gray-900 text-white hover:bg-gray-900 hover:text-white focus:bg-gray-900 focus:text-white",
-                    }}
-                    className="w-full"
-                  />
-                  {errors.endTime && (
-                    <p className="text-[#DC2626] text-xs">{errors.endTime}</p>
-                  )}
-                </PopoverContent>
-              </Popover>
+              <DateTimePicker
+                className="w-full"
+                label="End Time"
+                value={acaraBody.endTime}
+                minDate={new Date(acaraBody.startTime as string)}
+                minDateTime={new Date(acaraBody.startTime as string)}
+                // minDateTime={new Date(acaraBody.startTime as string)}
+                // minTime={new Date(acaraBody.startTime as string)}
+                onChange={(value: Date | null) => {
+                  if (value) {
+                    setAcaraBody({
+                      ...acaraBody,
+                      endTime: value.toISOString(),
+                    });
+                  }
+                }}
+                ampm={false}
+                renderInput={(params) => <TextField {...params} />}
+              />
             </div>
           </div>
 
@@ -245,7 +222,8 @@ const FormAddAcara: React.FC = () => {
               label="Acara Image"
               variant="outlined"
               error={!!errors.image}
-              onChange={handleChangeImage} />
+              onChange={handleChangeImage}
+            />
             {errors.image && (
               <p className="text-[#DC2626] text-xs">{errors.image}</p>
             )}
