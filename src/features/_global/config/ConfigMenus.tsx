@@ -1,5 +1,6 @@
 import { FaCalendar, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
+import { GiTeacher } from "react-icons/gi";
 import { ItemMenuAdmin } from "../types/MenuTypes";
 
 export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
@@ -17,5 +18,10 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <FaCalendar />,
     name: "Acara",
     to: "/admin/acara",
+  },
+  {
+    icon: <GiTeacher />,
+    name: "Dosen",
+    to: "/admin/dosen",
   },
 ];

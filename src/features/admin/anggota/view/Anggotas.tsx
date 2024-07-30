@@ -5,7 +5,12 @@ import { AnggotaContent } from "../components/AnggotaContent";
 export const AnggotaView: React.FC = () => {
   return (
     <>
-      <AdminNavbar layout="anggota" page="list Anggota" searchField />
+      <AdminNavbar
+        layout="anggota"
+        page="list Anggota"
+        searchField
+        searchPlaceholder="Search Anggota"
+      />
       <div className="mt-12 mb-8 flex flex-col gap-12">
         <AnggotaContent />
       </div>

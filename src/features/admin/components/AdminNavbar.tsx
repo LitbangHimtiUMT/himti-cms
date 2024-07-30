@@ -15,7 +15,13 @@ const AdminNavbar: React.FC<{
   page: string;
   layout: string;
   searchField?: boolean;
-}> = ({ page, layout, searchField = false }) => {
+  searchPlaceholder?: string;
+}> = ({
+  page,
+  layout,
+  searchField = false,
+  searchPlaceholder = "search fikri",
+}) => {
   const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
@@ -64,7 +70,7 @@ const AdminNavbar: React.FC<{
               <input
                 onChange={handeSearchChange}
                 type="text"
-                placeholder="Search Anggota"
+                placeholder={searchPlaceholder}
                 className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
               />
             </div>

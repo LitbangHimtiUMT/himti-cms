@@ -1,6 +1,6 @@
+import { CONFIG_APP } from "@core/configs/app";
 import { MenuAdminConfig } from "@features/_global/types/MenuTypes";
-import { IconButton } from "@material-tailwind/react";
-import { Typography } from "@material-tailwind/react";
+import { IconButton, Typography } from "@material-tailwind/react";
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -20,7 +20,7 @@ const Sidenav: React.FC<{
       <div className={`relative`}>
         <Link to="/" className="py-6 px-8 text-center">
           <Typography variant="h6" color={"white"}>
-            HIMTI_APP
+            {CONFIG_APP.APP_NAME}
           </Typography>
         </Link>
         <IconButton
