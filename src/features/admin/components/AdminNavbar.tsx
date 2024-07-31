@@ -1,4 +1,3 @@
-import { convertQueryParamsToObject } from "@features/_global/helper";
 import { openSidenavAtom } from "@features/admin/store/sidenav";
 import {
   Breadcrumbs,
@@ -7,32 +6,18 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import { useAtom } from "jotai";
-import React, { useCallback } from "react";
+import React from "react";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const AdminNavbar: React.FC<{
   page: string;
   layout: string;
-  searchField?: boolean;
-  searchPlaceholder?: string;
 }> = ({
   page,
   layout,
-  searchField = false,
-  searchPlaceholder = "search fikri",
 }) => {
   const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const queryParams = convertQueryParamsToObject(searchParams.toString());
-
-  const handeSearchChange: React.ChangeEventHandler<HTMLInputElement> =
-    useCallback(
-      (e) => {
-        setSearchParams({ ...queryParams, search: e.target.value });
-      },
-      [searchField, searchParams]
-    );
 
   return (
     <Navbar
@@ -41,7 +26,7 @@ const AdminNavbar: React.FC<{
       fullWidth
     >
       <div className="flex justify-between gap-6 flex-row items-center">
-        <div className="flex items-end justify-between capitalize w-full px-5">
+        <div className="capitalize w-full px-5">
           <div className="flex flex-col gap-3">
             <Breadcrumbs className={`bg-transparent p-0 transition-all`}>
               <Link to={`/admin/${layout}`}>
@@ -65,16 +50,6 @@ const AdminNavbar: React.FC<{
               {page}
             </Typography>
           </div>
-          {searchField && (
-            <div className="w-72">
-              <input
-                onChange={handeSearchChange}
-                type="text"
-                placeholder={searchPlaceholder}
-                className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
-              />
-            </div>
-          )}
         </div>
         <div className="flex items-center">
           <IconButton

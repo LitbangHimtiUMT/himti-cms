@@ -39,6 +39,8 @@ export const AnggotaContent: React.FC = () => {
         )
       }
       pagination={pagination}
+      searchField
+      searchPlaceholder="Search Anggota"
     >
       <Table>
         <TableHead

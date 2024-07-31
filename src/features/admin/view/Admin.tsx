@@ -24,7 +24,7 @@ const AdminView: React.FC = () => {
         setOpenSidenav={handleOpenSidenav}
         Menus={CONFIG_MENU_ADMIN}
       />
-      <div className="p-4 min-h-screen flex flex-col xl:ml-80">
+      <div className="p-4 min-h-screen flex flex-col xl:ml-80 justify-between">
         <Outlet />
         <ScrollRestoration />
         <div className="text-blue-gray-600">

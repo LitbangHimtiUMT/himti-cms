@@ -1,9 +1,9 @@
-import AcaraView from "@features/admin/acara/view/Acara";
+import AcaraView from "@features/admin/acara/view/acara";
 import AddAcaraView from "@features/admin/acara/view/addAcara";
 import DetailAcaraView from "@features/admin/acara/view/detailAcara";
 import { AnggotaView } from "@features/admin/anggota/view/Anggotas";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
-import { UserView } from "@features/admin/users/view/Users";
+import { UserView } from "@features/admin/users/view/users";
 import AdminView from "@features/admin/view/Admin";
 import LoginView from "@features/auth/view/LoginView";
 import { createBrowserRouter } from "react-router-dom";

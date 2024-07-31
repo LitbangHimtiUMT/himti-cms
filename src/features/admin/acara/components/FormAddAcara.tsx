@@ -1,9 +1,5 @@
 import {
   Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
   Typography,
   Select,
   Option,
@@ -17,6 +13,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { TextField } from "@mui/material";
 import { utcToZonedTime } from "date-fns-tz";
 import { PageLayout } from "@features/_global/components/PageLayout";
+import { useNavigate } from "react-router-dom";
+import InputGroup from "@features/_global/components/Input/InputTextGroup";
 
 const InitialValue: AcaraDTO = {
   name: "",
@@ -40,7 +38,11 @@ const FormAddAcara: React.FC = () => {
     {}
   );
 
+  const navigate = useNavigate();
+
   const validate = () => {
+    console.log(acaraBody);
+
     const newErrors: Partial<Record<keyof AcaraDTO, string>> = {};
     let isValid = true;
 
@@ -52,6 +54,10 @@ const FormAddAcara: React.FC = () => {
       newErrors.description = "Description is required";
       isValid = false;
     }
+    if (!acaraBody.isOpenAbsen) {
+      newErrors.isOpenAbsen = "Open Absen is required";
+      isValid = false;
+    }
     if (!acaraBody.startTime) {
       newErrors.startTime = "Start Time is required";
       isValid = false;
@@ -61,12 +67,36 @@ const FormAddAcara: React.FC = () => {
       isValid = false;
     }
 
+    if (
+      acaraBody.startTime &&
+      acaraBody.endTime &&
+      acaraBody.endTime < acaraBody.startTime
+    ) {
+      newErrors.startTime = "End Time must be greater than Start Time";
+      isValid = false;
+    }
+
+    if (!imageFile) {
+      newErrors.image = "Image is required";
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    acaraBody.startTime = utcToZonedTime(
+      acaraBody.startTime as Date,
+      "Asia/Jakarta"
+    ).toISOString();
+    acaraBody.endTime = utcToZonedTime(
+      acaraBody.endTime as Date,
+      "Asia/Jakarta"
+    ).toISOString();
+    console.log(acaraBody);
+
     if (!validate()) return;
     const formData = new FormData();
     Object.entries(acaraBody).forEach(([key, value]) => {
@@ -113,14 +143,23 @@ const FormAddAcara: React.FC = () => {
   };
 
   return (
-    <PageLayout title="Add Acara" headBackground="blue">
+    <PageLayout
+      title="Add Acara"
+      headBackground="blue"
+      action={{
+        show: true,
+        buttonTitle: "Cancel",
+        buttonProps: { onClick: () => navigate(-1) },
+        colorButton: "red",
+      }}
+    >
       <form onSubmit={handleSubmit}>
         <div className="mb-4 my-2">
-          <Input
+          <InputGroup
             label="Name"
             variant="outlined"
-            error={!!errors.name}
-            value={acaraBody.name}
+            error={errors.name}
+            value={acaraBody.name as string}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setAcaraBody({ ...acaraBody, name: e.target.value })
             }
@@ -128,10 +167,11 @@ const FormAddAcara: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <Textarea
+          <InputGroup
+            type="textarea"
             label="Description"
             variant="outlined"
-            error={!!errors.description}
+            error={errors.description}
             value={acaraBody.description}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
               setAcaraBody({
@@ -143,26 +183,23 @@ const FormAddAcara: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <Select
+          <InputGroup
+            type="select"
             label="Status"
-            value={
-              acaraBody.isOpenAbsen
-                ? acaraBody.isOpenAbsen
-                  ? "yes"
-                  : "no"
-                : ""
-            }
-            onChange={(e: string) => {
+            value={acaraBody.isOpenAbsen as string}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setAcaraBody({
                 ...acaraBody,
-                isOpenAbsen: e === "yes" ? "yes" : "no",
+                isOpenAbsen: e,
               });
             }}
-          >
-            <Option value="">Pilih Status</Option>
-            <Option value="yes">Open</Option>
-            <Option value="no">Close</Option>
-          </Select>
+            error={errors.isOpenAbsen}
+            options={[
+              { value: "", label: "Pilih Status" },
+              { value: "true", label: "Open" },
+              { value: "false", label: "Close" },
+            ]}
+          />
         </div>
 
         <div className="flex gap-4 mb-4">
@@ -175,7 +212,7 @@ const FormAddAcara: React.FC = () => {
                 if (value) {
                   setAcaraBody({
                     ...acaraBody,
-                    startTime: value.toISOString(),
+                    startTime: value,
                   });
                 }
               }}
@@ -189,13 +226,11 @@ const FormAddAcara: React.FC = () => {
               label="End Time"
               value={acaraBody.endTime}
               minDateTime={new Date(acaraBody.startTime as string)}
-              // minDateTime={new Date(acaraBody.startTime as string)}
-              // minTime={new Date(acaraBody.startTime as string)}
               onChange={(value: Date | null) => {
                 if (value) {
                   setAcaraBody({
                     ...acaraBody,
-                    endTime: value.toISOString(),
+                    endTime: value,
                   });
                 }
               }}
@@ -213,16 +248,13 @@ const FormAddAcara: React.FC = () => {
           />
         </div>
         <div className="mb-4">
-          <Input
+          <InputGroup
             type="file"
             label="Acara Image"
             variant="outlined"
-            error={!!errors.image}
+            error={errors.image}
             onChange={handleChangeImage}
           />
-          {errors.image && (
-            <p className="text-[#DC2626] text-xs">{errors.image}</p>
-          )}
         </div>
         <div className="flex justify-center items-center gap-5">
           <Button onClick={handleReset} variant="outlined" fullWidth>

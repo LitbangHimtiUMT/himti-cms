@@ -3,11 +3,13 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Input,
   Typography,
 } from "@material-tailwind/react";
-import { ButtonHTMLAttributes, PropsWithChildren } from "react";
-import { Link } from "react-router-dom";
+import { ButtonHTMLAttributes, PropsWithChildren, useCallback } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Pagination } from "../Pagination";
+import { convertQueryParamsToObject } from "@features/_global/helper";
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {}
@@ -28,8 +30,11 @@ interface IPageLayoutProps extends PropsWithChildren {
     link?: {
       to?: string;
     };
+    colorButton?: string
   };
   headBackground?: string;
+  searchField?: boolean;
+  searchPlaceholder?: string;
 }
 
 export const PageLayout: React.FC<IPageLayoutProps> = ({
@@ -38,13 +43,15 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   showPagination,
   title,
   action,
-  headBackground="gray",
+  headBackground = "gray",
+  searchField = false,
+  searchPlaceholder = "search...",
 }) => {
   const renderAction = () => {
     if (action?.show && action.link) {
       return (
         <Link to={action.link.to as string}>
-          <Button {...action?.buttonProps} color="blue" variant="gradient">
+          <Button {...action?.buttonProps} size="sm" color={action?.colorButton || "blue"} variant="gradient">
             {action?.buttonTitle}
           </Button>
         </Link>
@@ -53,7 +60,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
 
     if (action?.show) {
       return (
-        <Button {...action?.buttonProps} color="blue" variant="gradient">
+        <Button {...action?.buttonProps} size="sm" color={action?.colorButton || "blue"} variant="gradient">
           {action?.buttonTitle}
         </Button>
       );
@@ -61,13 +68,24 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
     return null;
   };
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParams = convertQueryParamsToObject(searchParams.toString());
+
+  const handeSearchChange: React.ChangeEventHandler<HTMLInputElement> =
+    useCallback(
+      (e) => {
+        setSearchParams({ ...queryParams, search: e.target.value });
+      },
+      [searchField, searchParams]
+    );
+
   return (
     <div>
       <Card>
         <CardHeader
           variant="gradient"
           color={headBackground}
-          className="mb-8 p-6 flex justify-between items-center"
+          className="mb-2 p-6 flex justify-between items-center"
         >
           {title && (
             <Typography variant="h6" color="white">
@@ -76,7 +94,19 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
           )}
           {renderAction()}
         </CardHeader>
-        <CardBody className="overflow-x-scroll px-4 pt-0 pb-2">
+        <CardBody className="overflow-x-auto px-4 py-2">
+          <div>
+            {searchField && (
+              <div className="w-72 ms-auto">
+                <Input
+                  onChange={handeSearchChange}
+                  placeholder={searchPlaceholder}
+                  label="Search"
+                  // className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
+                />
+              </div>
+            )}
+          </div>
           {children}
         </CardBody>
       </Card>
