@@ -32,6 +32,8 @@ export const DosenContent = () => {
         )
       }
       pagination={pagination}
+      searchField
+      searchPlaceholder="Search Dosen"
     >
       <Table>
         <TableHead

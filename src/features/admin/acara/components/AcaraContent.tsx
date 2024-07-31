@@ -53,6 +53,8 @@ export const AcaraContent: React.FC = () => {
             (acara.meta?.totalData as number) > (acara?.meta?.perPage as number)
           )
         }
+        searchField
+        searchPlaceholder="Search Acara"
         pagination={pagination}
       >
         <Table>
@@ -68,7 +70,10 @@ export const AcaraContent: React.FC = () => {
               </tr>
             ) : (
               acara?.data.map(
-                ({ name, startTime, endTime, isOpenAbsen, image, id }, index) => (
+                (
+                  { name, startTime, endTime, isOpenAbsen, image, id },
+                  index
+                ) => (
                   <TableItem
                     key={index}
                     show={index !== (acara?.data?.length as number) - 1}

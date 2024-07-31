@@ -1,3 +1,4 @@
+import { convertQueryParamsToObject } from "@features/_global/helper";
 import {
   Button,
   Card,
@@ -9,7 +10,6 @@ import {
 import { ButtonHTMLAttributes, PropsWithChildren, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination } from "../Pagination";
-import { convertQueryParamsToObject } from "@features/_global/helper";
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {}
@@ -30,7 +30,7 @@ interface IPageLayoutProps extends PropsWithChildren {
     link?: {
       to?: string;
     };
-    colorButton?: string
+    colorButton?: string;
   };
   headBackground?: string;
   searchField?: boolean;
@@ -45,13 +45,18 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   action,
   headBackground = "gray",
   searchField = false,
-  searchPlaceholder = "search...",
+  searchPlaceholder = "search kambing..",
 }) => {
   const renderAction = () => {
     if (action?.show && action.link) {
       return (
         <Link to={action.link.to as string}>
-          <Button {...action?.buttonProps} size="sm" color={action?.colorButton || "blue"} variant="gradient">
+          <Button
+            {...action?.buttonProps}
+            size="sm"
+            color={action?.colorButton || "blue"}
+            variant="gradient"
+          >
             {action?.buttonTitle}
           </Button>
         </Link>
@@ -60,7 +65,12 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
 
     if (action?.show) {
       return (
-        <Button {...action?.buttonProps} size="sm" color={action?.colorButton || "blue"} variant="gradient">
+        <Button
+          {...action?.buttonProps}
+          size="sm"
+          color={action?.colorButton || "blue"}
+          variant="gradient"
+        >
           {action?.buttonTitle}
         </Button>
       );
@@ -99,6 +109,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
             {searchField && (
               <div className="w-72 ms-auto">
                 <Input
+                  value={queryParams?.search || ""}
                   onChange={handeSearchChange}
                   placeholder={searchPlaceholder}
                   label="Search"

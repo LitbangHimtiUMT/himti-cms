@@ -1,12 +1,14 @@
-import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { ApiErrorResponse, ApiResponse, QueryParams } from "@core/libs/api/types";
 import { acaraService } from "@core/services/acara";
 import { useAuth } from "@features/auth/hooks/useAuth";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import useDebounce from "./useDebounce";
 
-interface Options {
+interface Options extends QueryParams {
   page?: number,
   perPage?: number
+  name?: string
 }
 
 type PayloadType = 'create' | 'update' | 'delete'
@@ -21,13 +23,17 @@ export function useAcara(options?: Options) {
   const [searchParams] = useSearchParams()
   const page = options?.page || searchParams.get("page") || 1;
   const perPage = options?.perPage || searchParams.get("perPage") || 10;
+  const searchQuery = options?.search || searchParams.get('search') || undefined
+  const search = useDebounce(searchQuery as string, 500)
+
   const query = useQuery({
-    queryKey: ['acaras', { page, perPage }],
+    queryKey: ['acaras', { page, perPage, search }],
     queryFn: () => acaraService.get({
       queryParams: {
         perPage: perPage ? Number(perPage) : undefined,
-        page: page ? Number(page) : undefined
-      }
+        page: page ? Number(page) : undefined,
+        name: search
+      } as Options
     })
   })
   return query
@@ -51,7 +57,7 @@ export function useAcaraCreation() {
       }
     },
     onSuccess: (res) => {
-      console.log(res);      
+      console.log(res);
       navigate('/admin/acara')
 
       queryClient.removeQueries({ queryKey: ['acaras'] })
