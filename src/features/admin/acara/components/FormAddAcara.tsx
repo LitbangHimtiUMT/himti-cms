@@ -1,9 +1,5 @@
 import {
   Button,
-  Typography,
-  Select,
-  Option,
-  Textarea,
 } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { AcaraDTO } from "../model/acara";
@@ -14,7 +10,7 @@ import { TextField } from "@mui/material";
 import { utcToZonedTime } from "date-fns-tz";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { useNavigate } from "react-router-dom";
-import InputGroup from "@features/_global/components/Input/InputTextGroup";
+import InputGroup from "@features/_global/components/Input/InputGroup";
 
 const InitialValue: AcaraDTO = {
   name: "",
