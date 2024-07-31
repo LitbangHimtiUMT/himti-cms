@@ -76,6 +76,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
             </Typography>
           </Link>
           <Typography
+            as="button"
             className="text-xs font-semibold text-red-600"
             onClick={() => {
               const confirm = window.confirm(

@@ -2,8 +2,8 @@ import {
   Input,
   Typography,
   Select,
-  MenuItem,
   Textarea,
+  Option,
 } from "@material-tailwind/react";
 import React from "react";
 
@@ -42,6 +42,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
       )}
       {type === "file" && (
         <Input
+          type="file"
           label={label}
           variant={variant}
           error={!!error}
@@ -63,9 +64,9 @@ const InputGroup: React.FC<InputGroupProps> = ({
       {type === "select" && (
         <Select label={label} value={value} error={!!error} onChange={onChange} {...rest}>
           {options.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
+            <Option key={option.value} value={option.value}>
               {option.label}
-            </MenuItem>
+            </Option>
           ))}
         </Select>
       )}

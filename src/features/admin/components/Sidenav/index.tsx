@@ -1,10 +1,11 @@
 import { CONFIG_APP } from "@core/configs/app";
 import { MenuAdminConfig } from "@features/_global/types/MenuTypes";
-import { IconButton, Typography } from "@material-tailwind/react";
+import { Button, IconButton, Typography } from "@material-tailwind/react";
 import React from "react";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
 import ItemSidenav from "./item";
+import { IoMdLogOut } from "react-icons/io";
 
 const Sidenav: React.FC<{
   Menus: MenuAdminConfig;
@@ -39,6 +40,24 @@ const Sidenav: React.FC<{
           {Menus.map(({ icon, name, to }, index) => (
             <ItemSidenav key={index} name={name} to={to} icon={icon} />
           ))}
+          <li>
+            <Button
+              variant={"text"}
+              color={"white"}
+              className="flex items-center gap-4 px-4 capitalize"
+              fullWidth
+              onClick={() => {
+                if (!window.confirm("Are you sure you want to logout?")) return;
+                localStorage.removeItem("token");
+                window.location.reload();
+              }}
+            >
+              <IoMdLogOut />
+              <Typography color="inherit" className="font-medium capitalize">
+                Logout
+              </Typography>
+            </Button>
+          </li>
         </ul>
       </div>
     </aside>
