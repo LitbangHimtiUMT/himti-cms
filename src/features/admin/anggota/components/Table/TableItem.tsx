@@ -26,6 +26,7 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
   id,
   handleDelete,
 }) => {
+  console.log(email);
   return (
     <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
       <td className="py-3 px-5">

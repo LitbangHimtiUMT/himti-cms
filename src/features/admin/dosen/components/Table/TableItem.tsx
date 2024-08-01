@@ -1,13 +1,13 @@
-import { Chip, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import React from "react";
 import { Link } from "react-router-dom";
 
 interface ITableItemProps {
   id: string;
   name: string;
-  nidn: number;
+  nidn: string;
   email: string;
-  numberPhone: number;
+  numberPhone: string;
   show?: boolean;
   lesson?: string | null;
   handleDelete: (id: string) => void;
