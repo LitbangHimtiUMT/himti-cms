@@ -195,11 +195,6 @@ const FormAddUser: React.FC = () => {
               variant="outlined"
               value={searchAnggota}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setUserBody({
-                  ...userBody,
-                  anggotaId: "",
-                  nim: "",
-                });
                 setSearchAnngota(e.target.value);
               }}
             />
@@ -216,11 +211,21 @@ const FormAddUser: React.FC = () => {
                 disabled={mutation.isPending}
                 type="select"
                 label="Anggota"
-                value={userBody.anggotaId as string}
+                value={""}
                 onChange={() => {}}
                 error={errors.anggotaId}
                 options={[
-                  // { value: "", label: "Pilih Anggota" },
+                  {
+                    value: "",
+                    label: "Pilih Anggota",
+                    onClick: () => {
+                      setUserBody({
+                        ...userBody,
+                        anggotaId: "",
+                        nim: "",
+                      });
+                    },
+                  },
                   ...anggota?.data.map((anggota) => ({
                     value: anggota.id,
                     label: anggota.name,
