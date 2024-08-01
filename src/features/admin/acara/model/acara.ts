@@ -1,23 +1,23 @@
-import React from "react"
+import React from "react";
 
 export interface AcaraModel {
-  id?: string,
-  name?: string
-  description?: string
-  isOpenAbsen?: boolean
-  image?: File | string
-  startTime?: Date
-  endTime?: Date
-  createdAt?: Date
-  updatedAt?: Date
+  id?: string;
+  name?: string;
+  description?: string;
+  isOpenAbsen?: boolean;
+  image?: File | string;
+  startTime?: Date;
+  endTime?: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface AcaraDTO {
-  name?: string
-  description?: string
+  name?: string;
+  description?: string;
   isOpenAbsen?: boolean | string | React.ChangeEvent<HTMLSelectElement>;
   isOpenRegister?: boolean | string;
-  image?: File | string
-  startTime?: Date | string
-  endTime?: Date | string
+  image?: File | string;
+  startTime?: Date | string;
+  endTime?: Date | string;
 }

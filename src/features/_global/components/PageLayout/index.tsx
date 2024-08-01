@@ -30,7 +30,7 @@ interface IPageLayoutProps extends PropsWithChildren {
     link?: {
       to?: string;
     };
-    colorButton?: string
+    colorButton?: string;
   };
   headBackground?: string;
   searchField?: boolean;
@@ -51,7 +51,12 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
     if (action?.show && action.link) {
       return (
         <Link to={action.link.to as string}>
-          <Button {...action?.buttonProps} size="sm" color={action?.colorButton || "blue"} variant="gradient">
+          <Button
+            {...action?.buttonProps}
+            size="sm"
+            color={action?.colorButton || "blue"}
+            variant="gradient"
+          >
             {action?.buttonTitle}
           </Button>
         </Link>
@@ -60,7 +65,12 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
 
     if (action?.show) {
       return (
-        <Button {...action?.buttonProps} size="sm" color={action?.colorButton || "blue"} variant="gradient">
+        <Button
+          {...action?.buttonProps}
+          size="sm"
+          color={action?.colorButton || "blue"}
+          variant="gradient"
+        >
           {action?.buttonTitle}
         </Button>
       );
@@ -85,7 +95,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
         <CardHeader
           variant="gradient"
           color={headBackground}
-          className="mb-2 p-6 flex justify-between items-center"
+          className="mb-4 p-6 flex justify-between items-center"
         >
           {title && (
             <Typography variant="h6" color="white">
@@ -94,20 +104,18 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
           )}
           {renderAction()}
         </CardHeader>
-        <CardBody className="overflow-x-auto px-4 py-2">
-          <div>
-            {searchField && (
-              <div className="w-72 ms-auto">
-                <Input
-                  onChange={handeSearchChange}
-                  placeholder={searchPlaceholder}
-                  label="Search"
-                  // className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
-                />
-              </div>
-            )}
+        {searchField && (
+          <div className="w-72 ms-auto mx-4">
+            <Input
+              onChange={handeSearchChange}
+              placeholder={searchPlaceholder}
+              label="Search"
+              // className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
+            />
           </div>
-          {children}
+        )}
+        <CardBody className="overflow-x-auto px-4 py-2">
+          <>{children}</>
         </CardBody>
       </Card>
       {showPagination && <Pagination {...pagination} />}

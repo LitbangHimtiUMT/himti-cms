@@ -1,10 +1,11 @@
 import { Chip, Typography } from "@material-tailwind/react";
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface IAnggotaItemProps {
   id: string;
   name: string;
-  nim: number;
+  nim: string;
   angkatan: {
     id: string;
     year: number;
@@ -12,6 +13,7 @@ interface IAnggotaItemProps {
   email: string | null;
   isActive: boolean;
   show?: boolean;
+  handleDelete: (id: string) => void;
 }
 
 export const TableItem: React.FC<IAnggotaItemProps> = ({
@@ -22,6 +24,7 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
   name,
   nim,
   id,
+  handleDelete,
 }) => {
   return (
     <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
@@ -40,11 +43,11 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
           {angkatan.year}
         </Typography>
       </td>
-      <td className="py-3 px-5">
+      {/* <td className="py-3 px-5">
         <Typography className="text-xs font-semibold text-blue-gray-600">
           {email || "-"}
         </Typography>
-      </td>
+      </td> */}
       <td className="py-3 px-5">
         <Chip
           variant="gradient"
@@ -55,13 +58,35 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
       </td>
 
       <td className="py-3 px-5">
-        <Typography
-          as="a"
-          href="#"
-          className="text-xs font-semibold text-blue-gray-600"
-        >
-          Edit
-        </Typography>
+        <div className="flex items-center gap-2">
+          <Typography
+            as="button"
+            className="text-xs font-semibold text-blue-600"
+          >
+            Sosmed
+          </Typography>
+          <Link to={`/admin/anggota/edit/${id}`}>
+            <Typography
+              as="button"
+              className="text-xs font-semibold text-yellow-900"
+            >
+              Edit
+            </Typography>
+          </Link>
+          <Typography
+            as="button"
+            className="text-xs font-semibold text-red-600"
+            onClick={() => {
+              const confirm = window.confirm(
+                "Are you sure you want to delete this anggota?"
+              );
+              if (!confirm) return;
+              handleDelete(id);
+            }}
+          >
+            Delete
+          </Typography>
+        </div>
       </td>
     </tr>
   );

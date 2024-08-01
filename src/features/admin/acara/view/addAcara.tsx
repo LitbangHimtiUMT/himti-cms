@@ -1,6 +1,6 @@
 import React from "react";
 import AdminNavbar from "@features/admin/components/AdminNavbar";
-import FormAddAcara from "../components/FormEditAcara";
+import FormAddAcara from "../components/FormAddAcara";
 
 const AddAcaraView: React.FC = () => {
   return (

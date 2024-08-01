@@ -58,7 +58,7 @@ export const AcaraContent: React.FC = () => {
         <Table>
           <TableHead field={Thead} />
           <TableBody>
-            {isLoading ? (
+            {isLoading || mutation.isPending ? (
               <SimpleLoadingTable ColSpan={6} />
             ) : !acara?.data?.length ? (
               <tr>

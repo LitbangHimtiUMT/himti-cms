@@ -17,5 +17,6 @@ declare module '@material-tailwind/react' {
   export const Popover: any;
   export const PopoverContent: any;
   export const PopoverHandler: any;
+  export const ButtonGroup: any;
   export const MenuItem: any;
 }

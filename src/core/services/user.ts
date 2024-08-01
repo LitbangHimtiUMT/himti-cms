@@ -4,5 +4,9 @@ import { ApiResponse } from "@core/libs/api/types";
 import { UserModel } from "@core/model/user";
 
 export const userService = {
-    get: HTTP_REQUEST.get<ApiResponse<UserModel[]>>(API_ENDPOINT.users),
-}
+  get: HTTP_REQUEST.get<ApiResponse<UserModel[]>>(API_ENDPOINT.users),
+  getById: HTTP_REQUEST.get<ApiResponse<UserModel>>(API_ENDPOINT.users),
+  post: HTTP_REQUEST.post<ApiResponse<UserModel>>(API_ENDPOINT.users),
+  put: HTTP_REQUEST.put<ApiResponse<UserModel>>(API_ENDPOINT.users),
+  delete: HTTP_REQUEST.delete<ApiResponse<void>>(API_ENDPOINT.users),
+};
