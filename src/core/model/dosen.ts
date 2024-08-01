@@ -1,11 +1,20 @@
 export interface DosenModel {
     id: string
-    nidn: number,
+    nidn: string,
     name: string
     email: string
-    numberPhone: number,
+    numberPhone: string,
     lesson: string | null,
     isActive: boolean,
     createdAt: string
     updatedAt: string
+}
+
+export interface DosenDTO {
+    nidn?: string,
+    name?: string
+    email?: string
+    numberPhone?: string,
+    lesson?: string | null,
+    isActive?: boolean,
 }

@@ -27,7 +27,7 @@ export const useUser = (options?: Options) => {
   
     const search = useDebounce(searchQuery as string, 500);
     const query = useQuery({
-      queryKey: ["acaras", { page, perPage, search }],
+      queryKey: ["users", { page, perPage, search }],
       queryFn: () =>
         userService.get({
           queryParams: {

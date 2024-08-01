@@ -42,10 +42,10 @@ export const TableItem: React.FC<ITableItemProps> = ({
         <Chip
           variant="gradient"
           color={
-            role === "ANGGOTA" ? "green" : role === "ADMIN" ? "blue" : "red"
+            role === "ANGGOTA" ? "green" : role === "ADMIN" ? "blue" : "amber"
           }
           value={role}
-          className="py-0.5 px-2 text-[11px] font-medium w-fit"
+          className="py-0.5 px-2 text-[11px] font-medium w-fit text-white"
         />
       </td>
 

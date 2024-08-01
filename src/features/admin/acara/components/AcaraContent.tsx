@@ -12,8 +12,6 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { TableItem } from "./Table/TableItem";
 
-const Thead = ["Image", "Name", "Time", "Status", ""];
-
 export const AcaraContent: React.FC = () => {
   const { data: acara, isLoading } = useAcara();
 
@@ -56,7 +54,7 @@ export const AcaraContent: React.FC = () => {
         pagination={pagination}
       >
         <Table>
-          <TableHead field={Thead} />
+          <TableHead field={["Image", "Name", "Time", "Status", "Action"]} />
           <TableBody>
             {isLoading || mutation.isPending ? (
               <SimpleLoadingTable ColSpan={6} />

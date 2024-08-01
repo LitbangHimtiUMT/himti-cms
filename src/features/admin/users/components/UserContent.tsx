@@ -12,7 +12,7 @@ import { TableItem } from "./Table/TableItem";
 
 export const UserContent = () => {
   const { data: users, isLoading } = useUser();
-  
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
 
@@ -36,6 +36,11 @@ export const UserContent = () => {
   return (
     <PageLayout
       title="Users"
+      action={{
+        show: true,
+        buttonTitle: "Create User",
+        link: { to: "/admin/user/create" },
+      }}
       showPagination={
         !!(
           users?.data?.length &&

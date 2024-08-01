@@ -10,14 +10,29 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     to: "/admin/user",
   },
   {
-    icon: <FaUserGroup />,
-    name: "Anggota",
-    to: "/admin/anggota",
+    icon: <FaCalendar />,
+    name: "Absen Acara",
+    to: "/admin/absen",
   },
   {
     icon: <FaCalendar />,
     name: "Acara",
     to: "/admin/acara",
+  },
+  {
+    icon: <FaUserGroup />,
+    name: "Angkatan",
+    to: "/admin/angkatan",
+  },
+  {
+    icon: <FaUserGroup />,
+    name: "Anggota",
+    to: "/admin/anggota",
+  },
+  {
+    icon: <FaUserGroup />,
+    name: "Struktural",
+    to: "/admin/struktural",
   },
   {
     icon: <GiTeacher />,
