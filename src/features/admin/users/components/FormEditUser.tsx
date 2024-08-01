@@ -1,11 +1,12 @@
-import { Button } from "@material-tailwind/react";
+import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 import { useUserById, useUserCreation } from "../hooks/useUser";
-import { UserDTO } from "@core/model/user";
+import { Role, UserDTO } from "@core/model/user";
+import { useAnggota } from "@features/admin/anggota/hooks/useAnggota";
 
 const InitialValue: UserDTO = {
   nim: "",
@@ -15,6 +16,11 @@ const InitialValue: UserDTO = {
 };
 
 const FormEditUser: React.FC = () => {
+  const [searchAnggota, setSearchAnngota] = useState("");
+  const { data: anggota, isLoading: isLoadingAnggota } = useAnggota({
+    perPage: 100000,
+    search: searchAnggota,
+  });
   const { id } = useParams<{ id: string }>();
   const { data: userById, isLoading } = useUserById();
 
@@ -61,8 +67,23 @@ const FormEditUser: React.FC = () => {
       isValid = false;
     }
 
+    if (!userBody.password) {
+      newErrors.password = "Password is required";
+      isValid = false;
+    }
+
     if (!userBody.role) {
       newErrors.role = "Role is required";
+      isValid = false;
+    }
+
+    if (userBody.role === "ANGGOTA" && !userBody.anggotaId) {
+      newErrors.anggotaId = "Anggota is required";
+      isValid = false;
+    }
+
+    if (!userBody.nim) {
+      newErrors.nim = "NIM is required";
       isValid = false;
     }
 
@@ -85,10 +106,17 @@ const FormEditUser: React.FC = () => {
     setErrors({});
   };
 
+  const handleRoleChange = (name: Role) => {
+    if (userBody.role === name) {
+      setUserBody({ ...userBody, role: "", nim: "", anggotaId: "" });
+    } else {
+      setUserBody({ ...userBody, role: name, nim: "", anggotaId: "" });
+    }
+  };
   return (
     <PageLayout
-      title="Edit User"
-      headBackground="amber"
+      title="Add User"
+      headBackground="blue"
       action={{
         show: true,
         buttonTitle: "Cancel",
@@ -105,19 +133,6 @@ const FormEditUser: React.FC = () => {
       )}
       {!isLoading && userById?.data && (
         <form onSubmit={handleSubmit}>
-          <div className="mb-4 my-2">
-            <InputGroup
-              disabled={mutation.isPending}
-              type="text"
-              label="NIM"
-              variant="outlined"
-              error={errors.nim}
-              value={userBody.nim}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setUserBody({ ...userBody, nim: e.target.value })
-              }
-            />
-          </div>
           <div className="mb-4 my-2">
             <InputGroup
               disabled={mutation.isPending}
@@ -144,27 +159,130 @@ const FormEditUser: React.FC = () => {
               }
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 my-2">
             <InputGroup
               disabled={mutation.isPending}
-              type="select"
-              label="Status"
-              value={userBody.role as string}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setUserBody({
-                  ...userBody,
-                  role: e,
-                });
-              }}
-              error={errors.role}
-              options={[
-                { value: "", label: "Pilih Role" },
-                { value: "ADMIN", label: "ADMIN" },
-                { value: "ANGGOTA", label: "AANGGOTA" },
-                { value: "USER", label: "USER" },
-              ]}
+              type="password"
+              label="Password"
+              variant="outlined"
+              error={errors.password}
+              placeholder="*****"
+              value={userBody.password as string}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setUserBody({ ...userBody, password: e.target.value })
+              }
             />
           </div>
+          <div className="mb-4">
+            <Typography className="text-xs font-semibold text-blue-gray-600">
+              Role:
+            </Typography>
+            <ButtonGroup variant="outlined" size="sm">
+              <Button
+                className={`${
+                  userBody.role === "ADMIN" ? "bg-blue-500 text-white" : ""
+                }`}
+                onClick={() => handleRoleChange("ADMIN")}
+              >
+                ADMIN
+              </Button>
+              <Button
+                className={`${
+                  userBody.role === "ANGGOTA" ? "bg-blue-500 text-white" : ""
+                }`}
+                onClick={() => handleRoleChange("ANGGOTA")}
+              >
+                ANGGOTA
+              </Button>
+              <Button
+                className={`${
+                  userBody.role === "USER" ? "bg-blue-500 text-white" : ""
+                }`}
+                onClick={() => handleRoleChange("USER")}
+              >
+                USER
+              </Button>
+            </ButtonGroup>
+            <InputGroup error={errors.role} />
+          </div>
+
+          {userBody.role === "ANGGOTA" ? (
+            <div className="flex">
+              <InputGroup
+                type="search"
+                label="Search Anggota"
+                variant="outlined"
+                value={searchAnggota}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSearchAnngota(e.target.value);
+                }}
+              />
+              {isLoadingAnggota ? (
+                <InputGroup
+                  className="flex-1"
+                  disabled
+                  type="select"
+                  label="Loading..."
+                />
+              ) : anggota?.data ? (
+                <InputGroup
+                  className="flex-1"
+                  disabled={mutation.isPending}
+                  type="select"
+                  label="Anggota"
+                  value={searchAnggota ? "" : (userBody.anggotaId as string)}
+                  onChange={() => {}}
+                  error={errors.anggotaId}
+                  options={[
+                    {
+                      value: "",
+                      label: "Pilih Anggota",
+                      onClick: () => {
+                        setUserBody({
+                          ...userBody,
+                          anggotaId: "",
+                          nim: "",
+                        });
+                      },
+                    },
+                    ...anggota?.data.map((anggota) => ({
+                      value: anggota.id,
+                      label: anggota.name,
+                      onClick: () => {
+                        setUserBody({
+                          ...userBody,
+                          nim: anggota.nim,
+                          anggotaId: anggota.id,
+                        });
+                      },
+                    })),
+                  ]}
+                />
+              ) : (
+                <InputGroup
+                  className="flex-1"
+                  disabled
+                  type="select"
+                  label="Anggota not found"
+                />
+              )}
+            </div>
+          ) : (
+            <div className="mb-4 my-2">
+              <InputGroup
+                disabled={mutation.isPending}
+                type="text"
+                label="NIM"
+                variant="outlined"
+                error={errors.nim}
+                value={userBody.nim}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setUserBody({ ...userBody, nim: e.target.value })
+                }
+              />
+            </div>
+          )}
+
           <div className="flex justify-center items-center gap-5">
             <Button
               disabled={mutation.isPending}
@@ -178,7 +296,7 @@ const FormEditUser: React.FC = () => {
               className="text-white"
               type="submit"
               variant="gradient"
-              color="amber"
+              color="blue"
               fullWidth
               disabled={mutation.isPending}
             >

@@ -8,7 +8,6 @@ import { useUserCreation } from "../hooks/useUser";
 import { Role, UserDTO } from "@core/model/user";
 import { ButtonGroup } from "@material-tailwind/react";
 import { useAnggota } from "@features/admin/anggota/hooks/useAnggota";
-import { Input } from "postcss";
 
 const InitialValue: UserDTO = {
   nim: "",
@@ -20,7 +19,7 @@ const InitialValue: UserDTO = {
 };
 
 const FormAddUser: React.FC = () => {
-  const [searchAnggota, setSearchAnngota] = useState("");
+  const [searchAnggota, setSearchAnggota] = useState("");
   const { data: anggota, isLoading: isLoadingAnggota } = useAnggota({
     perPage: 100000,
     search: searchAnggota,
@@ -195,7 +194,7 @@ const FormAddUser: React.FC = () => {
               variant="outlined"
               value={searchAnggota}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setSearchAnngota(e.target.value);
+                setSearchAnggota(e.target.value);
               }}
             />
             {isLoadingAnggota ? (
@@ -211,7 +210,7 @@ const FormAddUser: React.FC = () => {
                 disabled={mutation.isPending}
                 type="select"
                 label="Anggota"
-                value={""}
+                value={searchAnggota ? "" : userBody.anggotaId as string}
                 onChange={() => {}}
                 error={errors.anggotaId}
                 options={[
