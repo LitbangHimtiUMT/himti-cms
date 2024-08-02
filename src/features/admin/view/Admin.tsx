@@ -2,7 +2,7 @@ import { CONFIG_MENU_ADMIN } from "@features/_global/config";
 import Footer from "@features/admin/components/Footer";
 import { useAuth } from "@features/auth/hooks/useAuth";
 import { useAtom } from "jotai";
-import React from "react";
+import React, { useEffect } from "react";
 import { Navigate, Outlet, ScrollRestoration } from "react-router-dom";
 import Sidenav from "../components/Sidenav";
 import { openSidenavAtom } from "../store/sidenav";
@@ -14,6 +14,15 @@ const AdminView: React.FC = () => {
   if (!auth?.token) {
     return <Navigate to={"/admin/login"} replace />;
   }
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 1140) {
+        setOpenSidenav(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+  }, [window.innerWidth]);
 
   const handleOpenSidenav = () => setOpenSidenav(!openSidenav);
 

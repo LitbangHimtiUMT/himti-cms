@@ -1,3 +1,3 @@
 import { atom } from "jotai";
 
-export const openSidenavAtom = atom(true)
+export const openSidenavAtom = atom(false)

@@ -1,7 +1,5 @@
-import {
-  Button,
-} from "@material-tailwind/react";
-import React, { useState } from "react";
+import { Button } from "@material-tailwind/react";
+import React, { useRef, useState } from "react";
 import { AcaraDTO } from "../model/acara";
 import { useAcaraCreation } from "@features/_global/hooks/useAcara";
 import DefaultImage from "@core/assets/default-image.png";
@@ -11,6 +9,7 @@ import { utcToZonedTime } from "date-fns-tz";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import InputGroup from "@features/_global/components/Input/InputGroup";
+import CropperImage from "@features/_global/components/CropperImage";
 
 const InitialValue: AcaraDTO = {
   name: "",
@@ -28,8 +27,13 @@ interface ImageFile extends File {
 const FormAddAcara: React.FC = () => {
   const mutation = useAcaraCreation();
 
+  const cropperRef = useRef<any>(null);
+
+  const [isModal, setIsModal] = useState<boolean>(false);
   const [acaraBody, setAcaraBody] = useState<AcaraDTO>({ ...InitialValue });
-  const [imageFile, setImageFile] = useState<ImageFile | null>(null);
+  const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
+    DefaultImage
+  );
   const [errors, setErrors] = useState<Partial<Record<keyof AcaraDTO, string>>>(
     {}
   );
@@ -37,8 +41,6 @@ const FormAddAcara: React.FC = () => {
   const navigate = useNavigate();
 
   const validate = () => {
-    console.log(acaraBody);
-
     const newErrors: Partial<Record<keyof AcaraDTO, string>> = {};
     let isValid = true;
 
@@ -72,7 +74,7 @@ const FormAddAcara: React.FC = () => {
       isValid = false;
     }
 
-    if (!imageFile) {
+    if (!imageFile || imageFile === DefaultImage) {
       newErrors.image = "Image is required";
       isValid = false;
     }
@@ -83,6 +85,7 @@ const FormAddAcara: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     acaraBody.startTime = utcToZonedTime(
       acaraBody.startTime as Date,
       "Asia/Jakarta"
@@ -91,9 +94,8 @@ const FormAddAcara: React.FC = () => {
       acaraBody.endTime as Date,
       "Asia/Jakarta"
     ).toISOString();
-    console.log(acaraBody);
+    acaraBody.isOpenAbsen = acaraBody.isOpenAbsen === "true";
 
-    if (!validate()) return;
     const formData = new FormData();
     Object.entries(acaraBody).forEach(([key, value]) => {
       formData.append(key, value as any);
@@ -105,7 +107,8 @@ const FormAddAcara: React.FC = () => {
     });
   };
 
-  const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
     const file = e.target.files?.[0];
     if (file && file.type.startsWith("image/")) {
       const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
@@ -117,13 +120,13 @@ const FormAddAcara: React.FC = () => {
         return;
       }
 
-      const newImageFile: ImageFile = Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      });
-
-      setImageFile(newImageFile);
-      setAcaraBody({ ...acaraBody, image: file });
-      setErrors((prevErrors) => ({ ...prevErrors, image: "" }));
+      const reader = new FileReader();
+      reader.onload = () => {
+        // console.log(reader.result as ArrayBuffer);
+        setImageFile(reader.result as ArrayBuffer);
+        setIsModal(true); // Open modal when image is loaded
+      };
+      reader.readAsDataURL(file);
     } else {
       setErrors((prevErrors) => ({
         ...prevErrors,
@@ -132,10 +135,41 @@ const FormAddAcara: React.FC = () => {
     }
   };
 
+  const getCropData = () => {
+    if (typeof cropperRef.current?.cropper !== "undefined") {
+      const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
+        width: 1080,
+        height: 1080,
+      });
+      croppedCanvas.toBlob((blob: File) => {
+        setAcaraBody({ ...acaraBody, image: blob });
+        setIsModal(false); // Close modal after cropping
+        setImageFile(URL.createObjectURL(blob) as string);
+      });
+    }
+  };
+
   const handleReset = () => {
     setAcaraBody(InitialValue);
-    setImageFile(null);
+    setImageFile(DefaultImage);
+    const fileInput = document.getElementById(
+      "image-input"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
     setErrors({});
+  };
+
+  const handleCancelCrop = () => {
+    setImageFile(DefaultImage);
+    const fileInput = document.getElementById(
+      "image-input"
+    ) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.value = "";
+    }
+    setIsModal(false);
   };
 
   return (
@@ -152,6 +186,8 @@ const FormAddAcara: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <div className="mb-4 my-2">
           <InputGroup
+            disabled={mutation.isPending}
+            type="text"
             label="Name"
             variant="outlined"
             error={errors.name}
@@ -164,6 +200,7 @@ const FormAddAcara: React.FC = () => {
 
         <div className="mb-4">
           <InputGroup
+            disabled={mutation.isPending}
             type="textarea"
             label="Description"
             variant="outlined"
@@ -180,9 +217,10 @@ const FormAddAcara: React.FC = () => {
 
         <div className="mb-4">
           <InputGroup
+            disabled={mutation.isPending}
             type="select"
             label="Status"
-            value={acaraBody.isOpenAbsen as string}
+            value={String(acaraBody.isOpenAbsen)}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setAcaraBody({
                 ...acaraBody,
@@ -201,6 +239,7 @@ const FormAddAcara: React.FC = () => {
         <div className="flex gap-4 mb-4">
           <div className="flex-1">
             <DateTimePicker
+              disabled={mutation.isPending}
               className="w-full"
               label="Start Time"
               value={acaraBody.startTime}
@@ -215,9 +254,11 @@ const FormAddAcara: React.FC = () => {
               ampm={false}
               renderInput={(params) => <TextField {...params} />}
             />
+            <InputGroup error={errors.startTime} />
           </div>
           <div className="flex-1">
             <DateTimePicker
+              disabled={mutation.isPending}
               className="w-full"
               label="End Time"
               value={acaraBody.endTime}
@@ -238,22 +279,36 @@ const FormAddAcara: React.FC = () => {
 
         <div className="flex justify-start items-center my-6">
           <img
-            src={imageFile?.preview || DefaultImage}
+            src={imageFile as string}
             alt="Acara Image"
             className="max-w-[200px] h-[200px] max-h-[200px] rounded-md object-cover"
           />
         </div>
         <div className="mb-4">
           <InputGroup
+            disabled={mutation.isPending}
+            id="image-input"
             type="file"
             label="Acara Image"
             variant="outlined"
             error={errors.image}
-            onChange={handleChangeImage}
+            onChange={onChange}
+          />
+          <CropperImage
+            image={imageFile as ArrayBuffer}
+            isModal={isModal}
+            cropperRef={cropperRef}
+            getCropData={getCropData}
+            hanldeCancelCrop={handleCancelCrop}
           />
         </div>
         <div className="flex justify-center items-center gap-5">
-          <Button onClick={handleReset} variant="outlined" fullWidth>
+          <Button
+            disabled={mutation.isPending}
+            onClick={handleReset}
+            variant="outlined"
+            fullWidth
+          >
             Reset
           </Button>
           <Button

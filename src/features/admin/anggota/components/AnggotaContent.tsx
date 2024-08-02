@@ -8,15 +8,25 @@ import {
 import { convertQueryParamsToObject } from "@features/_global/helper";
 import React from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAnggota } from "../hooks/useAnggota";
+import { useAnggota, useAnggotaCreation } from "../hooks/useAnggota";
 import { TableItem } from "./Table/TableItem";
 
 export const AnggotaContent: React.FC = () => {
   const { data: anggotas, isLoading } = useAnggota();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
   const onPageChange = (page: number) =>
     setSearchParams({ ...queryParams, page: page.toString() });
+
+  const mutation = useAnggotaCreation();
+
+  const handleDelete = async (id: string) => {
+    await mutation.mutateAsync({
+      type: "delete",
+      id,
+    });
+  };
 
   const pagination = {
     currentPage: anggotas?.meta?.page || 1,
@@ -29,6 +39,7 @@ export const AnggotaContent: React.FC = () => {
       action={{
         show: true,
         buttonTitle: "Create Anggota",
+        link: { to: "/admin/anggota/create" },
       }}
       showPagination={
         !!(
@@ -44,7 +55,7 @@ export const AnggotaContent: React.FC = () => {
     >
       <Table>
         <TableHead
-          field={["Name", "NIM", "Angkatan", "Email", "Role", "Action"]}
+          field={["Name", "NIM", "Angkatan", "Status", "Action"]}
         />
 
         <TableBody>
@@ -63,6 +74,7 @@ export const AnggotaContent: React.FC = () => {
                     name={name}
                     nim={nim}
                     show={key !== (anggotas?.data?.length as number) - 1}
+                    handleDelete={handleDelete}
                   />
                 )
               )}

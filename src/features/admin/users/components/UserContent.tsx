@@ -7,15 +7,27 @@ import {
 } from "@features/_global/components/Table";
 import { convertQueryParamsToObject } from "@features/_global/helper";
 import { useSearchParams } from "react-router-dom";
-import { useUser } from "../hooks/useUser";
+import { useUser, useUserCreation } from "../hooks/useUser";
 import { TableItem } from "./Table/TableItem";
 
 export const UserContent = () => {
   const { data: users, isLoading } = useUser();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
+
   const onPageChange = (page: number) =>
     setSearchParams({ ...queryParams, page: page.toString() });
+
+  const mutation = useUserCreation();
+
+  const handleDelete = async (id: string) => {
+    await mutation.mutateAsync({
+      type: "delete",
+      id,
+    });
+  };
+
   const pagination = {
     currentPage: users?.meta?.page || 1,
     totalPages: users?.meta?.totalPages || 1,
@@ -24,6 +36,11 @@ export const UserContent = () => {
   return (
     <PageLayout
       title="Users"
+      action={{
+        show: true,
+        buttonTitle: "Create User",
+        link: { to: "/admin/user/create" },
+      }}
       showPagination={
         !!(
           users?.data?.length &&
@@ -45,6 +62,7 @@ export const UserContent = () => {
               {users?.data?.map((item, key) => (
                 <TableItem
                   key={key}
+                  handleDelete={handleDelete}
                   {...item}
                   show={key !== (users?.data?.length as number) - 1}
                 />

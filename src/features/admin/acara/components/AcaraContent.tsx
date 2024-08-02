@@ -12,8 +12,6 @@ import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { TableItem } from "./Table/TableItem";
 
-const Thead = ["Image", "Name", "Time", "Status", ""];
-
 export const AcaraContent: React.FC = () => {
   const { data: acara, isLoading } = useAcara();
 
@@ -58,9 +56,9 @@ export const AcaraContent: React.FC = () => {
         pagination={pagination}
       >
         <Table>
-          <TableHead field={Thead} />
+          <TableHead field={["Image", "Name", "Time", "Status", "Action"]} />
           <TableBody>
-            {isLoading ? (
+            {isLoading || mutation.isPending ? (
               <SimpleLoadingTable ColSpan={6} />
             ) : !acara?.data?.length ? (
               <tr>
@@ -69,24 +67,14 @@ export const AcaraContent: React.FC = () => {
                 </td>
               </tr>
             ) : (
-              acara?.data.map(
-                (
-                  { name, startTime, endTime, isOpenAbsen, image, id },
-                  index
-                ) => (
-                  <TableItem
-                    key={index}
-                    show={index !== (acara?.data?.length as number) - 1}
-                    name={name as string}
-                    startTime={startTime as Date}
-                    endTime={endTime as Date}
-                    isOpen={isOpenAbsen as boolean}
-                    image={image as string}
-                    handleDelete={handleDelete}
-                    id={id as string}
-                  />
-                )
-              )
+              acara?.data.map((item, index) => (
+                <TableItem
+                  key={index}
+                  show={index !== (acara?.data?.length as number) - 1}
+                  {...item}
+                  handleDelete={handleDelete}
+                />
+              ))
             )}
           </TableBody>
         </Table>

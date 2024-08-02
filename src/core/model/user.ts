@@ -1,13 +1,24 @@
-type Role = "ADMIN" | 'USER' | 'ANGGOTA'
+import { ChangeEvent } from "react";
+
+export type Role = "ADMIN" | "USER" | "ANGGOTA";
 
 export interface UserModel {
-    "id": string
-    "name": string
-    "email": string
-    "password": string
-    "role": Role
-    "nim": string
-    "anggotaId": string
-    "createdAt": string
-    "updatedAt": string
+  id: string;
+  name: string;
+  email: string;
+  password: string;
+  role: Role;
+  nim: string;
+  anggotaId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UserDTO {
+  name?: string;
+  email?: string;
+  password?: string;
+  role?: Role | "" | ChangeEvent<HTMLSelectElement>;
+  nim?: string;
+  anggotaId?: string | ChangeEvent<HTMLSelectElement>;
 }
