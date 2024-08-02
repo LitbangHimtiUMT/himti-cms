@@ -14,7 +14,7 @@ interface InputGroupProps {
   value?: string | number;
   onChange?: (e: React.ChangeEvent<any>) => void;
   type?: "text" | "textarea" | "select" | "file" | "number" | "email" | "search" | "password";
-  options?: { value: string; label: string, onClick?: () => void }[]; // Digunakan untuk Select
+  options?: { value: string | boolean; label: string, onClick?: () => void }[]; // Digunakan untuk Select
   isPending?: boolean;
   className?: string;
   [x: string]: any; // Untuk menangani properti tambahan

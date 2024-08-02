@@ -4,8 +4,8 @@ export interface AnggotaModel {
     id: string
     nim: string,
     name: string
-    email: string | null,
-    angkatan: {
+    email?: string | null,
+    angkatan?: {
         id: string
         year: number
     },
@@ -13,9 +13,9 @@ export interface AnggotaModel {
     instagram: string | null,
     linkedin: string | null,
     twitter: string | null,
-    isActive: boolean,
-    createdAt: string | Date,
-    updatedAt: string | Date
+    isActive?: boolean,
+    createdAt?: string | Date,
+    updatedAt?: string | Date
 }
 
 export interface AnggotaDTO {

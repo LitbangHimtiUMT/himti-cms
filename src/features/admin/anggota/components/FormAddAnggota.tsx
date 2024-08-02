@@ -69,6 +69,7 @@ const FormAddAnggota: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
+    anggotaBody.isActive = anggotaBody.isActive === "true";
     await mutation.mutateAsync({
       type: "create",
       data: anggotaBody,
@@ -218,7 +219,7 @@ const FormAddAnggota: React.FC = () => {
               disabled={mutation.isPending}
               type="select"
               label="Status"
-              value={anggotaBody.isActive as string}
+              value={String(anggotaBody.isActive)}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setAnggotaBody({
                   ...anggotaBody,

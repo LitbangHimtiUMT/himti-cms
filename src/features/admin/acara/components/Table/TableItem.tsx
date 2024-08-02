@@ -8,7 +8,7 @@ interface ItemAcaraProps {
   name: string;
   startTime: Date;
   endTime: Date;
-  isOpen: boolean;
+  isOpenAbsen: boolean;
   image: string;
   handleDelete: (id: string) => void;
   id: string;
@@ -19,7 +19,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
   name,
   startTime,
   endTime,
-  isOpen,
+  isOpenAbsen,
   image,
   handleDelete,
   id,
@@ -52,8 +52,8 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
       <td className="py-3 px-5">
         <Chip
           variant="gradient"
-          color={isOpen ? "green" : "red"}
-          value={isOpen ? "Open" : "Close"}
+          color={isOpenAbsen ? "green" : "red"}
+          value={isOpenAbsen ? "Open" : "Close"}
           className="py-0.5 px-2 text-[11px] font-medium w-fit"
         />
       </td>

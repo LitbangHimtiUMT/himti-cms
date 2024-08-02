@@ -21,10 +21,10 @@ const CropperImage: React.FC<IProps> = ({
   if (!isModal) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] overflow-auto grid h-screen w-screen place-items-center bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300">
+    <div className="fixed inset-0 p-4 z-[9999] overflow-auto grid h-screen w-screen place-items-center bg-black bg-opacity-60 backdrop-blur-sm transition-opacity duration-300">
       <div
         data-dialog="dialog"
-        className="relative m-4 w-2/5 min-w-[40%] z-[9999] max-w-[40%] h-min overflow-auto rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl"
+        className="relative w-full sm:min-w-[400px] z-[9999] sm:max-w-[40%] h-min overflow-auto rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl"
       >
         <div className="flex items-center justify-center p-4 font-sans text-2xl antialiased font-semibold leading-snug shrink-0 text-blue-gray-900">
           Crop Image
@@ -38,8 +38,8 @@ const CropperImage: React.FC<IProps> = ({
             background={false} // Remove background grid
             ref={cropperRef}
             viewMode={1} // Restrict the crop box to not exceed the size of the canvas
-            minCropBoxWidth={1080} // Set minimum width of the crop box
-            minCropBoxHeight={1080} // Set minimum height of the crop box
+            minCropBoxWidth={8} // Set minimum width of the crop box
+            minCropBoxHeight={8} // Set minimum height of the crop box
           />
         </div>
         <div className="flex flex-wrap items-center justify-end p-4 shrink-0 text-blue-gray-500">

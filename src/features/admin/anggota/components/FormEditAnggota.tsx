@@ -52,15 +52,15 @@ const FormEditAnggota: React.FC = () => {
       } = anggotaById.data;
       // const categoryId = category ? category.id : "";
       setAnggotaBody({
-        nim: `${nim}`,
+        nim,
         name,
-        angkatanId: angkatan.id,
+        angkatanId: angkatan?.id,
         email,
         facebook,
         instagram,
         linkedin,
         twitter,
-        isActive: isActive.toString(),
+        isActive,
       });
     }
   }, [anggotaById]);
@@ -103,6 +103,7 @@ const FormEditAnggota: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
+    anggotaBody.isActive = anggotaBody.isActive === "true";
     await mutation.mutateAsync({
       type: "update",
       data: anggotaBody,
@@ -253,7 +254,7 @@ const FormEditAnggota: React.FC = () => {
               disabled={mutation.isPending}
               type="select"
               label="Status"
-              value={anggotaBody.isActive as string}
+              value={String(anggotaBody.isActive)}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setAnggotaBody({
                   ...anggotaBody,

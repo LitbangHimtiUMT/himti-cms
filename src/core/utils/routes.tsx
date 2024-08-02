@@ -8,6 +8,7 @@ import EditAnggotaView from "@features/admin/anggota/view/editAnggota";
 import AddDosenView from "@features/admin/dosen/view/addDosen";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
 import EditDosenView from "@features/admin/dosen/view/editDosen";
+import StrukturalView from "@features/admin/struktural/view/struktural";
 import AddUserView from "@features/admin/users/view/addUser";
 import EditUserView from "@features/admin/users/view/editUser";
 import { UserView } from "@features/admin/users/view/users";
@@ -75,6 +76,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/dosen/edit/:id",
         element: <EditDosenView />,
+      },
+      {
+        path: "/admin/struktural",
+        element: <StrukturalView />,
       },
     ],
   },

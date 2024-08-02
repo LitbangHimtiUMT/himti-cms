@@ -43,7 +43,7 @@ const FormEditAcara: React.FC = () => {
       setAcaraBody({
         name,
         description,
-        isOpenAbsen: (isOpenAbsen as boolean).toString(),
+        isOpenAbsen,
         image,
         startTime,
         endTime,
@@ -107,6 +107,7 @@ const FormEditAcara: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     acaraBody.startTime = utcToZonedTime(
       acaraBody.startTime as Date,
       "Asia/Jakarta"
@@ -115,8 +116,7 @@ const FormEditAcara: React.FC = () => {
       acaraBody.endTime as Date,
       "Asia/Jakarta"
     ).toISOString();
-
-    if (!validate()) return;
+    acaraBody.isOpenAbsen = acaraBody.isOpenAbsen === "true";
     const formData = new FormData();
     Object.entries(acaraBody).forEach(([key, value]) => {
       formData.append(key, value as any);
@@ -250,7 +250,7 @@ const FormEditAcara: React.FC = () => {
               disabled={mutation.isPending}
               type="select"
               label="Status"
-              value={acaraBody.isOpenAbsen as string}
+              value={String(acaraBody.isOpenAbsen)}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setAcaraBody({
                   ...acaraBody,

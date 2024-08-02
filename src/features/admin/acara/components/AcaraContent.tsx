@@ -66,17 +66,12 @@ export const AcaraContent: React.FC = () => {
               </tr>
             ) : (
               acara?.data.map(
-                ({ name, startTime, endTime, isOpenAbsen, image, id }, index) => (
+                (item, index) => (
                   <TableItem
                     key={index}
                     show={index !== (acara?.data?.length as number) - 1}
-                    name={name as string}
-                    startTime={startTime as Date}
-                    endTime={endTime as Date}
-                    isOpen={isOpenAbsen as boolean}
-                    image={image as string}
+                    {...item}
                     handleDelete={handleDelete}
-                    id={id as string}
                   />
                 )
               )

@@ -85,6 +85,7 @@ const FormAddAcara: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!validate()) return;
     acaraBody.startTime = utcToZonedTime(
       acaraBody.startTime as Date,
       "Asia/Jakarta"
@@ -93,8 +94,8 @@ const FormAddAcara: React.FC = () => {
       acaraBody.endTime as Date,
       "Asia/Jakarta"
     ).toISOString();
+    acaraBody.isOpenAbsen = acaraBody.isOpenAbsen === "true";
 
-    if (!validate()) return;
     const formData = new FormData();
     Object.entries(acaraBody).forEach(([key, value]) => {
       formData.append(key, value as any);
@@ -219,7 +220,7 @@ const FormAddAcara: React.FC = () => {
             disabled={mutation.isPending}
             type="select"
             label="Status"
-            value={acaraBody.isOpenAbsen as string}
+            value={String(acaraBody.isOpenAbsen)}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setAcaraBody({
                 ...acaraBody,
@@ -302,7 +303,12 @@ const FormAddAcara: React.FC = () => {
           />
         </div>
         <div className="flex justify-center items-center gap-5">
-          <Button disabled={mutation.isPending} onClick={handleReset} variant="outlined" fullWidth>
+          <Button
+            disabled={mutation.isPending}
+            onClick={handleReset}
+            variant="outlined"
+            fullWidth
+          >
             Reset
           </Button>
           <Button
