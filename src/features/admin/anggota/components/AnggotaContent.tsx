@@ -54,30 +54,21 @@ export const AnggotaContent: React.FC = () => {
       searchPlaceholder="Search Anggota"
     >
       <Table>
-        <TableHead
-          field={["Name", "NIM", "Angkatan", "Status", "Action"]}
-        />
+        <TableHead field={["Name", "NIM", "Angkatan", "Status", "Action"]} />
 
         <TableBody>
           {isLoading ? (
             <SimpleLoadingTable ColSpan={6} />
           ) : (
             <>
-              {anggotas?.data?.map(
-                ({ angkatan, email, id, isActive, name, nim }, key) => (
-                  <TableItem
-                    key={key}
-                    id={id}
-                    angkatan={angkatan}
-                    email={email}
-                    isActive={isActive}
-                    name={name}
-                    nim={nim}
-                    show={key !== (anggotas?.data?.length as number) - 1}
-                    handleDelete={handleDelete}
-                  />
-                )
-              )}
+              {anggotas?.data?.map((item, key) => (
+                <TableItem
+                  key={key}
+                  show={key !== (anggotas?.data?.length as number) - 1}
+                  handleDelete={handleDelete}
+                  {...item}
+                />
+              ))}
             </>
           )}
         </TableBody>

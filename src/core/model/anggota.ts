@@ -4,10 +4,10 @@ export interface AnggotaModel {
     id: string
     nim: string,
     name: string
-    email?: string | null,
+    email?: string,
     angkatan?: {
         id: string
-        year: number
+        year: string
     },
     facebook: string | null,
     instagram: string | null,

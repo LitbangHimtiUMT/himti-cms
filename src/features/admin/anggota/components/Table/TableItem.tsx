@@ -4,14 +4,14 @@ import { Link } from "react-router-dom";
 
 interface IAnggotaItemProps {
   id: string;
-  name: string;
-  nim: string;
-  angkatan: {
+  name?: string;
+  nim?: string;
+  angkatan?: {
     id: string;
-    year: number;
+    year: string;
   };
-  email: string | null;
-  isActive: boolean;
+  email?: string;
+  isActive?: boolean;
   show?: boolean;
   handleDelete: (id: string) => void;
 }
@@ -41,7 +41,7 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
       </td>
       <td className="py-3 px-5">
         <Typography className="text-xs font-semibold text-blue-gray-600">
-          {angkatan.year}
+          {angkatan?.year}
         </Typography>
       </td>
       {/* <td className="py-3 px-5">
