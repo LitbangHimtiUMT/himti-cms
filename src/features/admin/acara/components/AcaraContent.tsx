@@ -1,4 +1,4 @@
-import EmptyData from "@features/_global/EmptyData";
+import EmptyData from "@features/_global/components/EmptyData";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 import {
