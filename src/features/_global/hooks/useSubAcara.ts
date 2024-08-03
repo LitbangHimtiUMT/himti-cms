@@ -6,11 +6,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "@features/auth/hooks/useAuth";
 import { subAcaraService } from "@core/services/subAcara";
 
-interface Options {
-  page?: number,
-  perPage?: number,
-  subAcaraId?: string
-}
+// interface Options {
+//   page?: number,
+//   perPage?: number,
+//   subAcaraId?: string
+// }
 
 type PayloadType = 'create' | 'update' | 'delete'
 
