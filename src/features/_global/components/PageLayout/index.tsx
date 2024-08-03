@@ -1,3 +1,4 @@
+import { convertQueryParamsToObject } from "@features/_global/helper";
 import {
   Button,
   Card,
@@ -9,7 +10,6 @@ import {
 import { ButtonHTMLAttributes, PropsWithChildren, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination } from "../Pagination";
-import { convertQueryParamsToObject } from "@features/_global/helper";
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {}
@@ -45,7 +45,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   action,
   headBackground = "gray",
   searchField = false,
-  searchPlaceholder = "search...",
+  searchPlaceholder = "search kambing..",
 }) => {
   const renderAction = () => {
     if (action?.show && action.link) {

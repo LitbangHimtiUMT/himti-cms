@@ -51,6 +51,8 @@ export const AcaraContent: React.FC = () => {
             (acara.meta?.totalData as number) > (acara?.meta?.perPage as number)
           )
         }
+        searchField
+        searchPlaceholder="Search Acara"
         pagination={pagination}
       >
         <Table>

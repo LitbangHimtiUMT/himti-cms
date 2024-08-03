@@ -50,7 +50,7 @@ export const UserContent = () => {
       }
       pagination={pagination}
       searchField
-      searchPlaceholder="Search Anggota"
+      searchPlaceholder="Search Users"
     >
       <Table>
         <TableHead field={["Name", "NIM", "Email", "Role", "Action"]} />

@@ -54,9 +54,7 @@ export const AnggotaContent: React.FC = () => {
       searchPlaceholder="Search Anggota"
     >
       <Table>
-        <TableHead
-          field={["Name", "NIM", "Angkatan", "Status", "Action"]}
-        />
+        <TableHead field={["Name", "NIM", "Angkatan", "Status", "Action"]} />
 
         <TableBody>
           {isLoading ? (
