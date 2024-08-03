@@ -95,7 +95,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
         <CardHeader
           variant="gradient"
           color={headBackground}
-          className="mb-4 p-6 flex justify-between items-center"
+          className="mb-4 p-6 flex justify-between items-center flex-wrap"
         >
           {title && (
             <Typography variant="h6" color="white">

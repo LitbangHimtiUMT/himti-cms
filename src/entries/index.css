@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+*{
+  scrollbar-width: thin;
+}
 
 html, body{
   scrollbar-width: none;

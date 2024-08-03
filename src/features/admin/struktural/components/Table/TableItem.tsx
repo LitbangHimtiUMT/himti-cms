@@ -59,7 +59,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
       </td>
       <td className="py-3 px-5">
         <div className="flex items-center gap-2">
-          <Link to={`/admin/acara/edit/${id}`}>
+          <Link to={`/admin/struktural/edit/${id}`}>
             <Typography
               as="button"
               className="text-xs font-semibold text-yellow-900"

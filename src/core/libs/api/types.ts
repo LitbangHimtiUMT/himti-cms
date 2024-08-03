@@ -2,6 +2,7 @@ export interface QueryParams {
   page?: number;
   perPage?: number;
   search?: string;
+  subAcaraId?: string;
 }
 
 export interface ApiOption {

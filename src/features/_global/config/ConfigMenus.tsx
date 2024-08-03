@@ -11,11 +11,6 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
   },
   {
     icon: <FaCalendar />,
-    name: "Absen Acara",
-    to: "/admin/absen",
-  },
-  {
-    icon: <FaCalendar />,
     name: "Acara",
     to: "/admin/acara",
   },

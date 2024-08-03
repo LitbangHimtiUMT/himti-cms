@@ -1,3 +1,7 @@
+import AddSubAcaraView from "@features/admin/acara/components/SubAcara/view/addSubAcara";
+import DetailAbsensiView from "@features/admin/acara/components/SubAcara/view/detailAbsensi";
+import DetailSubAcaraView from "@features/admin/acara/components/SubAcara/view/detailSubAcara";
+import EditSubAcaraView from "@features/admin/acara/components/SubAcara/view/editSubAcara";
 import AcaraView from "@features/admin/acara/view/acara";
 import AddAcaraView from "@features/admin/acara/view/addAcara";
 import DetailAcaraView from "@features/admin/acara/view/detailAcara";
@@ -8,6 +12,8 @@ import EditAnggotaView from "@features/admin/anggota/view/editAnggota";
 import AddDosenView from "@features/admin/dosen/view/addDosen";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
 import EditDosenView from "@features/admin/dosen/view/editDosen";
+import AddStrukturalView from "@features/admin/struktural/view/addStruktural";
+import EditStrukturalView from "@features/admin/struktural/view/editStruktural";
 import StrukturalView from "@features/admin/struktural/view/struktural";
 import AddUserView from "@features/admin/users/view/addUser";
 import EditUserView from "@features/admin/users/view/editUser";
@@ -40,6 +46,22 @@ export const router = createBrowserRouter([
       {
         path: "/admin/acara/edit/:id",
         element: <EditAcaraView />,
+      },
+      {
+        path: "/admin/sub-acara/create",
+        element: <AddSubAcaraView />,
+      },
+      {
+        path: "/admin/sub-acara/:id",
+        element: <DetailSubAcaraView />,
+      },
+      {
+        path: "/admin/sub-acara/edit/:id",
+        element: <EditSubAcaraView />,
+      },
+      {
+        path: "/admin/absensi/:id",
+        element: <DetailAbsensiView />,
       },
       {
         path: "/admin/user",
@@ -80,6 +102,14 @@ export const router = createBrowserRouter([
       {
         path: "/admin/struktural",
         element: <StrukturalView />,
+      },
+      {
+        path: "/admin/struktural/create",
+        element: <AddStrukturalView />,
+      },
+      {
+        path: "/admin/struktural/edit/:id",
+        element: <EditStrukturalView />,
       },
     ],
   },

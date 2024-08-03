@@ -68,6 +68,7 @@ export const AcaraContent: React.FC = () => {
               acara?.data.map(
                 (item, index) => (
                   <TableItem
+                    link="acara"
                     key={index}
                     show={index !== (acara?.data?.length as number) - 1}
                     {...item}

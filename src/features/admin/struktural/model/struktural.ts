@@ -22,7 +22,7 @@ export interface StrukturalModel {
 
 export interface StrukturalDTO {
   anggotaId?: string | React.ChangeEvent<HTMLSelectElement>;
-  jabatan?: Jabatan;
-  image?: string;
+  jabatan?: Jabatan | "" | React.ChangeEvent<HTMLSelectElement>;
+  image?: string | File;
   isActive?: boolean | string | React.ChangeEvent<HTMLSelectElement>;
 }

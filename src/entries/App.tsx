@@ -4,6 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "@core/utils/routes";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import "leaflet/dist/leaflet.css";
 
 function App() {
   return (

@@ -10,4 +10,6 @@ export const API_ENDPOINT = {
   anggota: `${CONFIG_APP.BASE_URL}/anggota`,
   dosen: `${CONFIG_APP.BASE_URL}/dosen`,
   struktural: `${CONFIG_APP.BASE_URL}/struktural`,
+  subAcara: `${CONFIG_APP.BASE_URL}/sub-acara`,
+  absensi: `${CONFIG_APP.BASE_URL}/absensi`,
 }

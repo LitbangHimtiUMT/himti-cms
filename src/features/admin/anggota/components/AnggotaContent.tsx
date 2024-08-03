@@ -64,15 +64,10 @@ export const AnggotaContent: React.FC = () => {
           ) : (
             <>
               {anggotas?.data?.map(
-                ({ angkatan, email, id, isActive, name, nim }, key) => (
+                (item, key) => (
                   <TableItem
                     key={key}
-                    id={id}
-                    angkatan={angkatan}
-                    email={email}
-                    isActive={isActive}
-                    name={name}
-                    nim={nim}
+                    {...item}
                     show={key !== (anggotas?.data?.length as number) - 1}
                     handleDelete={handleDelete}
                   />

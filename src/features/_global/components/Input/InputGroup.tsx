@@ -33,7 +33,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
   ...rest
 }) => {
   return (
-    <div id={type==="file" ? "container-image" : ""} className={`mb-4 ${className}`}>
+    <div id={type==="file" ? "container-image" : ""} className={`${type !== "search" && "mb-4"} ${className}`}>
       {(type === "text" || type === "email" || type === "number" || type === "password" || type === "search") && (
         <Input
           type={type}

@@ -1,80 +1,69 @@
 import { Button } from "@material-tailwind/react";
 import React, { useRef, useState } from "react";
-import { AcaraDTO } from "../model/struktural";
-import { useAcaraCreation } from "@features/_global/hooks/useAcara";
 import DefaultImage from "@core/assets/default-image.png";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { TextField } from "@mui/material";
-import { utcToZonedTime } from "date-fns-tz";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { useNavigate } from "react-router-dom";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import CropperImage from "@features/_global/components/CropperImage";
+import { useStrukturalCreation } from "../hooks/useStruktural";
+import { useAnggota } from "@features/admin/anggota/hooks/useAnggota";
+import { Jabatan, StrukturalDTO } from "../model/struktural";
 
-const InitialValue: AcaraDTO = {
-  name: "",
-  description: "",
-  isOpenAbsen: "",
+const InitialValue: StrukturalDTO = {
+  anggotaId: "",
+  jabatan: "",
   image: "",
-  startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
-  endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
 };
 
 interface ImageFile extends File {
   preview: string;
 }
 
+const jabatanValues: Jabatan[] = [
+  "KETUA_HIMPUNAN",
+  "WAKIL_KETUA_HIMPUNAN",
+  "BENDAHARA",
+  "SEKRETARIS",
+  "KETUA_DEPARTMENT",
+];
+
 const FormAddAcara: React.FC = () => {
-  const mutation = useAcaraCreation();
+  const [searchAnggota, setSearchAnngota] = useState("");
+  const { data: anggota, isLoading: isLoadingAnggota } = useAnggota({
+    perPage: 100000,
+    search: searchAnggota,
+  });
+
+  const mutation = useStrukturalCreation();
 
   const cropperRef = useRef<any>(null);
 
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [acaraBody, setAcaraBody] = useState<AcaraDTO>({ ...InitialValue });
+  const [strukturalBody, setStrukturalBody] = useState<StrukturalDTO>({
+    ...InitialValue,
+  });
   const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
     DefaultImage
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof AcaraDTO, string>>>(
-    {}
-  );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof StrukturalDTO, string>>
+  >({});
 
   const navigate = useNavigate();
 
   const validate = () => {
-    const newErrors: Partial<Record<keyof AcaraDTO, string>> = {};
+    const newErrors: Partial<Record<keyof StrukturalDTO, string>> = {};
     let isValid = true;
 
-    if (!acaraBody.name) {
-      newErrors.name = "Name is required";
+    if (!strukturalBody.anggotaId) {
+      newErrors.anggotaId = "Anggota is required";
       isValid = false;
     }
-    if (!acaraBody.description) {
-      newErrors.description = "Description is required";
+    if (!strukturalBody.jabatan) {
+      newErrors.jabatan = "Jabatan Time is required";
       isValid = false;
     }
-    if (!acaraBody.isOpenAbsen) {
-      newErrors.isOpenAbsen = "Open Absen is required";
-      isValid = false;
-    }
-    if (!acaraBody.startTime) {
-      newErrors.startTime = "Start Time is required";
-      isValid = false;
-    }
-    if (!acaraBody.endTime) {
-      newErrors.endTime = "End Time is required";
-      isValid = false;
-    }
-
-    if (
-      acaraBody.startTime &&
-      acaraBody.endTime &&
-      acaraBody.endTime < acaraBody.startTime
-    ) {
-      newErrors.startTime = "End Time must be greater than Start Time";
-      isValid = false;
-    }
-
-    if (!imageFile || imageFile === DefaultImage) {
+    if (!strukturalBody.image && (!imageFile || imageFile === DefaultImage)) {
       newErrors.image = "Image is required";
       isValid = false;
     }
@@ -85,18 +74,9 @@ const FormAddAcara: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    acaraBody.startTime = utcToZonedTime(
-      acaraBody.startTime as Date,
-      "Asia/Jakarta"
-    ).toISOString();
-    acaraBody.endTime = utcToZonedTime(
-      acaraBody.endTime as Date,
-      "Asia/Jakarta"
-    ).toISOString();
-
     if (!validate()) return;
     const formData = new FormData();
-    Object.entries(acaraBody).forEach(([key, value]) => {
+    Object.entries(strukturalBody).forEach(([key, value]) => {
       formData.append(key, value as any);
     });
 
@@ -141,7 +121,7 @@ const FormAddAcara: React.FC = () => {
         height: 1080,
       });
       croppedCanvas.toBlob((blob: File) => {
-        setAcaraBody({ ...acaraBody, image: blob });
+        setStrukturalBody({ ...strukturalBody, image: blob });
         setIsModal(false); // Close modal after cropping
         setImageFile(URL.createObjectURL(blob) as string);
       });
@@ -149,7 +129,7 @@ const FormAddAcara: React.FC = () => {
   };
 
   const handleReset = () => {
-    setAcaraBody(InitialValue);
+    setStrukturalBody(InitialValue);
     setImageFile(DefaultImage);
     const fileInput = document.getElementById(
       "image-input"
@@ -173,7 +153,7 @@ const FormAddAcara: React.FC = () => {
 
   return (
     <PageLayout
-      title="Add Acara"
+      title="Add Struktural"
       headBackground="blue"
       action={{
         show: true,
@@ -183,103 +163,81 @@ const FormAddAcara: React.FC = () => {
       }}
     >
       <form onSubmit={handleSubmit}>
-        <div className="mb-4 my-2">
+        <div className="flex sm:flex-row flex-col">
           <InputGroup
-            disabled={mutation.isPending}
-            type="text"
-            label="Name"
+            type="search"
+            label="Search Anggota"
             variant="outlined"
-            error={errors.name}
-            value={acaraBody.name as string}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setAcaraBody({ ...acaraBody, name: e.target.value })
-            }
+            value={searchAnggota}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearchAnngota(e.target.value);
+            }}
           />
+          {isLoadingAnggota ? (
+            <InputGroup
+              className="flex-1"
+              disabled
+              type="select"
+              label="Loading..."
+            />
+          ) : anggota?.data ? (
+            <InputGroup
+              className="flex-1"
+              disabled={mutation.isPending}
+              type="select"
+              label="Anggota"
+              defaultValue={strukturalBody.anggotaId as string}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setStrukturalBody({
+                  ...strukturalBody,
+                  anggotaId: e,
+                });
+              }}
+              error={errors.anggotaId}
+              options={[
+                {
+                  value: "",
+                  label: "Pilih Anggota",
+                },
+                ...anggota?.data.map((anggota) => ({
+                  value: anggota.id,
+                  label: anggota.name,
+                })),
+              ]}
+            />
+          ) : (
+            <InputGroup
+              className="flex-1"
+              disabled
+              type="select"
+              label="Anggota not found"
+            />
+          )}
         </div>
-
-        <div className="mb-4">
-          <InputGroup
-            disabled={mutation.isPending}
-            type="textarea"
-            label="Description"
-            variant="outlined"
-            error={errors.description}
-            value={acaraBody.description}
-            onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-              setAcaraBody({
-                ...acaraBody,
-                description: e.target.value,
-              })
-            }
-          />
-        </div>
-
         <div className="mb-4">
           <InputGroup
             disabled={mutation.isPending}
             type="select"
             label="Status"
-            value={acaraBody.isOpenAbsen as string}
+            value={strukturalBody.jabatan as string}
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              setAcaraBody({
-                ...acaraBody,
-                isOpenAbsen: e,
+              setStrukturalBody({
+                ...strukturalBody,
+                jabatan: e,
               });
             }}
-            error={errors.isOpenAbsen}
-            options={[
-              { value: "", label: "Pilih Status" },
-              { value: "true", label: "Open" },
-              { value: "false", label: "Close" },
-            ]}
+            error={errors.jabatan}
+            options={jabatanValues.map((jabat) => ({
+              value: jabat,
+              label: jabat.replace(/_/g, " "),
+            }))}
           />
-        </div>
-
-        <div className="flex gap-4 mb-4">
-          <div className="flex-1">
-            <DateTimePicker
-              disabled={mutation.isPending}
-              className="w-full"
-              label="Start Time"
-              value={acaraBody.startTime}
-              onChange={(value: Date | null) => {
-                if (value) {
-                  setAcaraBody({
-                    ...acaraBody,
-                    startTime: value,
-                  });
-                }
-              }}
-              ampm={false}
-              renderInput={(params) => <TextField {...params} />}
-            />
-            <InputGroup error={errors.startTime} />
-          </div>
-          <div className="flex-1">
-            <DateTimePicker
-              disabled={mutation.isPending}
-              className="w-full"
-              label="End Time"
-              value={acaraBody.endTime}
-              minDateTime={new Date(acaraBody.startTime as string)}
-              onChange={(value: Date | null) => {
-                if (value) {
-                  setAcaraBody({
-                    ...acaraBody,
-                    endTime: value,
-                  });
-                }
-              }}
-              ampm={false}
-              renderInput={(params) => <TextField {...params} />}
-            />
-          </div>
         </div>
 
         <div className="flex justify-start items-center my-6">
           <img
             src={imageFile as string}
-            alt="Acara Image"
+            alt="Struktural Image"
             className="max-w-[200px] h-[200px] max-h-[200px] rounded-md object-cover"
           />
         </div>
@@ -288,7 +246,7 @@ const FormAddAcara: React.FC = () => {
             disabled={mutation.isPending}
             id="image-input"
             type="file"
-            label="Acara Image"
+            label="Struktural Image"
             variant="outlined"
             error={errors.image}
             onChange={onChange}
@@ -302,10 +260,16 @@ const FormAddAcara: React.FC = () => {
           />
         </div>
         <div className="flex justify-center items-center gap-5">
-          <Button disabled={mutation.isPending} onClick={handleReset} variant="outlined" fullWidth>
+          <Button
+            disabled={mutation.isPending}
+            onClick={handleReset}
+            variant="outlined"
+            fullWidth
+          >
             Reset
           </Button>
           <Button
+            className="text-white"
             type="submit"
             variant="gradient"
             color="blue"

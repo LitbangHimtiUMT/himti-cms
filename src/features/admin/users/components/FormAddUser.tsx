@@ -187,7 +187,7 @@ const FormAddUser: React.FC = () => {
         </div>
 
         {userBody.role === "ANGGOTA" ? (
-          <div className="flex">
+          <div className="flex sm:flex-row flex-col">
             <InputGroup
               type="search"
               label="Search Anggota"

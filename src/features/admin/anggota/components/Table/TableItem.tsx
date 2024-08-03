@@ -1,4 +1,10 @@
-import { Chip, Typography } from "@material-tailwind/react";
+import {
+  Chip,
+  Popover,
+  PopoverContent,
+  PopoverHandler,
+  Typography,
+} from "@material-tailwind/react";
 import React from "react";
 import { Link } from "react-router-dom";
 
@@ -6,12 +12,16 @@ interface IAnggotaItemProps {
   id: string;
   name: string;
   nim: string;
-  angkatan: {
+  angkatan?: {
     id: string;
     year: number;
   };
-  email: string | null;
-  isActive: boolean;
+  email?: string | null;
+  facebook?: string | null;
+  instagram?: string | null;
+  linkedin?: string | null;
+  twitter?: string | null;
+  isActive?: boolean;
   show?: boolean;
   handleDelete: (id: string) => void;
 }
@@ -19,6 +29,10 @@ interface IAnggotaItemProps {
 export const TableItem: React.FC<IAnggotaItemProps> = ({
   angkatan,
   email,
+  facebook,
+  instagram,
+  linkedin,
+  twitter,
   show,
   isActive,
   name,
@@ -41,7 +55,7 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
       </td>
       <td className="py-3 px-5">
         <Typography className="text-xs font-semibold text-blue-gray-600">
-          {angkatan.year}
+          {angkatan?.year}
         </Typography>
       </td>
       {/* <td className="py-3 px-5">
@@ -60,12 +74,33 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
 
       <td className="py-3 px-5">
         <div className="flex items-center gap-2">
-          <Typography
-            as="button"
-            className="text-xs font-semibold text-blue-600"
-          >
-            Sosmed
-          </Typography>
+          <Popover placement="left">
+            <PopoverHandler>
+              <Typography
+                as="button"
+                className="text-xs font-semibold text-blue-600"
+              >
+                Sosmed
+              </Typography>
+            </PopoverHandler>
+            <PopoverContent className="flex flex-col gap-3">
+              <Typography className="text-xs font-semibold text-blue-gray-600">
+                Email: {email || "-"}
+              </Typography>
+              <Typography className="text-xs font-semibold text-blue-gray-600">
+                Facebook: {facebook || "-"}
+              </Typography>
+              <Typography className="text-xs font-semibold text-blue-gray-600">
+                Instagram: {instagram || "-"}
+              </Typography>
+              <Typography className="text-xs font-semibold text-blue-gray-600">
+                Linkedin: {linkedin || "-"}
+              </Typography>
+              <Typography className="text-xs font-semibold text-blue-gray-600">
+                Twitter: {twitter || "-"}
+              </Typography>
+            </PopoverContent>
+          </Popover>
           <Link to={`/admin/anggota/edit/${id}`}>
             <Typography
               as="button"
