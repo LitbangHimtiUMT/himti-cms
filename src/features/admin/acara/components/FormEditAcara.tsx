@@ -107,8 +107,6 @@ const FormEditAcara: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(typeof acaraBody.isOpenAbsen);
-    
     if (!validate()) return;
     acaraBody.startTime = utcToZonedTime(
       acaraBody.startTime as Date,
@@ -118,10 +116,13 @@ const FormEditAcara: React.FC = () => {
       acaraBody.endTime as Date,
       "Asia/Jakarta"
     ).toISOString();
-    acaraBody.isOpenAbsen = acaraBody.isOpenAbsen === "true";
     const formData = new FormData();
     Object.entries(acaraBody).forEach(([key, value]) => {
-      formData.append(key, value as any);
+      if (key === "isOpenAbsen") {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value as any);
+      }
     });
 
     await mutation.mutateAsync({

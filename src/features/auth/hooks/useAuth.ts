@@ -6,37 +6,36 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function useAuthLogin() {
-    const navigate = useNavigate()
-    const mutation = useMutation({
-        mutationFn: (body: AuthLoginBodyModel) => authService.login(body),
-        onSuccess: (res) => {
-            toast.success(res.message, {
-                position: "top-right",
-                autoClose: 3000,
-                pauseOnHover: true,
-                theme: "dark",
-              });
-            localStorage.setItem("token", res?.data?.access_token as string)
-            navigate("/admin/acara")
-        },
-        onError: (err: ApiErrorResponse<ApiResponse>) => {
-            toast.error(err.response?.data?.message, {
-                position: "top-right",
-                autoClose: 3000,
-                pauseOnHover: true,
-                theme: "dark",
-              });
-        }
-    })
-    return mutation
+  const navigate = useNavigate();
+  const mutation = useMutation({
+    mutationFn: (body: AuthLoginBodyModel) => authService.login(body),
+    onSuccess: (res) => {
+      toast.success(res.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      localStorage.setItem("token", res?.data?.access_token as string);
+      navigate("/admin/acara");
+    },
+    onError: (err: ApiErrorResponse<ApiResponse>) => {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+    },
+  });
+  return mutation;
 }
 
-
 export function useAuth() {
-    const token = localStorage.getItem("token") || ""
+  const token = localStorage.getItem("token") || "";
 
-    if (token) {
-        return { token }
-    }
-    return null
+  if (token) {
+    return { token };
+  }
+  return null;
 }

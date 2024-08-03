@@ -76,7 +76,7 @@ export function useAnggotaCreation() {
       return;
     },
     onError: (err: ApiErrorResponse<ApiResponse>) => {
-      toast.error(err.response?.data?.message, {
+      toast.error(err.message, {
         position: "top-right",
         autoClose: 3000,
         pauseOnHover: true,
