@@ -3,18 +3,29 @@ import { AuthLoginBodyModel } from "@core/model/auth";
 import { authService } from "@core/services/auth";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function useAuthLogin() {
     const navigate = useNavigate()
     const mutation = useMutation({
         mutationFn: (body: AuthLoginBodyModel) => authService.login(body),
         onSuccess: (res) => {
-            console.log(res)
+            toast.success(res.message, {
+                position: "top-right",
+                autoClose: 3000,
+                pauseOnHover: true,
+                theme: "dark",
+              });
             localStorage.setItem("token", res?.data?.access_token as string)
             navigate("/admin/acara")
         },
         onError: (err: ApiErrorResponse<ApiResponse>) => {
-            console.log(err);
+            toast.error(err.response?.data?.message, {
+                position: "top-right",
+                autoClose: 3000,
+                pauseOnHover: true,
+                theme: "dark",
+              });
         }
     })
     return mutation

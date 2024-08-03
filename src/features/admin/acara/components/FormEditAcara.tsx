@@ -74,7 +74,7 @@ const FormEditAcara: React.FC = () => {
       newErrors.description = "Description is required";
       isValid = false;
     }
-    if (!acaraBody.isOpenAbsen) {
+    if (!acaraBody.isOpenAbsen && typeof acaraBody.isOpenAbsen !== "boolean") {
       newErrors.isOpenAbsen = "Open Absen is required";
       isValid = false;
     }
@@ -107,6 +107,8 @@ const FormEditAcara: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(typeof acaraBody.isOpenAbsen);
+    
     if (!validate()) return;
     acaraBody.startTime = utcToZonedTime(
       acaraBody.startTime as Date,
@@ -353,7 +355,7 @@ const FormEditAcara: React.FC = () => {
               fullWidth
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Loading..." : "Add"}
+              {mutation.isPending ? "Loading..." : "Edit"}
             </Button>
           </div>
         </form>

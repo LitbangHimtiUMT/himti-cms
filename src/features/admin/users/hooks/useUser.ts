@@ -5,6 +5,7 @@ import useDebounce from "@features/_global/hooks/useDebounce";
 import { useAuth } from "@features/auth/hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface Options {
   page?: number;
@@ -20,23 +21,23 @@ interface UserCreation {
 }
 
 export const useUser = (options?: Options) => {
-    const [searchParams] = useSearchParams();
-    const page = options?.page || searchParams.get("page") || 1;
-    const perPage = options?.perPage || searchParams.get("perPage") || 10;
-    const searchQuery = searchParams.get("search") || undefined;
-  
-    const search = useDebounce(searchQuery as string, 500);
-    const query = useQuery({
-      queryKey: ["users", { page, perPage, search }],
-      queryFn: () =>
-        userService.get({
-          queryParams: {
-            perPage: perPage ? Number(perPage) : undefined,
-            page: page ? Number(page) : undefined,
-            search
-          },
-        }),
-    });
+  const [searchParams] = useSearchParams();
+  const page = options?.page || searchParams.get("page") || 1;
+  const perPage = options?.perPage || searchParams.get("perPage") || 10;
+  const searchQuery = searchParams.get("search") || undefined;
+
+  const search = useDebounce(searchQuery as string, 500);
+  const query = useQuery({
+    queryKey: ["users", { page, perPage, search }],
+    queryFn: () =>
+      userService.get({
+        queryParams: {
+          perPage: perPage ? Number(perPage) : undefined,
+          page: page ? Number(page) : undefined,
+          search,
+        },
+      }),
+  });
   return query;
 };
 
@@ -58,7 +59,12 @@ export function useUserCreation() {
       }
     },
     onSuccess: (res) => {
-      console.log(res);
+      toast.success(res.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
       navigate("/admin/user");
 
       queryClient.removeQueries({ queryKey: ["users"] });
@@ -66,7 +72,12 @@ export function useUserCreation() {
       return;
     },
     onError: (err: ApiErrorResponse<ApiResponse>) => {
-      console.log(err);
+      toast.error(err.response?.data?.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
     },
   });
   return mutation;
