@@ -53,7 +53,7 @@ export const TableItem: React.FC<ITableItemProps> = ({
         <div className="flex items-center gap-2">
           {role !== "ADMIN" && (
             <>
-              <Link to={`/admin/anggota/edit/${id}`}>
+              <Link to={`/admin/user/edit/${id}`}>
                 <Typography
                   as="button"
                   className="text-xs font-semibold text-yellow-900"

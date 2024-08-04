@@ -103,7 +103,8 @@ const FormEditAnggota: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(anggotaBody);
+
+    anggotaBody.isActive = JSON.parse(anggotaBody.isActive as string);
     
     await mutation.mutateAsync({
       type: "update",
@@ -128,7 +129,7 @@ const FormEditAnggota: React.FC = () => {
         colorButton: "red",
       }}
     >
-      {isLoading && isLoadingAngkatan && (
+      {(isLoading || isLoadingAngkatan) && (
         <table className="w-full justify-center items-center">
           <tbody>
             <SimpleLoadingTable />

@@ -210,7 +210,8 @@ const FormAddUser: React.FC = () => {
                 disabled={mutation.isPending}
                 type="select"
                 label="Anggota"
-                value={searchAnggota ? "" : userBody.anggotaId as string}
+                defaultValue={userBody.anggotaId}
+                // value={searchAnggota ? "" : userBody.anggotaId as string}
                 onChange={() => {}}
                 error={errors.anggotaId}
                 options={[
