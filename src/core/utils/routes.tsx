@@ -9,6 +9,7 @@ import EditAcaraView from "@features/admin/acara/view/editAcara";
 import AddAnggotaView from "@features/admin/anggota/view/addAnggota";
 import { AnggotaView } from "@features/admin/anggota/view/Anggotas";
 import EditAnggotaView from "@features/admin/anggota/view/editAnggota";
+import { AngkatanView } from "@features/admin/angkatan/view/Angkatan";
 import AddDosenView from "@features/admin/dosen/view/addDosen";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
 import EditDosenView from "@features/admin/dosen/view/editDosen";
@@ -110,6 +111,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/struktural/edit/:id",
         element: <EditStrukturalView />,
+      },
+      {
+        path: "/admin/angkatan",
+        element: <AngkatanView />,
       },
     ],
   },
