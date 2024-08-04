@@ -36,7 +36,7 @@ export const TableItem: React.FC<ITableItemProps> = ({
 
       <td className="py-3 px-5">
         <div className="flex items-center gap-2">
-          <Link to={`/admin/dosen/edit/${id}`}>
+          <Link to={`/admin/angkatan/update/${id}`}>
             <Typography
               as="button"
               className="text-xs font-semibold text-yellow-900"

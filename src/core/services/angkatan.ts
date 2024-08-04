@@ -7,6 +7,6 @@ export const angkatanService = {
     get: HTTP_REQUEST.get<ApiResponse<AngkatanModel[]>>(API_ENDPOINT.angkatan),
     post: HTTP_REQUEST.post<ApiResponse, AngkatanDTO>(API_ENDPOINT.angkatan),
     put: HTTP_REQUEST.put<ApiResponse, AngkatanDTO>(API_ENDPOINT.angkatan),
-    getById: HTTP_REQUEST.get<ApiResponse<AngkatanModel[]>>(API_ENDPOINT.angkatan),
+    getById: HTTP_REQUEST.get<ApiResponse<AngkatanModel>>(API_ENDPOINT.angkatan),
     delete: HTTP_REQUEST.delete<ApiResponse>(API_ENDPOINT.angkatan)
 }

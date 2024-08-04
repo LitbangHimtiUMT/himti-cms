@@ -36,8 +36,8 @@ export const AngkatanContent = () => {
       title="Angkatan"
       action={{
         show: true,
-        buttonTitle: "Create Dosen",
-        link: { to: "/admin/dosen/create" },
+        buttonTitle: "Create Angkatan",
+        link: { to: "/admin/angkatan/create" },
       }}
       showPagination={
         !!(

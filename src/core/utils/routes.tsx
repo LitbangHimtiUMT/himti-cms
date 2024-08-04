@@ -10,6 +10,8 @@ import AddAnggotaView from "@features/admin/anggota/view/addAnggota";
 import { AnggotaView } from "@features/admin/anggota/view/Anggotas";
 import EditAnggotaView from "@features/admin/anggota/view/editAnggota";
 import { AngkatanView } from "@features/admin/angkatan/view/Angkatan";
+import { CreateAngkatanView } from "@features/admin/angkatan/view/CreateAngkatan";
+import { UpdateAngkatanView } from "@features/admin/angkatan/view/UpdateAngkatan";
 import AddDosenView from "@features/admin/dosen/view/addDosen";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
 import EditDosenView from "@features/admin/dosen/view/editDosen";
@@ -115,6 +117,14 @@ export const router = createBrowserRouter([
       {
         path: "/admin/angkatan",
         element: <AngkatanView />,
+      },
+      {
+        path: "/admin/angkatan/create",
+        element: <CreateAngkatanView />,
+      },
+      {
+        path: "/admin/angkatan/update/:id",
+        element: <UpdateAngkatanView />,
       },
     ],
   },

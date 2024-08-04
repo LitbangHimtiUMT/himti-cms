@@ -2,9 +2,9 @@ import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
 import { AngkatanDTO } from "@core/model/angkatan";
 import { angkatanService } from "@core/services/angkatan";
 import useDebounce from "@features/_global/hooks/useDebounce";
-import { useAuth } from "@features/auth/hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface Options {
   page?: number;
@@ -43,44 +43,42 @@ export const useAngkatan = (options?: Options) => {
 };
 
 export function useAngkatanCreation() {
-  const auth = useAuth();
+  // const auth = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: async ({ data, type, id }: AngkatanCreation) => {
       switch (type) {
         case "create":
-          return angkatanService.post(data, { bearerToken: auth?.token });
+          return angkatanService.post(data);
         case "update":
           return angkatanService.put(data, {
-            path: id,
-            bearerToken: auth?.token,
+            path: id
           });
         case "delete":
-          return angkatanService.delete({ path: id, bearerToken: auth?.token });
+          return angkatanService.delete({ path: id, });
         default:
-          return angkatanService.post(data, { bearerToken: auth?.token });
+          return angkatanService.post(data);
       }
     },
     onSuccess: (res) => {
-      console.log(res);
-      navigate("/admin/dosen");
-
-      queryClient.removeQueries({ queryKey: ["dosens"] });
-      queryClient.removeQueries({ queryKey: ["dosensById"] });
+      navigate("/admin/angkatan");
+      toast.success(res.message)
+      queryClient.removeQueries({ queryKey: ["angkatans"] });
+      queryClient.removeQueries({ queryKey: ["angkatanById"] });
       return;
     },
     onError: (err: ApiErrorResponse<ApiResponse>) => {
-      console.log(err);
+      toast.error(err.message);
     },
   });
   return mutation;
 }
 
-export function useDosenById() {
+export function useAngkatanById() {
   const { id } = useParams();
   return useQuery({
-    queryKey: ["dosensById", id],
+    queryKey: ["angkatanById", id],
     queryFn: () => angkatanService.getById({ path: id }),
     enabled: !!id,
   });
