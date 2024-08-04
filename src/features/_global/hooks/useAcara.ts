@@ -7,8 +7,8 @@ import { acaraService } from "@core/services/acara";
 import { useAuth } from "@features/auth/hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import useDebounce from "./useDebounce";
-import { Flip, toast } from "react-toastify";
 
 interface Options extends QueryParams {
   page?: number;

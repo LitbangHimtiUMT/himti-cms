@@ -5,7 +5,7 @@ import { DosenDTO } from "@core/model/dosen";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { useNavigate } from "react-router-dom";
-import { useDosenCreation } from "../hooks/useAngkatan";
+import { useAngkatanCreation } from "../hooks/useAngkatan";
 
 const InitialValue: DosenDTO = {
   nidn: "",
@@ -16,7 +16,7 @@ const InitialValue: DosenDTO = {
 };
 
 const FormAddDosen: React.FC = () => {
-  const mutation = useDosenCreation();
+  const mutation = useAngkatanCreation();
 
   const [dosenBody, setDosenBody] = useState<DosenDTO>({
     ...InitialValue,
