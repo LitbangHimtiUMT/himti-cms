@@ -5,6 +5,8 @@ import { router } from "@core/utils/routes";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import "leaflet/dist/leaflet.css";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <RouterProvider router={router} />
+          <ToastContainer />
         </LocalizationProvider>
       </QueryClientProvider>
     </>

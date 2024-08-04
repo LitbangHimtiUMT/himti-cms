@@ -5,6 +5,7 @@ import useDebounce from "@features/_global/hooks/useDebounce";
 import { useAuth } from "@features/auth/hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface Options {
   page?: number;
@@ -62,7 +63,12 @@ export function useAnggotaCreation() {
       }
     },
     onSuccess: (res) => {
-      console.log(res);
+      toast.success(res.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
       navigate("/admin/anggota");
 
       queryClient.removeQueries({ queryKey: ["anggotas"] });
@@ -70,7 +76,12 @@ export function useAnggotaCreation() {
       return;
     },
     onError: (err: ApiErrorResponse<ApiResponse>) => {
-      console.log(err);
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
     },
   });
   return mutation;

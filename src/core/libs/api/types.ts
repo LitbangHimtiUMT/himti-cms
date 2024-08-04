@@ -28,14 +28,7 @@ export interface ApiResponse<Res = unknown> {
   meta?: MetaResponse;
 }
 
-export interface ApiErrorResponse<Res = unknown> {
-  code?: string;
-  status?: number;
-  statusText?: string;
-  response?: {
-    data: Res;
-  };
-}
+export type ApiErrorResponse<Res = unknown> = Res;
 
 export const getContentType = (type?: ApiOption["contentType"]) => {
   switch (type) {

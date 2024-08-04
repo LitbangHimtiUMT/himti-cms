@@ -74,7 +74,7 @@ const FormEditAcara: React.FC = () => {
       newErrors.description = "Description is required";
       isValid = false;
     }
-    if (!acaraBody.isOpenAbsen) {
+    if (!acaraBody.isOpenAbsen && typeof acaraBody.isOpenAbsen !== "boolean") {
       newErrors.isOpenAbsen = "Open Absen is required";
       isValid = false;
     }
@@ -116,10 +116,13 @@ const FormEditAcara: React.FC = () => {
       acaraBody.endTime as Date,
       "Asia/Jakarta"
     ).toISOString();
-    acaraBody.isOpenAbsen = acaraBody.isOpenAbsen === "true";
     const formData = new FormData();
     Object.entries(acaraBody).forEach(([key, value]) => {
-      formData.append(key, value as any);
+      if (key === "isOpenAbsen") {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value as any);
+      }
     });
 
     await mutation.mutateAsync({
@@ -353,7 +356,7 @@ const FormEditAcara: React.FC = () => {
               fullWidth
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Loading..." : "Add"}
+              {mutation.isPending ? "Loading..." : "Edit"}
             </Button>
           </div>
         </form>

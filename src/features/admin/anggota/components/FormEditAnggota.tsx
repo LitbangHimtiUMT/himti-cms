@@ -86,12 +86,12 @@ const FormEditAnggota: React.FC = () => {
       isValid = false;
     }
 
-    if (!anggotaBody.email) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    }
+    // if (!anggotaBody.email) {
+    //   newErrors.email = "Email is required";
+    //   isValid = false;
+    // }
 
-    if (!anggotaBody.isActive) {
+    if (!anggotaBody.isActive && typeof anggotaBody.isActive !== "boolean") {
       newErrors.isActive = "Status is required";
       isValid = false;
     }
@@ -103,7 +103,8 @@ const FormEditAnggota: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    anggotaBody.isActive = anggotaBody.isActive === "true";
+    console.log(anggotaBody);
+    
     await mutation.mutateAsync({
       type: "update",
       data: anggotaBody,
@@ -127,7 +128,7 @@ const FormEditAnggota: React.FC = () => {
         colorButton: "red",
       }}
     >
-      {isLoading || isLoadingAngkatan && (
+      {isLoading && isLoadingAngkatan && (
         <table className="w-full justify-center items-center">
           <tbody>
             <SimpleLoadingTable />
@@ -286,7 +287,7 @@ const FormEditAnggota: React.FC = () => {
               fullWidth
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Loading..." : "Add"}
+              {mutation.isPending ? "Loading..." : "Edit"}
             </Button>
           </div>
         </form>
