@@ -46,12 +46,16 @@ export const FormUpdateAngkatan: React.FC = () => {
       type: "update",
       data: {
         ...angkatanBody,
-        ...(angkatanBody.isActive === undefined && {
-          isActive: angkatan?.data?.isActive,
-        }),
-        ...(angkatanBody.year === undefined && {
-          year: angkatan?.data?.year,
-        }),
+        ...(angkatanBody.isActive === undefined
+          ? {
+              isActive: angkatan?.data?.isActive,
+            }
+          : { isActive: angkatanBody.isActive }),
+        ...(angkatanBody.year === undefined
+          ? {
+              year: angkatan?.data?.year,
+            }
+          : { year: angkatanBody.year }),
       },
       id,
     });
