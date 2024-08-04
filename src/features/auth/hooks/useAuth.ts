@@ -1,4 +1,3 @@
-import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
 import { AuthLoginBodyModel } from "@core/model/auth";
 import { authService } from "@core/services/auth";
 import { useMutation } from "@tanstack/react-query";
@@ -19,7 +18,7 @@ export function useAuthLogin() {
       localStorage.setItem("token", res?.data?.access_token as string);
       navigate("/admin/acara");
     },
-    onError: (err: ApiErrorResponse<ApiResponse>) => {
+    onError: (err) => {
       toast.error(err.message, {
         position: "top-right",
         autoClose: 3000,
