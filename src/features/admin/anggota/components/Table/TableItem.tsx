@@ -40,7 +40,6 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
   id,
   handleDelete,
 }) => {
-  console.log(email);
   return (
     <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
       <td className="py-3 px-5">
@@ -54,8 +53,7 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
         </Typography>
       </td>
       <td className="py-3 px-5">
-        <Typography className="text-xs font-semibold text-blue-gray-600">
-          {angkatan?.year}
+        <Typography className="text-xs font-semibold ext text-blue-gray-600">
           {angkatan?.year}
         </Typography>
       </td>
@@ -86,19 +84,19 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
             </PopoverHandler>
             <PopoverContent className="flex flex-col gap-3">
               <Typography className="text-xs font-semibold text-blue-gray-600">
-                Email: {email || "-"}
+                Email: {email?(<a href={`mailto:${email}`}>{email}</a>) : "-"}
               </Typography>
               <Typography className="text-xs font-semibold text-blue-gray-600">
-                Facebook: {facebook || "-"}
+                Facebook: {facebook?(<a href={facebook}>{facebook}</a>) : "-"}
               </Typography>
               <Typography className="text-xs font-semibold text-blue-gray-600">
-                Instagram: {instagram || "-"}
+                Instagram: {instagram?(<a href={instagram}>{instagram}</a>) : "-"}
               </Typography>
               <Typography className="text-xs font-semibold text-blue-gray-600">
-                Linkedin: {linkedin || "-"}
+                Linkedin: {linkedin?(<a href={linkedin}>{linkedin}</a>) : "-"}
               </Typography>
               <Typography className="text-xs font-semibold text-blue-gray-600">
-                Twitter: {twitter || "-"}
+                Twitter: {twitter?(<a href={twitter}>{twitter}</a>) : "-"}
               </Typography>
             </PopoverContent>
           </Popover>

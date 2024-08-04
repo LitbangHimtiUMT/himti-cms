@@ -52,12 +52,7 @@ const FormAddAnggota: React.FC = () => {
       isValid = false;
     }
 
-    if (!anggotaBody.email) {
-      newErrors.email = "Email is required";
-      isValid = false;
-    }
-
-    if (!anggotaBody.isActive) {
+    if (!anggotaBody.isActive && typeof anggotaBody.isActive !== "boolean") {
       newErrors.isActive = "Status is required";
       isValid = false;
     }
@@ -69,10 +64,16 @@ const FormAddAnggota: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    anggotaBody.isActive = anggotaBody.isActive === "true";
+    anggotaBody.isActive = JSON.parse(anggotaBody.isActive as string);
     await mutation.mutateAsync({
       type: "create",
-      data: anggotaBody,
+      data: {
+        nim: anggotaBody.nim,
+        name: anggotaBody.name,
+        angkatanId: "7977d5e0-f70a-4499-bc0f-23870a070257",
+        email: anggotaBody.email,
+        isActive: anggotaBody.isActive,
+      },
     });
   };
 
