@@ -1,5 +1,5 @@
 import { Button, Switch } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { AngkatanDTO } from "@core/model/angkatan";
 import InputGroup from "@features/_global/components/Input/InputGroup";
@@ -27,36 +27,24 @@ export const FormUpdateAngkatan: React.FC = () => {
   >({});
 
   const navigate = useNavigate();
-  // const validate = () => {
-  //   const newErrors: Partial<Record<keyof AngkatanDTO, string>> = {};
-  //   let isValid = true;
+  const validate = () => {
+    const newErrors: Partial<Record<keyof AngkatanDTO, string>> = {};
+    let isValid = true;
 
-  //   if (!angkatanBody.year) {
-  //     newErrors.year = "Year is required";
-  //     isValid = false;
-  //   }
+    if (!angkatanBody.year) {
+      newErrors.year = "Year is required";
+      isValid = false;
+    }
 
-  //   setErrors(newErrors);
-  //   return isValid;
-  // };
+    setErrors(newErrors);
+    return isValid;
+  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (!validate()) return;
+    if (!validate()) return;
     await mutation.mutateAsync({
       type: "update",
-      data: {
-        ...angkatanBody,
-        ...(angkatanBody.isActive === undefined
-          ? {
-              isActive: angkatan?.data?.isActive,
-            }
-          : { isActive: angkatanBody.isActive }),
-        ...(angkatanBody.year === undefined
-          ? {
-              year: angkatan?.data?.year,
-            }
-          : { year: angkatanBody.year }),
-      },
+      data: angkatanBody,
       id,
     });
   };
@@ -65,6 +53,14 @@ export const FormUpdateAngkatan: React.FC = () => {
     setAngkatanBody(InitialValue);
     setErrors({});
   };
+
+  useEffect(() => {
+    setAngkatanBody((prev) => ({
+      ...prev,
+      isActive: angkatan?.data?.isActive,
+      year: angkatan?.data?.year,
+    }));
+  }, [angkatan]);
   return (
     <PageLayout
       title="Update Angkatan"
