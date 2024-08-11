@@ -22,3 +22,9 @@ export interface UserDTO {
   nim?: string;
   anggotaId?: string | ChangeEvent<HTMLSelectElement>;
 }
+
+export interface CreateAdminUserBodyDTO {
+  name: string
+  email: string
+  password: string
+}

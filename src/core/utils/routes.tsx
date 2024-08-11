@@ -18,7 +18,7 @@ import EditDosenView from "@features/admin/dosen/view/editDosen";
 import AddStrukturalView from "@features/admin/struktural/view/addStruktural";
 import EditStrukturalView from "@features/admin/struktural/view/editStruktural";
 import StrukturalView from "@features/admin/struktural/view/struktural";
-import AddUserView from "@features/admin/users/view/addUser";
+import { CreateUserView } from "@features/admin/users/view/createUser";
 import EditUserView from "@features/admin/users/view/editUser";
 import { UserView } from "@features/admin/users/view/users";
 import AdminView from "@features/admin/view/Admin";
@@ -72,7 +72,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/admin/user/create",
-        element: <AddUserView />,
+        element: <CreateUserView />,
       },
       {
         path: "/admin/user/edit/:id",

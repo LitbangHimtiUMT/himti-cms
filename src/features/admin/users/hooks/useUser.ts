@@ -1,8 +1,7 @@
 import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
-import { UserDTO } from "@core/model/user";
+import { CreateAdminUserBodyDTO, UserDTO } from "@core/model/user";
 import { userService } from "@core/services/user";
 import useDebounce from "@features/_global/hooks/useDebounce";
-import { useAuth } from "@features/auth/hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,11 +11,12 @@ interface Options {
   perPage?: number;
 }
 
-type PayloadType = "create" | "update" | "delete";
+type PayloadType = "create" | "update" | "delete" | 'admin';
 
 interface UserCreation {
   type: PayloadType;
   data?: UserDTO;
+  adminData?: CreateAdminUserBodyDTO
   id?: string;
 }
 
@@ -42,20 +42,23 @@ export const useUser = (options?: Options) => {
 };
 
 export function useUserCreation() {
-  const auth = useAuth();
+  // const auth = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
-    mutationFn: async ({ data, type, id }: UserCreation) => {
+    mutationFn: async ({ data, type, id, adminData }: UserCreation) => {
+
       switch (type) {
         case "create":
-          return userService.post(data, { bearerToken: auth?.token });
+          return userService.post(data);
         case "update":
-          return userService.put(data, { path: id, bearerToken: auth?.token });
+          return userService.put(data, { path: id });
         case "delete":
-          return userService.delete({ path: id, bearerToken: auth?.token });
+          return userService.delete({ path: id });
+        case 'admin':
+          return userService.createAdmin(adminData, { path: 'admin' })
         default:
-          return userService.post(data, { bearerToken: auth?.token });
+          return userService.post(data);
       }
     },
     onSuccess: (res) => {

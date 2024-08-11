@@ -11,10 +11,6 @@ const AdminView: React.FC = () => {
   const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
   const auth = useAuth();
 
-  if (!auth?.token) {
-    return <Navigate to={"/admin/login"} replace />;
-  }
-
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 1140) {
@@ -25,6 +21,19 @@ const AdminView: React.FC = () => {
   }, [window.innerWidth]);
 
   const handleOpenSidenav = () => setOpenSidenav(!openSidenav);
+  console.log(auth);
+
+  if (auth?.isLoading) {
+    return (
+      <>
+        <p>Loading...</p>
+      </>
+    );
+  }
+
+  if (!auth?.data) {
+    return <Navigate to={"/admin/login"} replace />;
+  }
 
   return (
     <div className="min-h-screen bg-blue-gray-50/50">

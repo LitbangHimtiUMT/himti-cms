@@ -1,9 +1,9 @@
 import {
   Input,
-  Typography,
+  Option,
   Select,
   Textarea,
-  Option,
+  Typography,
 } from "@material-tailwind/react";
 import React from "react";
 
@@ -11,10 +11,19 @@ interface InputGroupProps {
   label?: string;
   variant?: "outlined" | "filled" | "standard";
   error?: string;
+  mb?: boolean;
   value?: string | number;
   onChange?: (e: React.ChangeEvent<any>) => void;
-  type?: "text" | "textarea" | "select" | "file" | "number" | "email" | "search" | "password";
-  options?: { value: string | boolean; label: string, onClick?: () => void }[]; // Digunakan untuk Select
+  type?:
+    | "text"
+    | "textarea"
+    | "select"
+    | "file"
+    | "number"
+    | "email"
+    | "search"
+    | "password";
+  options?: { value: string | boolean; label: string; onClick?: () => void }[]; // Digunakan untuk Select
   isPending?: boolean;
   className?: string;
   [x: string]: any; // Untuk menangani properti tambahan
@@ -26,6 +35,7 @@ const InputGroup: React.FC<InputGroupProps> = ({
   error,
   value,
   onChange,
+  mb = true,
   type,
   options = [],
   isPending,
@@ -33,8 +43,15 @@ const InputGroup: React.FC<InputGroupProps> = ({
   ...rest
 }) => {
   return (
-    <div id={type==="file" ? "container-image" : ""} className={`${type !== "search" && "mb-4"} ${className}`}>
-      {(type === "text" || type === "email" || type === "number" || type === "password" || type === "search") && (
+    <div
+      id={type === "file" ? "container-image" : ""}
+      className={`${type !== "search" && mb && "mb-4"} ${className}`}
+    >
+      {(type === "text" ||
+        type === "email" ||
+        type === "number" ||
+        type === "password" ||
+        type === "search") && (
         <Input
           type={type}
           disabled={isPending}
@@ -69,9 +86,20 @@ const InputGroup: React.FC<InputGroupProps> = ({
         />
       )}
       {type === "select" && (
-        <Select disabled={isPending} label={label} value={value} error={!!error} onChange={onChange} {...rest}>
+        <Select
+          disabled={isPending}
+          label={label}
+          value={value}
+          error={!!error}
+          onChange={onChange}
+          {...rest}
+        >
           {options.map((option) => (
-            <Option onClick={option.onClick} key={option.value} value={option.value}>
+            <Option
+              onClick={option.onClick}
+              key={option.value}
+              value={option.value}
+            >
               {option.label}
             </Option>
           ))}

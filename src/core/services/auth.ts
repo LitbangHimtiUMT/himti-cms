@@ -5,4 +5,5 @@ import { AuthLoginBodyModel, AuthLoginModel } from "@core/model/auth";
 
 export const authService = {
     login: HTTP_REQUEST.post<ApiResponse<AuthLoginModel>, AuthLoginBodyModel>(API_ENDPOINT.login),
+    check: HTTP_REQUEST.get<ApiResponse>(API_ENDPOINT.check),
 }
