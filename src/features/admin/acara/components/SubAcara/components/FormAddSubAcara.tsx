@@ -1,15 +1,15 @@
-import { Button } from "@material-tailwind/react";
-import React, { useRef, useState } from "react";
 import DefaultImage from "@core/assets/default-image.png";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { TextField } from "@mui/material";
-import { utcToZonedTime } from "date-fns-tz";
-import { PageLayout } from "@features/_global/components/PageLayout";
-import { useNavigate } from "react-router-dom";
-import InputGroup from "@features/_global/components/Input/InputGroup";
 import CropperImage from "@features/_global/components/CropperImage";
-import { AcaraDTO } from "../../../model/acara";
+import InputGroup from "@features/_global/components/Input/InputGroup";
+import { PageLayout } from "@features/_global/components/PageLayout";
 import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
+import { Button } from "@material-tailwind/react";
+import { TextField } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { utcToZonedTime } from "date-fns-tz";
+import React, { useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { AcaraDTO } from "../../../model/acara";
 
 const InitialValue: AcaraDTO = {
   name: "",
@@ -26,11 +26,14 @@ interface ImageFile extends File {
 
 const FormAddSubAcara: React.FC = () => {
   const mutation = useSubAcaraCreation();
+  const { acaraId } = useParams();
 
   const cropperRef = useRef<any>(null);
 
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [subAcaraBody, setSubAcaraBody] = useState<AcaraDTO>({ ...InitialValue });
+  const [subAcaraBody, setSubAcaraBody] = useState<AcaraDTO>({
+    ...InitialValue,
+  });
   const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
     DefaultImage
   );
@@ -100,6 +103,7 @@ const FormAddSubAcara: React.FC = () => {
     Object.entries(subAcaraBody).forEach(([key, value]) => {
       formData.append(key, value as any);
     });
+    formData.append("acaraId", acaraId as string);
 
     await mutation.mutateAsync({
       type: "create",

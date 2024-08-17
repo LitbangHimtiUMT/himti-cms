@@ -2,12 +2,11 @@ import { PageLayout } from "@features/_global/components/PageLayout";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 import { useAcaraById } from "@features/_global/hooks/useAcara";
 import { formatDate } from "@features/_global/lib/FormatTime";
-import { Button, Chip } from "@material-tailwind/react";
-import { Typography } from "@material-tailwind/react";
+import { Button, Chip, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ListSubAcaraContent from "./SubAcara/components/ListSubAcaraContent";
 import { subAcara } from "../model/acara";
+import ListSubAcaraContent from "./SubAcara/components/ListSubAcaraContent";
 
 const DetailAcaraContent: React.FC = () => {
   const { data: acaraById, isLoading } = useAcaraById();
@@ -69,7 +68,9 @@ const DetailAcaraContent: React.FC = () => {
                   className="px-2 text-[11px] font-medium w-fit inline-block"
                 />
               </div>
-              <Button className="w-full mb-4" onClick={handleIsDrawer}>Sub Acara</Button>
+              <Button className="w-full mb-4" onClick={handleIsDrawer}>
+                Sub Acara
+              </Button>
               <Typography variant="h5" className="mb-2">
                 Description :
               </Typography>
@@ -88,6 +89,7 @@ const DetailAcaraContent: React.FC = () => {
         )}
       </PageLayout>
       <ListSubAcaraContent
+        acaraId={acaraById?.data?.id as string}
         name={acaraById?.data?.name as string}
         subAcara={acaraById?.data?.subAcara as subAcara[]}
         isDrawer={isDrawer}

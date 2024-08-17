@@ -1,16 +1,16 @@
-import { Drawer, IconButton, Typography } from "@material-tailwind/react";
-import React from "react";
-import { subAcara } from "../../../model/acara";
+import EmptyData from "@features/_global/components/EmptyData";
 import { PageLayout } from "@features/_global/components/PageLayout";
+import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 import {
   Table,
   TableBody,
   TableHead,
 } from "@features/_global/components/Table";
-import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
-import EmptyData from "@features/_global/components/EmptyData";
-import { TableItem } from "../../Table/TableItem";
 import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
+import { Drawer, IconButton, Typography } from "@material-tailwind/react";
+import React from "react";
+import { subAcara } from "../../../model/acara";
+import { TableItem } from "../../Table/TableItem";
 
 interface ListSubAcaraContentProps {
   name: string;
@@ -18,6 +18,7 @@ interface ListSubAcaraContentProps {
   isDrawer: boolean;
   handleIsDrawer: () => void;
   isLoading: boolean;
+  acaraId: string;
 }
 
 const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
@@ -26,6 +27,7 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
   isDrawer,
   handleIsDrawer,
   isLoading,
+  acaraId,
 }) => {
   const mutation = useSubAcaraCreation();
 
@@ -68,7 +70,7 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
         action={{
           show: true,
           buttonTitle: "Create Sub Acara",
-          link: { to: "/admin/sub-acara/create" },
+          link: { to: `/admin/acara/${acaraId}/sub-acara/create` },
         }}
         title="Sub Acara"
       >

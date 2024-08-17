@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 // import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
-import { useAuth } from "@features/auth/hooks/useAuth";
 import { subAcaraService } from "@core/services/subAcara";
 import { toast } from "react-toastify";
 
@@ -22,7 +21,7 @@ interface SubAcaraCreation {
 }
 
 export function useSubAcaraCreation() {
-  const auth = useAuth();
+  // const auth = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
@@ -31,20 +30,20 @@ export function useSubAcaraCreation() {
         case "create":
           return subAcaraService.post(data, {
             contentType: "form-data",
-            bearerToken: auth?.token,
+
           });
         case "update":
           return subAcaraService.put(data, {
             contentType: "form-data",
             path: id,
-            bearerToken: auth?.token,
+
           });
         case "delete":
-          return subAcaraService.delete({ path: id, bearerToken: auth?.token });
+          return subAcaraService.delete({ path: id });
         default:
           return subAcaraService.post(data, {
             contentType: "form-data",
-            bearerToken: auth?.token,
+
           });
       }
     },
@@ -55,7 +54,7 @@ export function useSubAcaraCreation() {
         pauseOnHover: true,
         theme: "dark",
       });
-      navigate("/admin/subacara");
+      navigate("/admin/sub-acara");
 
       queryClient.removeQueries({ queryKey: ["acarasById"] });
       queryClient.removeQueries({ queryKey: ["absensis"] });

@@ -13,10 +13,8 @@ import { Link } from "react-router-dom";
 const AdminNavbar: React.FC<{
   page: string;
   layout: string;
-}> = ({
-  page,
-  layout,
-}) => {
+  link?: string;
+}> = ({ page, layout, link }) => {
   const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
 
   return (
@@ -29,7 +27,7 @@ const AdminNavbar: React.FC<{
         <div className="capitalize w-full px-5">
           <div className="flex flex-col gap-3">
             <Breadcrumbs className={`bg-transparent p-0 transition-all`}>
-              <Link to={`/admin/${layout}`}>
+              <Link to={link ? link : `/admin/${layout}`}>
                 <Typography
                   variant="small"
                   color="blue-gray"
