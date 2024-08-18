@@ -18,6 +18,7 @@ import EditDosenView from "@features/admin/dosen/view/editDosen";
 import AddStrukturalView from "@features/admin/struktural/view/addStruktural";
 import EditStrukturalView from "@features/admin/struktural/view/editStruktural";
 import StrukturalView from "@features/admin/struktural/view/struktural";
+import { UserLoginView } from "@features/admin/user-login/views/UserLogin";
 import { CreateUserView } from "@features/admin/users/view/CreateUser";
 import EditUserView from "@features/admin/users/view/editUser";
 import { UserView } from "@features/admin/users/view/users";
@@ -125,6 +126,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/angkatan/update/:id",
         element: <UpdateAngkatanView />,
+      },
+      {
+        path: "/admin/user-login",
+        element: <UserLoginView />,
       },
     ],
   },

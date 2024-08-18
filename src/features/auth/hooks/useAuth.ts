@@ -58,6 +58,7 @@ export function useAuth() {
   if (
     data?.code === "UNAUTHORIZED" ||
     data?.status === 401) {
+    console.log(token)
     localStorage.removeItem("token")
     return undefined
   }

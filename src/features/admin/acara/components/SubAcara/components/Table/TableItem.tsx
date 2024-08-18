@@ -15,18 +15,18 @@ interface ItemAcaraProps {
 export const TableItem: React.FC<ItemAcaraProps> = ({
   show,
   user,
-  image,
+  // image,
   id,
 }) => {
   return (
     <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
-      <td className="py-3 px-5">
+      {/* <td className="py-3 px-5">
         <img
           src={image}
           alt={user.name}
           className="max-w-[150px] max-h-[150px] object-cover rounded-md"
         />
-      </td>
+      </td> */}
       <td className="py-3 px-5">
         <div className="flex items-center gap-4">
           <Typography

@@ -14,4 +14,6 @@ export const API_ENDPOINT = {
   subAcara: `${CONFIG_APP.BASE_URL}/sub-acara`,
   absensi: `${CONFIG_APP.BASE_URL}/absensi`,
   angkatan: `${CONFIG_APP.BASE_URL}/angkatan`,
+  userLogin: `${CONFIG_APP.BASE_URL}/user-fcm`,
+  notification: `${CONFIG_APP.BASE_URL}/notification`,
 }

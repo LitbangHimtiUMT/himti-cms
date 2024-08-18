@@ -11,8 +11,7 @@ import {
   useSubAcaraById,
 } from "@features/_global/hooks/useSubAcara";
 import { formatDate } from "@features/_global/lib/FormatTime";
-import { Chip } from "@material-tailwind/react";
-import { Typography } from "@material-tailwind/react";
+import { Chip, Typography } from "@material-tailwind/react";
 import React, { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { TableItem } from "./Table/TableItem";
@@ -49,11 +48,11 @@ const DetailSubAcaraContent: React.FC = () => {
       {!isLoading && subAcaraById?.data && (
         <>
           <div className="flex flex-col w-full justify-center items-center">
-            <img
+            {/* <img
               src={subAcaraById?.data?.image as string}
               alt={subAcaraById?.data?.name as string}
               className="h-full w-full object-cover max-w-xs rounded-2xl mb-5"
-            />
+            /> */}
             <div className="w-full">
               <Typography variant="h4" className="mb-2 text-center">
                 {subAcaraById?.data?.name}

@@ -75,7 +75,7 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
         title="Sub Acara"
       >
         <Table>
-          <TableHead field={["Image", "Name", "Time", "Status", "Action"]} />
+          <TableHead field={["Name", "Time", "Status", "Action"]} />
           <TableBody>
             {isLoading ? (
               <SimpleLoadingTable ColSpan={6} />

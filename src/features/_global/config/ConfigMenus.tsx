@@ -1,3 +1,4 @@
+import { BiKey } from "react-icons/bi";
 import { FaCalendar, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
@@ -33,5 +34,10 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <GiTeacher />,
     name: "Dosen",
     to: "/admin/dosen",
+  },
+  {
+    icon: <BiKey />,
+    name: "User Login",
+    to: "/admin/user-login",
   },
 ];
