@@ -24,6 +24,14 @@ export interface subAcara {
   updatedAt: Date;
 }
 
+export interface SubAcaraBodyRequest {
+  name: string;
+  description?: string;
+  image?: File | string;
+  startTime: Date | string;
+  endTime: Date | string;
+}
+
 export interface AcaraDetailModel extends AcaraModel {
   subAcara: subAcara[];
 }

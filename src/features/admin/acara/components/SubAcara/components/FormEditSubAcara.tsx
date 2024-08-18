@@ -1,21 +1,23 @@
-import { Button } from "@material-tailwind/react";
-import React, { useEffect, useRef, useState } from "react";
 import DefaultImage from "@core/assets/default-image.png";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { TextField } from "@mui/material";
-import { utcToZonedTime } from "date-fns-tz";
-import { PageLayout } from "@features/_global/components/PageLayout";
-import { useNavigate, useParams } from "react-router-dom";
-import InputGroup from "@features/_global/components/Input/InputGroup";
 import CropperImage from "@features/_global/components/CropperImage";
+import InputGroup from "@features/_global/components/Input/InputGroup";
+import { PageLayout } from "@features/_global/components/PageLayout";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
-import { useSubAcaraById, useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
-import { AcaraDTO } from "../../../model/acara";
+import {
+  useSubAcaraById,
+  useSubAcaraCreation,
+} from "@features/_global/hooks/useSubAcara";
+import { Button } from "@material-tailwind/react";
+import { TextField } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { utcToZonedTime } from "date-fns-tz";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { SubAcaraBodyRequest } from "../../../model/acara";
 
-const InitialValue: AcaraDTO = {
+const InitialValue: SubAcaraBodyRequest = {
   name: "",
   description: "",
-  isOpenAbsen: "",
   image: "",
   startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
   endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
@@ -34,13 +36,12 @@ const FormEditSubAcara: React.FC = () => {
 
   useEffect(() => {
     if (subAcaraById && subAcaraById.data) {
-      const { name, description, isOpenAbsen, image, startTime, endTime } =
+      const { name, description, image, startTime, endTime } =
         subAcaraById.data;
       // const categoryId = category ? category.id : "";
       setSubAcaraBody({
         name,
         description,
-        isOpenAbsen,
         image,
         startTime,
         endTime,
@@ -49,18 +50,20 @@ const FormEditSubAcara: React.FC = () => {
   }, [subAcaraById]);
 
   const [isModal, setIsModal] = useState<boolean>(false);
-  const [subAcaraBody, setSubAcaraBody] = useState<AcaraDTO>({ ...InitialValue });
+  const [subAcaraBody, setSubAcaraBody] = useState<SubAcaraBodyRequest>({
+    ...InitialValue,
+  });
   const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
     DefaultImage
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof AcaraDTO, string>>>(
-    {}
-  );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof SubAcaraBodyRequest, string>>
+  >({});
 
   const navigate = useNavigate();
 
   const validate = () => {
-    const newErrors: Partial<Record<keyof AcaraDTO, string>> = {};
+    const newErrors: Partial<Record<keyof SubAcaraBodyRequest, string>> = {};
     let isValid = true;
 
     if (!subAcaraBody.name) {
@@ -69,10 +72,6 @@ const FormEditSubAcara: React.FC = () => {
     }
     if (!subAcaraBody.description) {
       newErrors.description = "Description is required";
-      isValid = false;
-    }
-    if (!subAcaraBody.isOpenAbsen) {
-      newErrors.isOpenAbsen = "Open Absen is required";
       isValid = false;
     }
     if (!subAcaraBody.startTime) {
@@ -84,14 +83,14 @@ const FormEditSubAcara: React.FC = () => {
       isValid = false;
     }
 
-    if (
-      subAcaraBody.startTime &&
-      subAcaraBody.endTime &&
-      subAcaraBody.endTime < subAcaraBody.startTime
-    ) {
-      newErrors.startTime = "End Time must be greater than Start Time";
-      isValid = false;
-    }
+    // if (
+    //   subAcaraBody.startTime &&
+    //   subAcaraBody.endTime &&
+    //   subAcaraBody.endTime < subAcaraBody.startTime
+    // ) {
+    //   newErrors.startTime = "End Time must be greater than Start Time";
+    //   isValid = false;
+    // }
 
     if (!subAcaraBody.image && (!imageFile || imageFile === DefaultImage)) {
       newErrors.image = "Image is required";
@@ -113,7 +112,6 @@ const FormEditSubAcara: React.FC = () => {
       subAcaraBody.endTime as Date,
       "Asia/Jakarta"
     ).toISOString();
-    subAcaraBody.isOpenAbsen = subAcaraBody.isOpenAbsen === "true";
     const formData = new FormData();
     Object.entries(subAcaraBody).forEach(([key, value]) => {
       formData.append(key, value as any);
@@ -239,27 +237,6 @@ const FormEditSubAcara: React.FC = () => {
                   description: e.target.value,
                 })
               }
-            />
-          </div>
-
-          <div className="mb-4">
-            <InputGroup
-              disabled={mutation.isPending}
-              type="select"
-              label="Status"
-              value={String(subAcaraBody.isOpenAbsen)}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setSubAcaraBody({
-                  ...subAcaraBody,
-                  isOpenAbsen: e,
-                });
-              }}
-              error={errors.isOpenAbsen}
-              options={[
-                { value: "", label: "Pilih Status" },
-                { value: "true", label: "Open" },
-                { value: "false", label: "Close" },
-              ]}
             />
           </div>
 

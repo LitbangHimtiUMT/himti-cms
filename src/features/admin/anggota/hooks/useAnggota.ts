@@ -2,7 +2,6 @@ import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
 import { AnggotaDTO } from "@core/model/anggota";
 import { anggotaService } from "@core/services/anggota";
 import useDebounce from "@features/_global/hooks/useDebounce";
-import { useAuth } from "@features/auth/hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -43,23 +42,23 @@ export const useAnggota = (options?: Options) => {
 };
 
 export function useAnggotaCreation() {
-  const auth = useAuth();
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: async ({ data, type, id }: AnggotaCreation) => {
       switch (type) {
         case "create":
-          return anggotaService.post(data, { bearerToken: auth?.token });
+          return anggotaService.post(data);
         case "update":
           return anggotaService.put(data, {
             path: id,
-            bearerToken: auth?.token,
+
           });
         case "delete":
-          return anggotaService.delete({ path: id, bearerToken: auth?.token });
+          return anggotaService.delete({ path: id });
         default:
-          return anggotaService.post(data, { bearerToken: auth?.token });
+          return anggotaService.post(data);
       }
     },
     onSuccess: (res) => {

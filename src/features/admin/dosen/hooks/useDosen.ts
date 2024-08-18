@@ -2,7 +2,6 @@ import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
 import { DosenDTO } from "@core/model/dosen";
 import { dosenService } from "@core/services/dosen";
 import useDebounce from "@features/_global/hooks/useDebounce";
-import { useAuth } from "@features/auth/hooks/useAuth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -44,23 +43,23 @@ export const useDosen = (options?: Options) => {
 };
 
 export function useDosenCreation() {
-  const auth = useAuth();
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: async ({ data, type, id }: DosenCreation) => {
       switch (type) {
         case "create":
-          return dosenService.post(data, { bearerToken: auth?.token });
+          return dosenService.post(data,);
         case "update":
           return dosenService.put(data, {
             path: id,
-            bearerToken: auth?.token,
+
           });
         case "delete":
-          return dosenService.delete({ path: id, bearerToken: auth?.token });
+          return dosenService.delete({ path: id });
         default:
-          return dosenService.post(data, { bearerToken: auth?.token });
+          return dosenService.post(data,);
       }
     },
     onSuccess: (res) => {

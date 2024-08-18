@@ -1,5 +1,4 @@
 import DefaultImage from "@core/assets/default-image.png";
-import CropperImage from "@features/_global/components/CropperImage";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
@@ -7,15 +6,14 @@ import { Button } from "@material-tailwind/react";
 import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { utcToZonedTime } from "date-fns-tz";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AcaraDTO } from "../../../model/acara";
+import { AcaraDTO, SubAcaraBodyRequest } from "../../../model/acara";
 
-const InitialValue: AcaraDTO = {
+const InitialValue: SubAcaraBodyRequest = {
   name: "",
   description: "",
-  isOpenAbsen: "",
-  image: "",
+  // image: "",
   startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
   endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
 };
@@ -28,18 +26,18 @@ const FormAddSubAcara: React.FC = () => {
   const mutation = useSubAcaraCreation();
   const { acaraId } = useParams();
 
-  const cropperRef = useRef<any>(null);
+  // const cropperRef = useRef<any>(null);
 
-  const [isModal, setIsModal] = useState<boolean>(false);
-  const [subAcaraBody, setSubAcaraBody] = useState<AcaraDTO>({
+  // const [isModal, setIsModal] = useState<boolean>(false);
+  const [subAcaraBody, setSubAcaraBody] = useState<SubAcaraBodyRequest>({
     ...InitialValue,
   });
-  const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
+  const [, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
     DefaultImage
   );
-  const [errors, setErrors] = useState<Partial<Record<keyof AcaraDTO, string>>>(
-    {}
-  );
+  const [errors, setErrors] = useState<
+    Partial<Record<keyof SubAcaraBodyRequest, string>>
+  >({});
 
   const navigate = useNavigate();
 
@@ -53,10 +51,6 @@ const FormAddSubAcara: React.FC = () => {
     }
     if (!subAcaraBody.description) {
       newErrors.description = "Description is required";
-      isValid = false;
-    }
-    if (!subAcaraBody.isOpenAbsen) {
-      newErrors.isOpenAbsen = "Open Absen is required";
       isValid = false;
     }
     if (!subAcaraBody.startTime) {
@@ -77,10 +71,10 @@ const FormAddSubAcara: React.FC = () => {
       isValid = false;
     }
 
-    if (!imageFile || imageFile === DefaultImage) {
-      newErrors.image = "Image is required";
-      isValid = false;
-    }
+    // if (!imageFile || imageFile === DefaultImage) {
+    //   newErrors.image = "Image is required";
+    //   isValid = false;
+    // }
 
     setErrors(newErrors);
     return isValid;
@@ -97,7 +91,6 @@ const FormAddSubAcara: React.FC = () => {
       subAcaraBody.endTime as Date,
       "Asia/Jakarta"
     ).toISOString();
-    subAcaraBody.isOpenAbsen = subAcaraBody.isOpenAbsen === "true";
 
     const formData = new FormData();
     Object.entries(subAcaraBody).forEach(([key, value]) => {
@@ -111,47 +104,47 @@ const FormAddSubAcara: React.FC = () => {
     });
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-      if (!validExtensions.includes(file.type)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          image: "Invalid image format. Please upload jpg, jpeg, or png files.",
-        }));
-        return;
-      }
+  // const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   const file = e.target.files?.[0];
+  //   if (file && file.type.startsWith("image/")) {
+  //     const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+  //     if (!validExtensions.includes(file.type)) {
+  //       setErrors((prevErrors) => ({
+  //         ...prevErrors,
+  //         image: "Invalid image format. Please upload jpg, jpeg, or png files.",
+  //       }));
+  //       return;
+  //     }
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        // console.log(reader.result as ArrayBuffer);
-        setImageFile(reader.result as ArrayBuffer);
-        setIsModal(true); // Open modal when image is loaded
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        image: "Please upload a valid image file.",
-      }));
-    }
-  };
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       // console.log(reader.result as ArrayBuffer);
+  //       setImageFile(reader.result as ArrayBuffer);
+  //       setIsModal(true); // Open modal when image is loaded
+  //     };
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     setErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       image: "Please upload a valid image file.",
+  //     }));
+  //   }
+  // };
 
-  const getCropData = () => {
-    if (typeof cropperRef.current?.cropper !== "undefined") {
-      const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
-        width: 1080,
-        height: 1080,
-      });
-      croppedCanvas.toBlob((blob: File) => {
-        setSubAcaraBody({ ...subAcaraBody, image: blob });
-        setIsModal(false); // Close modal after cropping
-        setImageFile(URL.createObjectURL(blob) as string);
-      });
-    }
-  };
+  // const getCropData = () => {
+  //   if (typeof cropperRef.current?.cropper !== "undefined") {
+  //     const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
+  //       width: 1080,
+  //       height: 1080,
+  //     });
+  //     croppedCanvas.toBlob((blob: File) => {
+  //       setSubAcaraBody({ ...subAcaraBody, image: blob });
+  //       setIsModal(false); // Close modal after cropping
+  //       setImageFile(URL.createObjectURL(blob) as string);
+  //     });
+  //   }
+  // };
 
   const handleReset = () => {
     setSubAcaraBody(InitialValue);
@@ -165,16 +158,16 @@ const FormAddSubAcara: React.FC = () => {
     setErrors({});
   };
 
-  const handleCancelCrop = () => {
-    setImageFile(DefaultImage);
-    const fileInput = document.getElementById(
-      "image-input"
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = "";
-    }
-    setIsModal(false);
-  };
+  // const handleCancelCrop = () => {
+  //   setImageFile(DefaultImage);
+  //   const fileInput = document.getElementById(
+  //     "image-input"
+  //   ) as HTMLInputElement;
+  //   if (fileInput) {
+  //     fileInput.value = "";
+  //   }
+  //   setIsModal(false);
+  // };
 
   return (
     <PageLayout
@@ -219,7 +212,7 @@ const FormAddSubAcara: React.FC = () => {
           />
         </div>
 
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <InputGroup
             disabled={mutation.isPending}
             type="select"
@@ -238,7 +231,7 @@ const FormAddSubAcara: React.FC = () => {
               { value: "false", label: "Close" },
             ]}
           />
-        </div>
+        </div> */}
 
         <div className="flex gap-4 mb-4">
           <div className="flex-1">
@@ -281,14 +274,14 @@ const FormAddSubAcara: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex justify-start items-center my-6">
+        {/* <div className="flex justify-start items-center my-6">
           <img
             src={imageFile as string}
             alt="SubAcara Image"
             className="max-w-[200px] h-[200px] max-h-[200px] rounded-md object-cover"
           />
-        </div>
-        <div className="mb-4">
+        </div> */}
+        {/* <div className="mb-4">
           <InputGroup
             disabled={mutation.isPending}
             id="image-input"
@@ -305,7 +298,7 @@ const FormAddSubAcara: React.FC = () => {
             getCropData={getCropData}
             hanldeCancelCrop={handleCancelCrop}
           />
-        </div>
+        </div> */}
         <div className="flex justify-center items-center gap-5">
           <Button
             disabled={mutation.isPending}

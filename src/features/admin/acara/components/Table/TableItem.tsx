@@ -1,7 +1,7 @@
 import { formatDate } from "@features/_global/lib/FormatTime";
 import { Chip, Typography } from "@material-tailwind/react";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 interface ItemAcaraProps {
   show?: boolean;
@@ -26,6 +26,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
   link,
   id,
 }) => {
+  const params = useParams();
   return (
     <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
       <td className="py-3 px-5">
@@ -69,7 +70,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
               View
             </Typography>
           </Link>
-          <Link to={`/admin/${link}/edit/${id}`}>
+          <Link to={`/admin/acara/${params.id}/sub-acara/update/${id}`}>
             <Typography
               as="button"
               className="text-xs font-semibold text-yellow-900"

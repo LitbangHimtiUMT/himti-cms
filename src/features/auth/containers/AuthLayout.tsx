@@ -6,7 +6,7 @@ import { useAuth } from "../hooks/useAuth";
 const AuthLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const auth = useAuth();
 
-  if (auth?.token) {
+  if (auth?.data) {
     return <Navigate to={"/admin/acara"} replace />;
   }
 

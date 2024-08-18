@@ -1,8 +1,7 @@
 import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
+import { strukturalService } from "@core/services/struktural";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
-import { strukturalService } from "@core/services/struktural";
-import { useAuth } from "@features/auth/hooks/useAuth";
 import { toast } from "react-toastify";
 
 interface Options {
@@ -36,7 +35,7 @@ export function useStruktural(options?: Options) {
 }
 
 export function useStrukturalCreation() {
-  const auth = useAuth();
+
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
@@ -45,23 +44,23 @@ export function useStrukturalCreation() {
         case "create":
           return strukturalService.post(data, {
             contentType: "form-data",
-            bearerToken: auth?.token,
+
           });
         case "update":
           return strukturalService.put(data, {
             contentType: "form-data",
             path: id,
-            bearerToken: auth?.token,
+
           });
         case "delete":
           return strukturalService.delete({
             path: id,
-            bearerToken: auth?.token,
+
           });
         default:
           return strukturalService.post(data, {
             contentType: "form-data",
-            bearerToken: auth?.token,
+
           });
       }
     },

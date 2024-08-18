@@ -59,7 +59,7 @@ export const router = createBrowserRouter([
         element: <DetailSubAcaraView />,
       },
       {
-        path: "/admin/sub-acara/edit/:id",
+        path: "/admin/acara/:acaraId/sub-acara/update/:id",
         element: <EditSubAcaraView />,
       },
       {

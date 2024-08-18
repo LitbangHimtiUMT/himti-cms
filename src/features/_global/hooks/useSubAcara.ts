@@ -23,6 +23,8 @@ interface SubAcaraCreation {
 export function useSubAcaraCreation() {
   // const auth = useAuth();
   const queryClient = useQueryClient();
+  const { acaraId } = useParams();
+
   const navigate = useNavigate();
   const mutation = useMutation({
     mutationFn: async ({ data, type, id }: SubAcaraCreation) => {
@@ -54,7 +56,7 @@ export function useSubAcaraCreation() {
         pauseOnHover: true,
         theme: "dark",
       });
-      navigate("/admin/sub-acara");
+      navigate(`/admin/acara/${acaraId}`);
 
       queryClient.removeQueries({ queryKey: ["acarasById"] });
       queryClient.removeQueries({ queryKey: ["absensis"] });
