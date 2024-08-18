@@ -5,4 +5,5 @@ import { NotificationBodyRequest } from "@core/model/notification";
 
 export const notificationService = {
     sendAll: HTTP_REQUEST.post<ApiResponse, NotificationBodyRequest>(API_ENDPOINT.notification),
+    sendSingle: HTTP_REQUEST.post<ApiResponse, NotificationBodyRequest>(API_ENDPOINT.notification),
 }

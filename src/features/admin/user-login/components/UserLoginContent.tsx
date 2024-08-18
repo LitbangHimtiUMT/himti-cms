@@ -40,6 +40,7 @@ export const UserLoginContent = () => {
     totalPages: userLogin?.meta?.totalPages || 1,
     onPageChange,
   };
+  console.log(show);
   return (
     <>
       <PageLayout
@@ -62,7 +63,7 @@ export const UserLoginContent = () => {
               size="sm"
               color={"green"}
               variant="gradient"
-              onClick={() => setShow((prev) => !prev)}
+              onClick={() => setShow((prev) => ({ ...prev, show: !prev.show }))}
             >
               Send All Notification
             </Button>
@@ -93,8 +94,12 @@ export const UserLoginContent = () => {
           </Table>
         </div>
         <ModalNotification
-          show={show}
-          onHide={() => setShow((prev) => !prev)}
+          show={show.show}
+          id={show.id}
+          name={show.name}
+          onHide={() =>
+            setShow((prev) => ({ ...prev, show: false, id: "", name: "" }))
+          }
         />
       </PageLayout>
     </>

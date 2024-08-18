@@ -1,4 +1,7 @@
-import { atom } from "jotai";
+import { atomWithReset } from "jotai/utils";
 
-export const SendAllState = atom(false)
-export const SendOneState = atom(false)
+export const SendAllState = atomWithReset({
+    show: false,
+    id: "",
+    name: ""
+})

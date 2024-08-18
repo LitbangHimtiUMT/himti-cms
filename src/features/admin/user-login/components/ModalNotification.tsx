@@ -9,6 +9,8 @@ import { useState } from "react";
 interface ModalProps {
   show: boolean;
   onHide: () => void;
+  id?: string;
+  name?: string;
 }
 
 interface BodyRequest {
@@ -30,7 +32,12 @@ const initialError = {
   body: "",
 };
 
-export const ModalNotification: React.FC<ModalProps> = ({ onHide, show }) => {
+export const ModalNotification: React.FC<ModalProps> = ({
+  onHide,
+  show,
+  id,
+  name,
+}) => {
   const [body, setBody] = useState<BodyRequest>(inititalValue);
   const [error, setError] = useState(initialError);
   const { data: acaras } = useDropdownAcara({ page: 1, perPage: 99999999 });
@@ -54,12 +61,21 @@ export const ModalNotification: React.FC<ModalProps> = ({ onHide, show }) => {
       return;
     }
 
-    await mutation.mutateAsync({
-      type: "ALL",
-      data: body,
-    });
+    if (id) {
+      await mutation.mutateAsync({
+        type: "SINGLE",
+        data: body,
+        id,
+      });
+    } else {
+      await mutation.mutateAsync({
+        type: "ALL",
+        data: body,
+      });
+    }
     onHide();
   };
+  console.log({ name, id });
   return (
     <>
       {show && (
@@ -69,7 +85,7 @@ export const ModalNotification: React.FC<ModalProps> = ({ onHide, show }) => {
             className="relative w-full sm:min-w-[400px] z-[9999] sm:max-w-[40%] h-min overflow-auto rounded-lg bg-white font-sans text-base font-light leading-relaxed text-blue-gray-500 antialiased shadow-2xl"
           >
             <div className="flex items-center justify-center p-4 font-sans text-2xl antialiased font-semibold leading-snug shrink-0 text-blue-gray-900">
-              Send All Notification
+              {id ? `Send Notification To ${name}` : "Send All Notification"}
             </div>
             <form onSubmit={handleSubmit}>
               <div className="relative h-[350px] p-4 font-sans text-base antialiased font-light leading-relaxed border-t border-b border-t-blue-gray-100 border-b-blue-gray-100 text-blue-gray-500">

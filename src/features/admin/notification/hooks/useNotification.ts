@@ -1,24 +1,28 @@
 import { ApiResponse } from "@core/libs/api/types"
 import { NotificationBodyRequest } from "@core/model/notification"
 import { notificationService } from "@core/services/notification"
-import { SendAllState, SendOneState } from "@features/admin/user-login/store/ModalNotificationState"
+import { SendAllState } from "@features/admin/user-login/store/ModalNotificationState"
 import { useMutation } from "@tanstack/react-query"
-import { useSetAtom } from "jotai"
+import { useAtom } from "jotai"
 import { toast } from "react-toastify"
 
 interface MutationVariabel {
     type: "ALL" | "SINGLE"
     data: NotificationBodyRequest
+    id?: string
 }
 
 export const useNotificationCreation = () => {
-    const setAll = useSetAtom(SendAllState)
-    const setSingle = useSetAtom(SendOneState)
+    const [, setState] = useAtom(SendAllState)
     const mutation = useMutation({
-        mutationFn: ({ type, data }: MutationVariabel) => {
+        mutationFn: ({ type, data, id }: MutationVariabel) => {
             switch (type) {
                 case "ALL":
                     return notificationService.sendAll(data)
+                case "SINGLE":
+                    return notificationService.sendSingle(data, {
+                        path: `fcm/${id}`
+                    })
                 default:
                     return notificationService.sendAll(data)
             }
@@ -30,8 +34,12 @@ export const useNotificationCreation = () => {
                 pauseOnHover: true,
                 theme: "dark",
             });
-            setAll(prev => !prev)
-            setSingle(prev => !prev)
+            setState(prev => ({
+                ...prev,
+                id: "",
+                name: "",
+                show: false
+            }))
         },
         onError: (err: ApiResponse) => {
             toast.error(err.message, {
