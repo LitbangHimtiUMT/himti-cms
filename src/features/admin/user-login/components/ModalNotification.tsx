@@ -23,7 +23,7 @@ interface BodyRequest {
 const inititalValue: BodyRequest = {
   title: "",
   body: "",
-  acaraId: "T",
+  acaraId: undefined,
   subAcaraId: undefined,
 };
 
