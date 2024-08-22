@@ -1,3 +1,4 @@
+import HIMTILOADER from "@core/assets/loader/HIMTI.svg";
 import { CONFIG_MENU_ADMIN } from "@features/_global/config";
 import Footer from "@features/admin/components/Footer";
 import { useAuth } from "@features/auth/hooks/useAuth";
@@ -25,9 +26,13 @@ const AdminView: React.FC = () => {
 
   if (auth?.isLoading) {
     return (
-      <>
-        <p>Loading...</p>
-      </>
+      <div className="w-screen h-screen flex justify-center items-center">
+        <img
+          className="w-[350px] object-cover"
+          src={HIMTILOADER}
+          alt="Loading..."
+        />
+      </div>
     );
   }
 
