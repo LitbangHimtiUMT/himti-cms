@@ -15,5 +15,6 @@ export const API_ENDPOINT = {
   absensi: `${CONFIG_APP.BASE_URL}/absensi`,
   angkatan: `${CONFIG_APP.BASE_URL}/angkatan`,
   userLogin: `${CONFIG_APP.BASE_URL}/user-fcm`,
+  profile: `${CONFIG_APP.BASE_URL}/profile`,
   notification: `${CONFIG_APP.BASE_URL}/notification`,
 }

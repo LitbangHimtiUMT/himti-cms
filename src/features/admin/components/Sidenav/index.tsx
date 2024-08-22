@@ -1,17 +1,20 @@
 import { CONFIG_APP } from "@core/configs/app";
 import { MenuAdminConfig } from "@features/_global/types/MenuTypes";
+import { useProfile } from "@features/auth/hooks/useProfile";
 import { Button, IconButton, Typography } from "@material-tailwind/react";
 import React from "react";
-import { IoMdClose } from "react-icons/io";
+import { ImProfile } from "react-icons/im";
+import { IoMdClose, IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
 import ItemSidenav from "./item";
-import { IoMdLogOut } from "react-icons/io";
 
 const Sidenav: React.FC<{
   Menus: MenuAdminConfig;
   openSidenav: boolean;
   setOpenSidenav: () => void;
 }> = ({ Menus, openSidenav, setOpenSidenav }) => {
+  const { data: profile } = useProfile();
+
   return (
     <aside
       className={`bg-gradient-to-br from-gray-800 to-gray-900 ${
@@ -36,6 +39,20 @@ const Sidenav: React.FC<{
         </IconButton>
       </div>
       <div className="m-4">
+        <Button
+          variant={"gradient"}
+          color={"white"}
+          className="flex items-center gap-4 px-4 capitalize"
+          fullWidth
+        >
+          <ImProfile />
+          <Typography color="inherit" className="font-medium font-bold ">
+            Hi, {profile?.data?.name}
+          </Typography>
+          {/* <Typography color="inherit" className="font-medium capitalize">
+            {name}
+          </Typography> */}
+        </Button>
         <ul className="mb-4 flex flex-col gap-1">
           {Menus.map(({ icon, name, to }, index) => (
             <ItemSidenav key={index} name={name} to={to} icon={icon} />
