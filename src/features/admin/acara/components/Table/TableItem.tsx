@@ -32,7 +32,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
 }) => {
   return (
     <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
-      {image && (
+      {image && title === "Acara" && (
         <td className="py-3 px-5">
           <img
             src={image}
