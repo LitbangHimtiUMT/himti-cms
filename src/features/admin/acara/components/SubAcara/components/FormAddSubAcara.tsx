@@ -1,6 +1,7 @@
 import DefaultImage from "@core/assets/default-image.png";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { PageLayout } from "@features/_global/components/PageLayout";
+import { FormatIDTime } from "@features/_global/helper";
 import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
 import { Button } from "@material-tailwind/react";
 import { TextField } from "@mui/material";
@@ -14,8 +15,8 @@ const InitialValue: SubAcaraBodyRequest = {
   name: "",
   description: "",
   // image: "",
-  startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
-  endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
+  startTime: FormatIDTime(utcToZonedTime(new Date(), "Asia/Jakarta")),
+  endTime: FormatIDTime(utcToZonedTime(new Date(), "Asia/Jakarta")),
 };
 
 interface ImageFile extends File {
@@ -79,7 +80,7 @@ const FormAddSubAcara: React.FC = () => {
     setErrors(newErrors);
     return isValid;
   };
-
+  console.log(subAcaraBody.startTime, subAcaraBody.endTime);
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
@@ -244,7 +245,7 @@ const FormAddSubAcara: React.FC = () => {
                 if (value) {
                   setSubAcaraBody({
                     ...subAcaraBody,
-                    startTime: value,
+                    startTime: FormatIDTime(value),
                   });
                 }
               }}
@@ -264,7 +265,7 @@ const FormAddSubAcara: React.FC = () => {
                 if (value) {
                   setSubAcaraBody({
                     ...subAcaraBody,
-                    endTime: value,
+                    endTime: FormatIDTime(value),
                   });
                 }
               }}

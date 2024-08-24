@@ -39,6 +39,7 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
       id,
     });
   };
+
   return (
     <Drawer
       size={500}
@@ -90,7 +91,8 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
             ) : (
               subacara.map((item, index) => (
                 <TableItem
-                  link={"sub-acara"}
+                  linkDetail={`/admin/sub-acara/${item.id}`}
+                  linkUpdate={`/admin/acara/${acaraId}/sub-acara/update/${item.id}`}
                   key={index}
                   show={index !== (subacara.length as number) - 1}
                   {...item}

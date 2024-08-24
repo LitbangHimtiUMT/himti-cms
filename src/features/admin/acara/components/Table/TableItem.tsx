@@ -1,7 +1,7 @@
 import { formatDate } from "@features/_global/lib/FormatTime";
 import { Chip, Typography } from "@material-tailwind/react";
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface ItemAcaraProps {
   show?: boolean;
@@ -12,7 +12,9 @@ interface ItemAcaraProps {
   image: string;
   handleDelete: (id: string) => void;
   id: string;
-  link?: string;
+  linkDetail?: string;
+  linkUpdate?: string;
+  title?: "Acara" | "Sub Acara";
 }
 
 export const TableItem: React.FC<ItemAcaraProps> = ({
@@ -23,10 +25,11 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
   isOpenAbsen,
   image,
   handleDelete,
-  link,
+  linkDetail,
+  linkUpdate,
   id,
+  title = "Acara",
 }) => {
-  const params = useParams();
   return (
     <tr key={id} className={`${show ? "border-b border-blue-gray-50" : ""}`}>
       {image && (
@@ -64,7 +67,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
       </td>
       <td className="py-3 px-5">
         <div className="flex items-center gap-2">
-          <Link to={`/admin/${link}/${id}`}>
+          <Link to={linkDetail as string}>
             <Typography
               as="button"
               className="text-xs font-semibold text-blue-600"
@@ -72,7 +75,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
               View
             </Typography>
           </Link>
-          <Link to={`/admin/acara/${params.id}/sub-acara/update/${id}`}>
+          <Link to={linkUpdate as string}>
             <Typography
               as="button"
               className="text-xs font-semibold text-yellow-900"
@@ -85,7 +88,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
             className="text-xs font-semibold text-red-600"
             onClick={() => {
               const confirm = window.confirm(
-                `Are you sure you want to delete this ${link}?`
+                `Are you sure you want to delete this ${title}?`
               );
               if (!confirm) return;
               handleDelete(id);

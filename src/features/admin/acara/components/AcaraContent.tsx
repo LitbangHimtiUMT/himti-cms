@@ -67,17 +67,16 @@ export const AcaraContent: React.FC = () => {
                 </td>
               </tr>
             ) : (
-              acara?.data.map(
-                (item, index) => (
-                  <TableItem
-                    link="acara"
-                    key={index}
-                    show={index !== (acara?.data?.length as number) - 1}
-                    {...item}
-                    handleDelete={handleDelete}
-                  />
-                )
-              )
+              acara?.data.map((item, index) => (
+                <TableItem
+                  linkDetail={`/admin/acara/${item.id}`}
+                  linkUpdate={`/admin/acara/edit/${item.id}`}
+                  key={index}
+                  show={index !== (acara?.data?.length as number) - 1}
+                  {...item}
+                  handleDelete={handleDelete}
+                />
+              ))
             )}
           </TableBody>
         </Table>
