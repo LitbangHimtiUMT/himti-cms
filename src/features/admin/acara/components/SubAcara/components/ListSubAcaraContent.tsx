@@ -94,6 +94,7 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
                   linkDetail={`/admin/sub-acara/${item.id}`}
                   linkUpdate={`/admin/acara/${acaraId}/sub-acara/update/${item.id}`}
                   key={index}
+                  title="Sub Acara"
                   show={index !== (subacara.length as number) - 1}
                   {...item}
                   handleDelete={handleDelete}

@@ -1,7 +1,6 @@
 import DefaultImage from "@core/assets/default-image.png";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { PageLayout } from "@features/_global/components/PageLayout";
-import { FormatIDTime } from "@features/_global/helper";
 import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
 import { Button } from "@material-tailwind/react";
 import { TextField } from "@mui/material";
@@ -15,8 +14,8 @@ const InitialValue: SubAcaraBodyRequest = {
   name: "",
   description: "",
   // image: "",
-  startTime: FormatIDTime(utcToZonedTime(new Date(), "Asia/Jakarta")),
-  endTime: FormatIDTime(utcToZonedTime(new Date(), "Asia/Jakarta")),
+  startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
+  endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
 };
 
 interface ImageFile extends File {
@@ -84,14 +83,11 @@ const FormAddSubAcara: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    subAcaraBody.startTime = utcToZonedTime(
-      subAcaraBody.startTime as Date,
-      "Asia/Jakarta"
-    ).toISOString();
-    subAcaraBody.endTime = utcToZonedTime(
-      subAcaraBody.endTime as Date,
-      "Asia/Jakarta"
-    ).toISOString();
+    setSubAcaraBody((prev) => ({
+      ...prev,
+      startTime: utcToZonedTime(prev.startTime, "Asia/Jakarta").toISOString(),
+      endTime: utcToZonedTime(prev.endTime, "Asia/Jakarta").toISOString(),
+    }));
 
     const formData = new FormData();
     Object.entries(subAcaraBody).forEach(([key, value]) => {
@@ -245,7 +241,7 @@ const FormAddSubAcara: React.FC = () => {
                 if (value) {
                   setSubAcaraBody({
                     ...subAcaraBody,
-                    startTime: FormatIDTime(value),
+                    startTime: value,
                   });
                 }
               }}
@@ -265,7 +261,7 @@ const FormAddSubAcara: React.FC = () => {
                 if (value) {
                   setSubAcaraBody({
                     ...subAcaraBody,
-                    endTime: FormatIDTime(value),
+                    endTime: value,
                   });
                 }
               }}
