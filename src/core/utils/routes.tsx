@@ -20,7 +20,7 @@ import EditStrukturalView from "@features/admin/struktural/view/editStruktural";
 import StrukturalView from "@features/admin/struktural/view/struktural";
 import { UserLoginView } from "@features/admin/user-login/views/UserLogin";
 import { CreateUserView } from "@features/admin/users/view/CreateUser";
-import EditUserView from "@features/admin/users/view/editUser";
+import { UpdateUserView } from "@features/admin/users/view/UpdateUser";
 import { UserView } from "@features/admin/users/view/users";
 import AdminView from "@features/admin/view/Admin";
 import LoginView from "@features/auth/view/LoginView";
@@ -77,7 +77,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/admin/user/update/:id",
-        element: <EditUserView />,
+        element: <UpdateUserView />,
       },
       {
         path: "/admin/anggota",

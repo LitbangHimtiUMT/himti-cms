@@ -64,6 +64,7 @@ export const UserContent = () => {
                   key={key}
                   handleDelete={handleDelete}
                   {...item}
+                  status={item.isLogin}
                   show={key !== (users?.data?.length as number) - 1}
                 />
               ))}

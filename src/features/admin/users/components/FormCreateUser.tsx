@@ -55,7 +55,7 @@ export const FormCreateUserAdmin: React.FC = () => {
     if (!validate()) return;
     console.log(userBody);
     await mutation.mutateAsync({
-      type: "admin",
+      type: "admin-create",
       adminData: userBody,
     });
   };

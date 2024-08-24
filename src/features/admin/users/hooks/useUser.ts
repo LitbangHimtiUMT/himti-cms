@@ -11,7 +11,7 @@ interface Options {
   perPage?: number;
 }
 
-type PayloadType = "create" | "update" | "delete" | 'admin';
+type PayloadType = "create" | "update" | "delete" | 'admin-create' | 'admin-update';
 
 interface UserCreation {
   type: PayloadType;
@@ -45,6 +45,7 @@ export function useUserCreation() {
   // const auth = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
+  const params = useParams()
   const mutation = useMutation({
     mutationFn: async ({ data, type, id, adminData }: UserCreation) => {
 
@@ -55,8 +56,10 @@ export function useUserCreation() {
           return userService.put(data, { path: id });
         case "delete":
           return userService.delete({ path: id });
-        case 'admin':
+        case 'admin-create':
           return userService.createAdmin(adminData, { path: 'admin' })
+        case 'admin-update':
+          return userService.updateAdmin(adminData, { path: `admin/${params.id}` })
         default:
           return userService.post(data);
       }
@@ -71,7 +74,7 @@ export function useUserCreation() {
       navigate("/admin/user");
 
       queryClient.removeQueries({ queryKey: ["users"] });
-      queryClient.removeQueries({ queryKey: ["usersById"] });
+      queryClient.removeQueries({ queryKey: ["userById"] });
       return;
     },
     onError: (err: ApiErrorResponse<ApiResponse>) => {
@@ -89,8 +92,7 @@ export function useUserCreation() {
 export function useUserById() {
   const { id } = useParams();
   return useQuery({
-    queryKey: ["usersById", id],
+    queryKey: ["userById", id],
     queryFn: () => userService.getById({ path: id }),
-    enabled: !!id,
   });
 }

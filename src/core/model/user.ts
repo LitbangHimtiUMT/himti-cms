@@ -9,9 +9,7 @@ export interface UserModel {
   password: string;
   role: Role;
   nim: string;
-  anggotaId: string;
-  createdAt: string;
-  updatedAt: string;
+  isLogin: boolean
 }
 
 export interface UserDTO {
@@ -26,5 +24,5 @@ export interface UserDTO {
 export interface CreateAdminUserBodyDTO {
   name: string
   email: string
-  password: string
+  password?: string
 }

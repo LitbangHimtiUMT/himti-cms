@@ -45,7 +45,7 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
       placement="bottom"
       open={isDrawer}
       onClose={handleIsDrawer}
-      className="p-4 overflow-auto"
+      className="p-4 overflow-auto rounded-t-2xl"
     >
       <div className="mb-6 flex items-center justify-between">
         <Typography variant="h4" className="mb-2" color="blue-gray">
