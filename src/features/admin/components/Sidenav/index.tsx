@@ -46,7 +46,7 @@ const Sidenav: React.FC<{
           fullWidth
         >
           <ImProfile />
-          <Typography color="inherit" className="font-medium font-bold ">
+          <Typography color="inherit" className="font-bold ">
             Hi, {profile?.data?.name}
           </Typography>
           {/* <Typography color="inherit" className="font-medium capitalize">

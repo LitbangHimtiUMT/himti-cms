@@ -76,7 +76,7 @@ export const router = createBrowserRouter([
         element: <CreateUserView />,
       },
       {
-        path: "/admin/user/edit/:id",
+        path: "/admin/user/update/:id",
         element: <EditUserView />,
       },
       {

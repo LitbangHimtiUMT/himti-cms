@@ -6,15 +6,15 @@ import {
   TableBody,
   TableHead,
 } from "@features/_global/components/Table";
+import { useAcaraById } from "@features/_global/hooks/useAcara";
 import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
 import { Drawer, IconButton, Typography } from "@material-tailwind/react";
 import React from "react";
-import { subAcara } from "../../../model/acara";
 import { TableItem } from "../../Table/TableItem";
 
 interface ListSubAcaraContentProps {
   name: string;
-  subAcara: subAcara[];
+  // subAcara: subAcara[];
   isDrawer: boolean;
   handleIsDrawer: () => void;
   isLoading: boolean;
@@ -23,13 +23,15 @@ interface ListSubAcaraContentProps {
 
 const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
   name,
-  subAcara,
   isDrawer,
   handleIsDrawer,
   isLoading,
   acaraId,
 }) => {
   const mutation = useSubAcaraCreation();
+  const { data: acara } = useAcaraById();
+
+  const subacara = acara?.data?.subAcara;
 
   const handleDelete = async (id: string) => {
     await mutation.mutateAsync({
@@ -79,18 +81,18 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
           <TableBody>
             {isLoading ? (
               <SimpleLoadingTable ColSpan={6} />
-            ) : !subAcara?.length ? (
+            ) : !subacara?.length ? (
               <tr>
                 <td colSpan={6}>
                   <EmptyData title="Sub Acara" action />
                 </td>
               </tr>
             ) : (
-              subAcara.map((item, index) => (
+              subacara.map((item, index) => (
                 <TableItem
                   link={"sub-acara"}
                   key={index}
-                  show={index !== (subAcara.length as number) - 1}
+                  show={index !== (subacara.length as number) - 1}
                   {...item}
                   handleDelete={handleDelete}
                 />
