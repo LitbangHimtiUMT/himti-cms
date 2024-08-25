@@ -94,7 +94,7 @@ export function useAbsensi(option?: Options) {
     queryKey: ["absensies", { id, page, perPage }],
     queryFn: () =>
       subAcaraService.getAbsensi({
-        path: id,
+        path: `sub-acara/${id}`,
         queryParams: {
           page: page ? Number(page) : undefined,
           perPage: perPage ? Number(perPage) : undefined,
