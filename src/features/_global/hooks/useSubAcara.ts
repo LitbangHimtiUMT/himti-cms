@@ -1,16 +1,16 @@
 import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 // import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 
 import { subAcaraService } from "@core/services/subAcara";
 import { toast } from "react-toastify";
 
-// interface Options {
-//   page?: number,
-//   perPage?: number,
-//   subAcaraId?: string
-// }
+interface Options {
+  page?: number,
+  perPage?: number,
+  subAcaraId?: string
+}
 
 type PayloadType = "create" | "update" | "delete";
 
@@ -85,21 +85,20 @@ export function useSubAcaraById() {
 }
 
 // export function useAbsensi(options?: Options) {
-export function useAbsensi() {
+export function useAbsensi(option?: Options) {
   const { id } = useParams();
-  // const [searchParams] = useSearchParams()
-  // const page = options?.page || searchParams.get("page") || 1;
-  // const perPage = options?.perPage || searchParams.get("perPage") || 10;
+  const [searchParams] = useSearchParams()
+  const page = option?.page || searchParams.get("page") || 1;
+  const perPage = option?.perPage || searchParams.get("perPage") || 10;
   const query = useQuery({
-    // queryKey: ['subacaras', { page, perPage }],
-    queryKey: ["absensis", { id }],
+    queryKey: ["absensies", { id, page, perPage }],
     queryFn: () =>
       subAcaraService.getAbsensi({
+        path: id,
         queryParams: {
-          // perPage: perPage ? Number(perPage) : undefined,
-          // page: page ? Number(page) : undefined
-          subAcaraId: id,
-        },
+          page: page ? Number(page) : undefined,
+          perPage: perPage ? Number(perPage) : undefined,
+        }
       }),
     enabled: !!id,
   });

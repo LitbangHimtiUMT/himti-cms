@@ -88,7 +88,7 @@ const DetailSubAcaraContent: React.FC = () => {
                 Data Absensi :
               </Typography>
               <Table>
-                <TableHead field={["Image", "Name", "Nim", "Action"]} />
+                <TableHead field={["Image", "Name", "NIM", "Action"]} />
                 <TableBody>
                   {!absensi?.data?.length ? (
                     <tr>

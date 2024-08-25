@@ -1,11 +1,11 @@
 import DefaultImage from "@core/assets/default-image.png";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { PageLayout } from "@features/_global/components/PageLayout";
+import { FormatIDTime } from "@features/_global/helper";
 import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
 import { Button } from "@material-tailwind/react";
 import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { utcToZonedTime } from "date-fns-tz";
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { AcaraDTO, SubAcaraBodyRequest } from "../../../model/acara";
@@ -14,8 +14,8 @@ const InitialValue: SubAcaraBodyRequest = {
   name: "",
   description: "",
   // image: "",
-  startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
-  endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
+  startTime: FormatIDTime(new Date()),
+  endTime: FormatIDTime(new Date()),
 };
 
 interface ImageFile extends File {
@@ -62,14 +62,14 @@ const FormAddSubAcara: React.FC = () => {
       isValid = false;
     }
 
-    if (
-      subAcaraBody.startTime &&
-      subAcaraBody.endTime &&
-      subAcaraBody.endTime < subAcaraBody.startTime
-    ) {
-      newErrors.startTime = "End Time must be greater than Start Time";
-      isValid = false;
-    }
+    // if (
+    //   subAcaraBody.startTime &&
+    //   subAcaraBody.endTime &&
+    //   subAcaraBody.endTime < subAcaraBody.startTime
+    // ) {
+    //   newErrors.startTime = "End Time must be greater than Start Time";
+    //   isValid = false;
+    // }
 
     // if (!imageFile || imageFile === DefaultImage) {
     //   newErrors.image = "Image is required";
@@ -83,14 +83,18 @@ const FormAddSubAcara: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    setSubAcaraBody((prev) => ({
-      ...prev,
-      startTime: utcToZonedTime(prev.startTime, "Asia/Jakarta").toISOString(),
-      endTime: utcToZonedTime(prev.endTime, "Asia/Jakarta").toISOString(),
-    }));
+    // setSubAcaraBody((prev) => ({
+    //   ...prev,
+    //   startTime: FormatIDTime(prev.startTime as Date),
+    //   endTime: FormatIDTime(prev.endTime as Date),
+    // }));
 
     const formData = new FormData();
     Object.entries(subAcaraBody).forEach(([key, value]) => {
+      if (key === "startTime" || key === "endTime") {
+        formData.append(key, FormatIDTime(value));
+        return;
+      }
       formData.append(key, value as any);
     });
     formData.append("acaraId", acaraId as string);
@@ -165,7 +169,8 @@ const FormAddSubAcara: React.FC = () => {
   //   }
   //   setIsModal(false);
   // };
-
+  console.log({ subAcaraBody });
+  console.log(new Date(), "ts");
   return (
     <PageLayout
       title="Add Sub Acara"
@@ -239,10 +244,11 @@ const FormAddSubAcara: React.FC = () => {
               value={subAcaraBody.startTime}
               onChange={(value: Date | null) => {
                 if (value) {
-                  setSubAcaraBody({
-                    ...subAcaraBody,
+                  console.log({ value });
+                  setSubAcaraBody((prev) => ({
+                    ...prev,
                     startTime: value,
-                  });
+                  }));
                 }
               }}
               ampm={false}
@@ -259,10 +265,10 @@ const FormAddSubAcara: React.FC = () => {
               minDateTime={new Date(subAcaraBody.startTime as string)}
               onChange={(value: Date | null) => {
                 if (value) {
-                  setSubAcaraBody({
-                    ...subAcaraBody,
+                  setSubAcaraBody((prev) => ({
+                    ...prev,
                     endTime: value,
-                  });
+                  }));
                 }
               }}
               ampm={false}
