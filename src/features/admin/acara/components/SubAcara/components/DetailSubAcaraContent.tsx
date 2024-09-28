@@ -66,8 +66,8 @@ const DetailSubAcaraContent: React.FC = () => {
                 <Chip
                   as="span"
                   variant="gradient"
-                  color={subAcaraById?.data?.isOpenAbsen ? "green" : "red"}
-                  value={subAcaraById?.data?.isOpenAbsen ? "Open" : "Close"}
+                  // color={subAcaraById?.data?.isOpenAbsen ? "green" : "red"}
+                  // value={subAcaraById?.data?.isOpenAbsen ? "Open" : "Close"}
                   className="px-2 text-[11px] font-medium w-fit inline-block"
                 />
               </div>
