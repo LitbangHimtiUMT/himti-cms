@@ -17,4 +17,6 @@ export const API_ENDPOINT = {
   userLogin: `${CONFIG_APP.BASE_URL}/user-fcm`,
   profile: `${CONFIG_APP.BASE_URL}/profile`,
   notification: `${CONFIG_APP.BASE_URL}/notification`,
+  eventMeeting: `${CONFIG_APP.BASE_URL}/event-meeting`,
+  meeting: `${CONFIG_APP.BASE_URL}/meeting`,
 }

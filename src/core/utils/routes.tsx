@@ -24,6 +24,9 @@ import { UpdateUserView } from "@features/admin/users/view/UpdateUser";
 import { UserView } from "@features/admin/users/view/users";
 import AdminView from "@features/admin/view/Admin";
 import LoginView from "@features/auth/view/LoginView";
+import { CreateEventMeetingViews } from "@features/event-meeting/views/CreateEventMeetingViews";
+import { EventMeetingView } from "@features/event-meeting/views/EventMeeting";
+import { EventMeetingDetail } from "@features/event-meeting/views/EventMeetingDetail";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -130,6 +133,18 @@ export const router = createBrowserRouter([
       {
         path: "/admin/user-login",
         element: <UserLoginView />,
+      },
+      {
+        path: "/admin/event-meeting",
+        element: <EventMeetingView />,
+      },
+      {
+        path: "/admin/event-meeting/create",
+        element: <CreateEventMeetingViews />,
+      },
+      {
+        path: "/admin/event-meeting/:eventMeetingId",
+        element: <EventMeetingDetail />,
       },
     ],
   },

@@ -74,6 +74,14 @@ export const AcaraContent: React.FC = () => {
                   key={index}
                   show={index !== (acara?.data?.length as number) - 1}
                   {...item}
+                  isOpenAbsen={item.isOpen}
+                  // id={item.id}
+                  // title="Acara"
+                  // endTime={item.endTime}
+                  // startTime={item.startTime}
+                  // image={item.image}
+                  // isOpenAbsen={item.isOpen}
+                  // name={item.name}
                   handleDelete={handleDelete}
                 />
               ))

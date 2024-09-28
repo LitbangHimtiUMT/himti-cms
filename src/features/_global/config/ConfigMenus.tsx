@@ -1,4 +1,5 @@
 import { BiKey } from "react-icons/bi";
+import { BsCalendar2EventFill } from "react-icons/bs";
 import { FaCalendar, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
@@ -14,6 +15,11 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <FaCalendar />,
     name: "Acara",
     to: "/admin/acara",
+  },
+  {
+    icon: <BsCalendar2EventFill />,
+    name: "Event Meeting",
+    to: "/admin/event-meeting",
   },
   {
     icon: <FaUserGroup />,

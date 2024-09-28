@@ -4,7 +4,7 @@ export interface AcaraModel {
   id: string;
   name: string;
   description: string;
-  isOpenAbsen: boolean;
+  isOpen: boolean;
   image: string;
   startTime: Date;
   endTime: Date;
@@ -39,7 +39,7 @@ export interface AcaraDetailModel extends AcaraModel {
 export interface AcaraDTO {
   name?: string;
   description?: string;
-  isOpenAbsen?: boolean | string | React.ChangeEvent<HTMLSelectElement>;
+  isOpen?: boolean | string | React.ChangeEvent<HTMLSelectElement>;
   isOpenRegister?: boolean | string;
   image?: File | string;
   startTime?: Date | string;

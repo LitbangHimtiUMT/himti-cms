@@ -1,27 +1,26 @@
-import { Button } from "@material-tailwind/react";
-import React, { useEffect, useRef, useState } from "react";
-import { AcaraDTO } from "../model/acara";
+import DefaultImage from "@core/assets/default-image.png";
+import InputGroup from "@features/_global/components/Input/InputGroup";
+import { PageLayout } from "@features/_global/components/PageLayout";
+import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 import {
   useAcaraById,
   useAcaraCreation,
 } from "@features/_global/hooks/useAcara";
-import DefaultImage from "@core/assets/default-image.png";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { Button } from "@material-tailwind/react";
 import { TextField } from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { utcToZonedTime } from "date-fns-tz";
-import { PageLayout } from "@features/_global/components/PageLayout";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import InputGroup from "@features/_global/components/Input/InputGroup";
-import CropperImage from "@features/_global/components/CropperImage";
-import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
+import { AcaraDTO } from "../model/acara";
 
 const InitialValue: AcaraDTO = {
   name: "",
   description: "",
-  isOpenAbsen: "",
-  image: "",
-  startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
-  endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
+  isOpen: undefined,
+  image: undefined,
+  startTime: new Date(),
+  endTime: new Date(),
 };
 
 interface ImageFile extends File {
@@ -33,17 +32,15 @@ const FormEditAcara: React.FC = () => {
   const { data: acaraById, isLoading } = useAcaraById();
   const mutation = useAcaraCreation();
 
-  const cropperRef = useRef<any>(null);
-
   useEffect(() => {
     if (acaraById && acaraById.data) {
-      const { name, description, isOpenAbsen, image, startTime, endTime } =
+      const { name, description, isOpen, image, startTime, endTime } =
         acaraById.data;
       // const categoryId = category ? category.id : "";
       setAcaraBody({
         name,
         description,
-        isOpenAbsen,
+        isOpen,
         image,
         startTime,
         endTime,
@@ -51,11 +48,10 @@ const FormEditAcara: React.FC = () => {
     }
   }, [acaraById]);
 
-  const [isModal, setIsModal] = useState<boolean>(false);
   const [acaraBody, setAcaraBody] = useState<AcaraDTO>({ ...InitialValue });
-  const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
-    DefaultImage
-  );
+  const [imageFile, setImageFile] = useState<
+    ImageFile | ArrayBuffer | string | null
+  >(DefaultImage);
   const [errors, setErrors] = useState<Partial<Record<keyof AcaraDTO, string>>>(
     {}
   );
@@ -72,10 +68,6 @@ const FormEditAcara: React.FC = () => {
     }
     if (!acaraBody.description) {
       newErrors.description = "Description is required";
-      isValid = false;
-    }
-    if (!acaraBody.isOpenAbsen && typeof acaraBody.isOpenAbsen !== "boolean") {
-      newErrors.isOpenAbsen = "Open Absen is required";
       isValid = false;
     }
     if (!acaraBody.startTime) {
@@ -121,7 +113,7 @@ const FormEditAcara: React.FC = () => {
       if (key === "isOpenAbsen") {
         formData.append(key, JSON.stringify(value));
       } else {
-        formData.append(key, value as any);
+        formData.append(key, value);
       }
     });
 
@@ -132,45 +124,83 @@ const FormEditAcara: React.FC = () => {
     });
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-      if (!validExtensions.includes(file.type)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          image: "Invalid image format. Please upload jpg, jpeg, or png files.",
-        }));
-        return;
-      }
+  // const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   e.preventDefault();
+  //   const file = e.target.files?.[0];
+  //   if (file && file.type.startsWith("image/")) {
+  //     const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+  //     if (!validExtensions.includes(file.type)) {
+  //       setErrors((prevErrors) => ({
+  //         ...prevErrors,
+  //         image: "Invalid image format. Please upload jpg, jpeg, or png files.",
+  //       }));
+  //       return;
+  //     }
 
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       // console.log(reader.result as ArrayBuffer);
+  //       setImageFile(reader.result as ArrayBuffer);
+  //       setIsModal(true); // Open modal when image is loaded
+  //     };
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     setErrors((prevErrors) => ({
+  //       ...prevErrors,
+  //       image: "Please upload a valid image file.",
+  //     }));
+  //   }
+  // };
+
+  // const getCropData = () => {
+  //   if (typeof cropperRef.current?.cropper !== "undefined") {
+  //     const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
+  //       width: 1080,
+  //       height: 1080,
+  //     });
+  //     croppedCanvas.toBlob((blob: File) => {
+  //       setAcaraBody({ ...acaraBody, image: blob });
+  //       setIsModal(false); // Close modal after cropping
+  //       setImageFile(URL.createObjectURL(blob) as string);
+  //     });
+  //   }
+  // };
+
+  // const handleReset = () => {
+  //   setAcaraBody(InitialValue);
+  //   setImageFile(DefaultImage);
+  //   const fileInput = document.getElementById(
+  //     "image-input"
+  //   ) as HTMLInputElement;
+  //   if (fileInput) {
+  //     fileInput.value = "";
+  //   }
+  //   setErrors({});
+  // };
+
+  // const handleCancelCrop = () => {
+  //   setImageFile(DefaultImage);
+  //   const fileInput = document.getElementById(
+  //     "image-input"
+  //   ) as HTMLInputElement;
+  //   if (fileInput) {
+  //     fileInput.value = "";
+  //   }
+  //   setIsModal(false);
+  // };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e?.target?.files?.[0];
+    setAcaraBody((prev) => ({
+      ...prev,
+      image: file as File,
+    }));
+    if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        // console.log(reader.result as ArrayBuffer);
-        setImageFile(reader.result as ArrayBuffer);
-        setIsModal(true); // Open modal when image is loaded
+      reader.onloadend = () => {
+        setImageFile(reader.result);
       };
       reader.readAsDataURL(file);
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        image: "Please upload a valid image file.",
-      }));
-    }
-  };
-
-  const getCropData = () => {
-    if (typeof cropperRef.current?.cropper !== "undefined") {
-      const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
-        width: 1080,
-        height: 1080,
-      });
-      croppedCanvas.toBlob((blob: File) => {
-        setAcaraBody({ ...acaraBody, image: blob });
-        setIsModal(false); // Close modal after cropping
-        setImageFile(URL.createObjectURL(blob) as string);
-      });
     }
   };
 
@@ -184,17 +214,6 @@ const FormEditAcara: React.FC = () => {
       fileInput.value = "";
     }
     setErrors({});
-  };
-
-  const handleCancelCrop = () => {
-    setImageFile(DefaultImage);
-    const fileInput = document.getElementById(
-      "image-input"
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = "";
-    }
-    setIsModal(false);
   };
 
   return (
@@ -253,14 +272,14 @@ const FormEditAcara: React.FC = () => {
               disabled={mutation.isPending}
               type="select"
               label="Status"
-              value={String(acaraBody.isOpenAbsen)}
+              value={String(acaraBody.isOpen)}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setAcaraBody({
                   ...acaraBody,
-                  isOpenAbsen: e,
+                  isOpen: e,
                 });
               }}
-              error={errors.isOpenAbsen}
+              error={errors.isOpen}
               options={[
                 { value: "", label: "Pilih Status" },
                 { value: "true", label: "Open" },
@@ -322,22 +341,20 @@ const FormEditAcara: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <InputGroup
-              disabled={mutation.isPending}
-              id="image-input"
-              type="file"
-              label="Acara Image"
-              variant="outlined"
-              error={errors.image}
-              onChange={onChange}
-            />
-            <CropperImage
+            <div className="flex items-center w-full">
+              <input
+                type="file"
+                className="file-input w-full border border-solid border-black"
+                onChange={handleImageChange}
+              />
+            </div>
+            {/* <CropperImage
               image={imageFile as ArrayBuffer}
               isModal={isModal}
               cropperRef={cropperRef}
               getCropData={getCropData}
               hanldeCancelCrop={handleCancelCrop}
-            />
+            /> */}
           </div>
           <div className="flex justify-center items-center gap-5">
             <Button
