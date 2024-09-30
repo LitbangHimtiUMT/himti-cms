@@ -9,18 +9,15 @@ interface ItemAcaraProps {
   id: string;
   jabatan: Jabatan;
   image: string;
-  anggotaId: string;
+  memberId: string;
   isActive: boolean;
-  departmentId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  anggota: AnggotaModel;
+  Member: AnggotaModel;
   handleDelete: (id: string) => void;
 }
 
 export const TableItem: React.FC<ItemAcaraProps> = ({
   show,
-  anggota,
+  Member,
   jabatan,
   image,
   handleDelete,
@@ -31,7 +28,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
       <td className="py-3 px-5">
         <img
           src={image}
-          alt={anggota.name}
+          alt={Member?.name}
           className="max-w-[150px] max-h-[150px] object-cover rounded-md"
         />
       </td>
@@ -42,13 +39,13 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
             color="blue-gray"
             className="font-semibold"
           >
-            {anggota.name}
+            {Member?.name ?? '-'}
           </Typography>
         </div>
       </td>
       <td className="py-3 px-5">
         <Typography className="text-xs font-semibold text-blue-gray-600">
-          {anggota.nim}
+          {Member?.nim}
         </Typography>
       </td>
       <td className="py-3 px-5">

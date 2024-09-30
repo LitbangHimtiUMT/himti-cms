@@ -1,7 +1,3 @@
-import AddSubAcaraView from "@features/admin/acara/components/SubAcara/view/addSubAcara";
-import DetailAbsensiView from "@features/admin/acara/components/SubAcara/view/detailAbsensi";
-import DetailSubAcaraView from "@features/admin/acara/components/SubAcara/view/detailSubAcara";
-import EditSubAcaraView from "@features/admin/acara/components/SubAcara/view/editSubAcara";
 import AcaraView from "@features/admin/acara/view/acara";
 import AddAcaraView from "@features/admin/acara/view/addAcara";
 import DetailAcaraView from "@features/admin/acara/view/detailAcara";
@@ -25,6 +21,7 @@ import { UserView } from "@features/admin/users/view/users";
 import AdminView from "@features/admin/view/Admin";
 import LoginView from "@features/auth/view/LoginView";
 import { CreateEventMeetingViews } from "@features/event-meeting/views/CreateEventMeetingViews";
+import { CreateMeetingViews } from "@features/event-meeting/views/CreateMeetingViews";
 import { EventMeetingView } from "@features/event-meeting/views/EventMeeting";
 import { EventMeetingDetail } from "@features/event-meeting/views/EventMeetingDetail";
 import { createBrowserRouter } from "react-router-dom";
@@ -53,22 +50,6 @@ export const router = createBrowserRouter([
       {
         path: "/admin/acara/edit/:id",
         element: <EditAcaraView />,
-      },
-      {
-        path: "/admin/acara/:acaraId/sub-acara/create",
-        element: <AddSubAcaraView />,
-      },
-      {
-        path: "/admin/sub-acara/:id",
-        element: <DetailSubAcaraView />,
-      },
-      {
-        path: "/admin/acara/:acaraId/sub-acara/update/:id",
-        element: <EditSubAcaraView />,
-      },
-      {
-        path: "/admin/absensi/:id",
-        element: <DetailAbsensiView />,
       },
       {
         path: "/admin/user",
@@ -145,6 +126,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/event-meeting/:eventMeetingId",
         element: <EventMeetingDetail />,
+      },
+      {
+        path: "/admin/event-meeting/:eventMeetingId/meeting/create",
+        element: <CreateMeetingViews />,
       },
     ],
   },

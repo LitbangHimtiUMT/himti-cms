@@ -10,14 +10,13 @@ export type Jabatan =
 
 export interface StrukturalModel {
   id: string;
-  jabatan: Jabatan;
   image: string;
-  anggotaId: string;
-  isActive: boolean;
-  departmentId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  anggota: AnggotaModel;
+  isActive: true;
+  jabatan: Jabatan;
+  Member: AnggotaModel
+  memberId: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface StrukturalDTO {

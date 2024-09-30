@@ -223,7 +223,7 @@ const FormAddAcara: React.FC = () => {
           />
         </div>
 
-        <div className='mb-4'>
+        {/* <div className='mb-4'>
           <InputGroup
             disabled={mutation.isPending}
             type='select'
@@ -241,7 +241,7 @@ const FormAddAcara: React.FC = () => {
               { value: false, label: "Close" },
             ]}
           />
-        </div>
+        </div> */}
 
         <div className='flex gap-4 mb-4'>
           <div className='flex-1'>

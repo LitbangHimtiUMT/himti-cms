@@ -41,11 +41,11 @@ export function useCheckToken() {
 export function useAuth() {
 
   const token = localStorage.getItem("token") || "";
+  const { data, isLoading } = useCheckToken()
 
   if (!token) {
     return undefined;
   }
-  const { data, isLoading } = useCheckToken()
 
   if (
     isLoading) {

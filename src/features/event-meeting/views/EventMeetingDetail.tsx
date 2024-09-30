@@ -2,6 +2,7 @@ import AdminNavbar from "@features/admin/components/AdminNavbar";
 import { MeetingContent } from "../components/meetings/MeetingContent";
 
 export const EventMeetingDetail = () => {
+
   return (
     <>
       <AdminNavbar layout='Meeting' page='List Meeting' />

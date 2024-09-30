@@ -7,13 +7,14 @@ import {
   TableHead,
 } from "@features/_global/components/Table";
 import { convertQueryParamsToObject } from "@features/_global/helper";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 
 import { TableItem } from "./Table/TableItem";
 import { useMeeting } from "@features/event-meeting/hooks/useMeeting";
 
 export const MeetingContent = () => {
   const { data: meetings, isLoading } = useMeeting();
+  const { eventMeetingId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
 
@@ -31,9 +32,9 @@ export const MeetingContent = () => {
         action={{
           show: true,
           buttonTitle: "Create Meeting",
-          link: { to: "/admin/meeting/create" },
+          link: { to: `/admin/event-meeting/${eventMeetingId}/meeting/create` },
         }}
-        title={`Event Meeting ${meetings?.data?.eventMeeting || ''}`}
+        title={`Event Meeting ${meetings?.data?.eventMeeting || ""}`}
         showPagination={
           !!(
             meetings?.data?.meetings?.length &&
@@ -43,18 +44,18 @@ export const MeetingContent = () => {
           )
         }
         searchField
-        searchPlaceholder='Search Acara'
+        searchPlaceholder="Search Acara"
         pagination={pagination}
       >
         <Table>
-          <TableHead field={["Name", "Description", 'Time', "Action"]} />
+          <TableHead field={["Name", "Description", "Time", "Action"]} />
           <TableBody>
             {isLoading ? (
               <SimpleLoadingTable ColSpan={3} />
             ) : !meetings?.data?.meetings?.length ? (
               <tr>
                 <td colSpan={6}>
-                  <EmptyData title='Event Meeting' action />
+                  <EmptyData title="Event Meeting" action />
                 </td>
               </tr>
             ) : (
@@ -63,7 +64,9 @@ export const MeetingContent = () => {
                   linkDetail={`/admin/event-meeting/${item.id}`}
                   linkUpdate={`/admin/event-meeting/edit/${item.id}`}
                   key={index}
-                  show={index !== (meetings?.data?.meetings?.length as number) - 1}
+                  show={
+                    index !== (meetings?.data?.meetings?.length as number) - 1
+                  }
                   {...item}
                   handleDelete={() => console.log("et")}
                 />

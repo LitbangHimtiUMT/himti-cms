@@ -5,7 +5,6 @@ import { formatTime } from "@features/_global/lib/FormatTime";
 import { Button, Chip, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ListSubAcaraContent from "./SubAcara/components/ListSubAcaraContent";
 
 const DetailAcaraContent: React.FC = () => {
   const { data: acaraById, isLoading } = useAcaraById();
@@ -87,13 +86,6 @@ const DetailAcaraContent: React.FC = () => {
           </div>
         )}
       </PageLayout>
-      <ListSubAcaraContent
-        acaraId={acaraById?.data?.id as string}
-        name={acaraById?.data?.name as string}
-        isDrawer={isDrawer}
-        handleIsDrawer={handleIsDrawer}
-        isLoading={isLoading}
-      ></ListSubAcaraContent>
     </>
   );
 };
