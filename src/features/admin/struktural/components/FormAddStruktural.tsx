@@ -10,7 +10,7 @@ import { useAnggota } from "@features/admin/anggota/hooks/useAnggota";
 import { Jabatan, StrukturalDTO } from "../model/struktural";
 
 const InitialValue: StrukturalDTO = {
-  anggotaId: "",
+  memberId: "",
   jabatan: "",
   image: "",
 };
@@ -36,6 +36,7 @@ const FormAddAcara: React.FC = () => {
 
   const mutation = useStrukturalCreation();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cropperRef = useRef<any>(null);
 
   const [isModal, setIsModal] = useState<boolean>(false);
@@ -55,8 +56,8 @@ const FormAddAcara: React.FC = () => {
     const newErrors: Partial<Record<keyof StrukturalDTO, string>> = {};
     let isValid = true;
 
-    if (!strukturalBody.anggotaId) {
-      newErrors.anggotaId = "Anggota is required";
+    if (!strukturalBody.memberId) {
+      newErrors.memberId = "Anggota is required";
       isValid = false;
     }
     if (!strukturalBody.jabatan) {
@@ -77,7 +78,7 @@ const FormAddAcara: React.FC = () => {
     if (!validate()) return;
     const formData = new FormData();
     Object.entries(strukturalBody).forEach(([key, value]) => {
-      formData.append(key, value as any);
+      formData.append(key, value as unknown as string);
     });
 
     await mutation.mutateAsync({
@@ -186,23 +187,23 @@ const FormAddAcara: React.FC = () => {
               disabled={mutation.isPending}
               type="select"
               label="Anggota"
-              defaultValue={strukturalBody.anggotaId as string}
+              defaultValue={strukturalBody.memberId as string}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setStrukturalBody({
                   ...strukturalBody,
-                  anggotaId: e,
+                  memberId: e,
                 });
               }}
-              error={errors.anggotaId}
+              error={errors.memberId}
               options={[
                 {
                   value: "",
                   label: "Pilih Anggota",
                 },
-                ...anggota?.data.map((anggota) => ({
+                ...(anggota?.data.map((anggota) => ({
                   value: anggota.id,
                   label: anggota.name,
-                })),
+                })) || []),
               ]}
             />
           ) : (

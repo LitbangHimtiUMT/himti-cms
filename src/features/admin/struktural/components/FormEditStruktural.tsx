@@ -14,7 +14,7 @@ import {
 import { useAnggota } from "@features/admin/anggota/hooks/useAnggota";
 
 const InitialValue: StrukturalDTO = {
-  anggotaId: "",
+  memberId: "",
   jabatan: "",
   image: "",
 };
@@ -42,14 +42,15 @@ const FormEditStruktural: React.FC = () => {
   const { data: strukturalById, isLoading } = useStrukturalById();
   const mutation = useStrukturalCreation();
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const cropperRef = useRef<any>(null);
 
   useEffect(() => {
     if (strukturalById && strukturalById.data) {
-      const { anggotaId, jabatan, image } = strukturalById.data;
+      const { memberId, jabatan, image } = strukturalById.data;
       // const categoryId = category ? category.id : "";
       setStrukturalBody({
-        anggotaId,
+        memberId,
         jabatan,
         image,
       });
@@ -73,8 +74,8 @@ const FormEditStruktural: React.FC = () => {
     const newErrors: Partial<Record<keyof StrukturalDTO, string>> = {};
     let isValid = true;
 
-    if (!strukturalBody.anggotaId) {
-      newErrors.anggotaId = "Anggota is required";
+    if (!strukturalBody.memberId) {
+      newErrors.memberId = "Anggota is required";
       isValid = false;
     }
     if (!strukturalBody.jabatan) {
@@ -95,7 +96,7 @@ const FormEditStruktural: React.FC = () => {
     if (!validate()) return;
     const formData = new FormData();
     Object.entries(strukturalBody).forEach(([key, value]) => {
-      formData.append(key, value as any);
+      formData.append(key, value as unknown as string);
     });
 
     await mutation.mutateAsync({
@@ -214,23 +215,23 @@ const FormEditStruktural: React.FC = () => {
                 disabled={mutation.isPending}
                 type="select"
                 label="Anggota"
-                defaultValue={strukturalBody.anggotaId}
+                defaultValue={strukturalBody.memberId}
                 onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                   setStrukturalBody({
                     ...strukturalBody,
-                    anggotaId: e,
+                    memberId: e,
                   });
                 }}
-                error={errors.anggotaId}
+                error={errors.memberId}
                 options={[
                   {
                     value: "",
                     label: "Pilih Anggota",
                   },
-                  ...anggota?.data.map((anggota) => ({
+                  ...(anggota?.data.map((anggota) => ({
                     value: anggota.id,
                     label: anggota.name,
-                  })),
+                  })) ?? []),
                 ]}
               />
             ) : (
