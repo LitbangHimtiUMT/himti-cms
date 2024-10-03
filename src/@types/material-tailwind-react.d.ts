@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 declare module '@material-tailwind/react' {
   export const Input: any;
   export const Checkbox: any;

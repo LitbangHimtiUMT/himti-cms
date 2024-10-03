@@ -1,12 +1,11 @@
-import { Button } from "@material-tailwind/react";
-import React, { useRef, useState } from "react";
 import DefaultImage from "@core/assets/default-image.png";
-import { PageLayout } from "@features/_global/components/PageLayout";
-import { useNavigate } from "react-router-dom";
 import InputGroup from "@features/_global/components/Input/InputGroup";
-import CropperImage from "@features/_global/components/CropperImage";
-import { useStrukturalCreation } from "../hooks/useStruktural";
+import { PageLayout } from "@features/_global/components/PageLayout";
 import { useAnggota } from "@features/admin/anggota/hooks/useAnggota";
+import { Button } from "@material-tailwind/react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useStrukturalCreation } from "../hooks/useStruktural";
 import { Jabatan, StrukturalDTO } from "../model/struktural";
 
 const InitialValue: StrukturalDTO = {
@@ -37,13 +36,13 @@ const FormAddAcara: React.FC = () => {
   const mutation = useStrukturalCreation();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const cropperRef = useRef<any>(null);
+  // const cropperRef = useRef<any>(null);
 
-  const [isModal, setIsModal] = useState<boolean>(false);
+  // const [isModal, setIsModal] = useState<boolean>(false);
   const [strukturalBody, setStrukturalBody] = useState<StrukturalDTO>({
     ...InitialValue,
   });
-  const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
+  const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string | null>(
     DefaultImage
   );
   const [errors, setErrors] = useState<
@@ -87,47 +86,34 @@ const FormAddAcara: React.FC = () => {
     });
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault();
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith("image/")) {
-      const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-      if (!validExtensions.includes(file.type)) {
-        setErrors((prevErrors) => ({
-          ...prevErrors,
-          image: "Invalid image format. Please upload jpg, jpeg, or png files.",
-        }));
-        return;
-      }
-
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e?.target?.files?.[0];
+    setStrukturalBody((prev) => ({
+      ...prev,
+      image: file as File,
+    }));
+    if (file) {
       const reader = new FileReader();
-      reader.onload = () => {
-        // console.log(reader.result as ArrayBuffer);
-        setImageFile(reader.result as ArrayBuffer);
-        setIsModal(true); // Open modal when image is loaded
+      reader.onloadend = () => {
+        setImageFile(reader.result);
       };
       reader.readAsDataURL(file);
-    } else {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        image: "Please upload a valid image file.",
-      }));
     }
   };
 
-  const getCropData = () => {
-    if (typeof cropperRef.current?.cropper !== "undefined") {
-      const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
-        width: 1080,
-        height: 1080,
-      });
-      croppedCanvas.toBlob((blob: File) => {
-        setStrukturalBody({ ...strukturalBody, image: blob });
-        setIsModal(false); // Close modal after cropping
-        setImageFile(URL.createObjectURL(blob) as string);
-      });
-    }
-  };
+  // const getCropData = () => {
+  //   if (typeof cropperRef.current?.cropper !== "undefined") {
+  //     const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
+  //       width: 1080,
+  //       height: 1080,
+  //     });
+  //     croppedCanvas.toBlob((blob: File) => {
+  //       setStrukturalBody({ ...strukturalBody, image: blob });
+  //       setIsModal(false); // Close modal after cropping
+  //       setImageFile(URL.createObjectURL(blob) as string);
+  //     });
+  //   }
+  // };
 
   const handleReset = () => {
     setStrukturalBody(InitialValue);
@@ -141,16 +127,16 @@ const FormAddAcara: React.FC = () => {
     setErrors({});
   };
 
-  const handleCancelCrop = () => {
-    setImageFile(DefaultImage);
-    const fileInput = document.getElementById(
-      "image-input"
-    ) as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = "";
-    }
-    setIsModal(false);
-  };
+  // const handleCancelCrop = () => {
+  //   setImageFile(DefaultImage);
+  //   const fileInput = document.getElementById(
+  //     "image-input"
+  //   ) as HTMLInputElement;
+  //   if (fileInput) {
+  //     fileInput.value = "";
+  //   }
+  //   setIsModal(false);
+  // };
 
   return (
     <PageLayout
@@ -164,7 +150,7 @@ const FormAddAcara: React.FC = () => {
       }}
     >
       <form onSubmit={handleSubmit}>
-        <div className="flex sm:flex-row flex-col">
+        <div className="flex sm:flex-col flex-col gap-2">
           <InputGroup
             type="search"
             label="Search Anggota"
@@ -242,23 +228,14 @@ const FormAddAcara: React.FC = () => {
             className="max-w-[200px] h-[200px] max-h-[200px] rounded-md object-cover"
           />
         </div>
-        <div className="mb-4">
-          <InputGroup
-            disabled={mutation.isPending}
-            id="image-input"
-            type="file"
-            label="Struktural Image"
-            variant="outlined"
-            error={errors.image}
-            onChange={onChange}
-          />
-          <CropperImage
-            image={imageFile as ArrayBuffer}
-            isModal={isModal}
-            cropperRef={cropperRef}
-            getCropData={getCropData}
-            hanldeCancelCrop={handleCancelCrop}
-          />
+        <div className='mb-4'>
+          <div className='flex items-center w-full'>
+            <input
+              type='file'
+              className='file-input w-full border border-solid border-black'
+              onChange={handleImageChange}
+            />
+          </div>
         </div>
         <div className="flex justify-center items-center gap-5">
           <Button
@@ -277,7 +254,7 @@ const FormAddAcara: React.FC = () => {
             fullWidth
             disabled={mutation.isPending}
           >
-            {mutation.isPending ? "Loading..." : "Add"}
+            {mutation.isPending ? "Loading..." : "Create"}
           </Button>
         </div>
       </form>

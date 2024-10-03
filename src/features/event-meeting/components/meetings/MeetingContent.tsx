@@ -62,7 +62,7 @@ export const MeetingContent = () => {
               meetings?.data.meetings.map((item, index) => (
                 <TableItem
                   linkDetail={`/admin/event-meeting/${item.id}`}
-                  linkUpdate={`/admin/event-meeting/edit/${item.id}`}
+                  linkUpdate={`/admin/event-meeting/${eventMeetingId}/meeting/update/${item.id}`}
                   key={index}
                   show={
                     index !== (meetings?.data?.meetings?.length as number) - 1
