@@ -13,7 +13,8 @@ interface InputGroupProps {
   error?: string;
   mb?: boolean;
   value?: string | number;
-  onChange?: (e: React.ChangeEvent<any>) => void;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange?: (e: React.ChangeEvent<any>) => void | string;
   type?:
     | "text"
     | "textarea"
@@ -26,6 +27,7 @@ interface InputGroupProps {
   options?: { value: string | boolean; label: string; onClick?: () => void }[]; // Digunakan untuk Select
   isPending?: boolean;
   className?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any; // Untuk menangani properti tambahan
 }
 

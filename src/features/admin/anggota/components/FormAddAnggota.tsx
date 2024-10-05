@@ -1,17 +1,18 @@
 import { Button } from "@material-tailwind/react";
 import React, { useState } from "react";
 
-import { PageLayout } from "@features/_global/components/PageLayout";
-import { useNavigate } from "react-router-dom";
-import InputGroup from "@features/_global/components/Input/InputGroup";
 import { AnggotaDTO } from "@core/model/anggota";
-import { useAnggota, useAnggotaCreation } from "../hooks/useAnggota";
+import InputGroup from "@features/_global/components/Input/InputGroup";
+import { PageLayout } from "@features/_global/components/PageLayout";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
+import { useAngkatan } from "@features/admin/angkatan/hooks/useAngkatan";
+import { useNavigate } from "react-router-dom";
+import { useAnggotaCreation } from "../hooks/useAnggota";
 
 const InitialValue: AnggotaDTO = {
   nim: "",
   name: "",
-  angkatanId: "",
+  generationId: "",
   email: "",
   facebook: "",
   instagram: "",
@@ -21,7 +22,8 @@ const InitialValue: AnggotaDTO = {
 };
 
 const FormAddAnggota: React.FC = () => {
-  const { data: angkatan, isLoading } = useAnggota();
+  const { data: angkatan, isLoading } = useAngkatan();
+  const filteringAngkatan = angkatan?.data?.filter((i) => i.year !== "all");
   const mutation = useAnggotaCreation();
 
   const [anggotaBody, setAnggotaBody] = useState<AnggotaDTO>({
@@ -47,8 +49,8 @@ const FormAddAnggota: React.FC = () => {
       isValid = false;
     }
 
-    if (!anggotaBody.angkatanId) {
-      newErrors.angkatanId = "Angkatan is required";
+    if (!anggotaBody.generationId) {
+      newErrors.generationId = "Angkatan is required";
       isValid = false;
     }
 
@@ -70,7 +72,7 @@ const FormAddAnggota: React.FC = () => {
       data: {
         nim: anggotaBody.nim,
         name: anggotaBody.name,
-        angkatanId: "7977d5e0-f70a-4499-bc0f-23870a070257",
+        generationId: anggotaBody.generationId,
         email: anggotaBody.email,
         isActive: anggotaBody.isActive,
       },
@@ -128,26 +130,23 @@ const FormAddAnggota: React.FC = () => {
               }
             />
           </div>
-          <div className="mb-4">
+          <div className="mb-4 w-full">
             <InputGroup
               disabled={mutation.isPending}
               type="select"
               label="Angkatan"
-              value={anggotaBody.angkatanId as string}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setAnggotaBody({
-                  ...anggotaBody,
-                  angkatanId: e,
-                });
+              value={anggotaBody.generationId}
+              onChange={(e) => {
+                setAnggotaBody((prev) => ({
+                  ...prev,
+                  generationId: e as unknown as string,
+                }));
               }}
-              error={errors.angkatanId}
-              options={[
-                { value: "", label: "Pilih Angkatan" },
-                ...angkatan?.data.map((angkatan) => ({
-                  value: angkatan.id,
-                  label: angkatan.name,
-                })),
-              ]}
+              error={errors.generationId}
+              options={filteringAngkatan?.map((i) => ({
+                label: i.year,
+                value: i.id,
+              }))}
             />
           </div>
           <div className="mb-4 my-2">
@@ -229,7 +228,6 @@ const FormAddAnggota: React.FC = () => {
               }}
               error={errors.isActive}
               options={[
-                { value: "", label: "Pilih Status" },
                 { value: "true", label: "Active" },
                 { value: "false", label: "Non Active" },
               ]}

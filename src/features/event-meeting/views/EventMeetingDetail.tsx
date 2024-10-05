@@ -5,7 +5,7 @@ export const EventMeetingDetail = () => {
 
   return (
     <>
-      <AdminNavbar layout='Meeting' page='List Meeting' />
+      <AdminNavbar layout='Meeting' page='List Meeting' link="/admin/event-meeting" />
       <div className='mt-12 mb-8 flex flex-col gap-12 flex-1'>
         <MeetingContent />
       </div>

@@ -102,7 +102,9 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
               {title}
             </Typography>
           )}
+          <div className="md:mt-0 mt-4">
           {renderAction()}
+          </div>
         </CardHeader>
         {searchField && (
           <div className="w-72 ms-auto mx-4">

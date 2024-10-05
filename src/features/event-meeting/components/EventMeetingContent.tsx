@@ -8,13 +8,18 @@ import {
 } from "@features/_global/components/Table";
 import { convertQueryParamsToObject } from "@features/_global/helper";
 import { useSearchParams } from "react-router-dom";
-import { useEventMeeting } from "../hooks/useEventMeeting";
+import {
+  useEventMeeting,
+  useEventMeetingCreation,
+} from "../hooks/useEventMeeting";
 import { TableItem } from "./Table/TableItem";
 
 export const EventMeetingContent = () => {
   const { data: eventMeetings, isLoading } = useEventMeeting();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
+
+  const mutation = useEventMeetingCreation();
 
   const onPageChange = (page: number) => {
     setSearchParams({ ...queryParams, page: String(page) });
@@ -24,6 +29,16 @@ export const EventMeetingContent = () => {
     totalPages: eventMeetings?.meta?.totalPages || 1,
     onPageChange,
   };
+
+  const handleDelete = async (id: string) => {
+    await mutation.mutateAsync({
+      type: "delete",
+      data: {
+        eventMeetingId: id,
+      },
+    });
+  };
+
   return (
     <>
       <PageLayout
@@ -32,7 +47,7 @@ export const EventMeetingContent = () => {
           buttonTitle: "Create Event Meeting",
           link: { to: "/admin/event-meeting/create" },
         }}
-        title='Event Meeting'
+        title="Event Meeting"
         showPagination={
           !!(
             eventMeetings?.data?.length &&
@@ -42,29 +57,31 @@ export const EventMeetingContent = () => {
           )
         }
         searchField
-        searchPlaceholder='Search Acara'
+        searchPlaceholder="Search Acara"
         pagination={pagination}
       >
         <Table>
-          <TableHead field={["Name", "Meeting Count", "Action"]} />
+          <TableHead
+            field={["Name", "Description", "Meeting Count", "Action"]}
+          />
           <TableBody>
             {isLoading ? (
               <SimpleLoadingTable ColSpan={3} />
             ) : !eventMeetings?.data?.length ? (
               <tr>
                 <td colSpan={6}>
-                  <EmptyData title='Event Meeting' action />
+                  <EmptyData title="Event Meeting" action />
                 </td>
               </tr>
             ) : (
               eventMeetings?.data.map((item, index) => (
                 <TableItem
                   linkDetail={`/admin/event-meeting/${item.id}`}
-                  linkUpdate={`/admin/event-meeting/edit/${item.id}`}
+                  linkUpdate={`/admin/event-meeting/update/${item.id}`}
                   key={index}
                   show={index !== (eventMeetings?.data?.length as number) - 1}
                   {...item}
-                  handleDelete={() => console.log("et")}
+                  handleDelete={handleDelete}
                 />
               ))
             )}

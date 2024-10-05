@@ -1,20 +1,20 @@
+import { AnggotaDTO } from "@core/model/anggota";
+import InputGroup from "@features/_global/components/Input/InputGroup";
+import { PageLayout } from "@features/_global/components/PageLayout";
+import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
+import { useAngkatan } from "@features/admin/angkatan/hooks/useAngkatan";
 import { Button } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
-import { PageLayout } from "@features/_global/components/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
-import InputGroup from "@features/_global/components/Input/InputGroup";
 import {
-  useAnggota,
   useAnggotaById,
-  useAnggotaCreation,
+  useAnggotaCreation
 } from "../hooks/useAnggota";
-import { AnggotaDTO } from "@core/model/anggota";
-import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 
 const InitialValue: AnggotaDTO = {
   nim: "",
   name: "",
-  angkatanId: "",
+  generationId: "",
   email: "",
   facebook: "",
   instagram: "",
@@ -25,7 +25,8 @@ const InitialValue: AnggotaDTO = {
 
 const FormEditAnggota: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const { data: angkatan, isLoading: isLoadingAngkatan } = useAnggota();
+  const { data: angkatan, isLoading: isLoadingAngkatan } = useAngkatan();
+  const filteringAngkatan = angkatan?.data?.filter((i) => i.year !== "all");
   const { data: anggotaById, isLoading } = useAnggotaById();
   // const { data: angkatan, isLoading } = useAngkatan();
   const mutation = useAnggotaCreation();
@@ -42,7 +43,7 @@ const FormEditAnggota: React.FC = () => {
       const {
         nim,
         name,
-        angkatan,
+        Generation,
         email,
         facebook,
         instagram,
@@ -54,7 +55,7 @@ const FormEditAnggota: React.FC = () => {
       setAnggotaBody({
         nim,
         name,
-        angkatanId: angkatan?.id,
+        generationId: Generation?.id,
         email,
         facebook,
         instagram,
@@ -81,8 +82,8 @@ const FormEditAnggota: React.FC = () => {
       isValid = false;
     }
 
-    if (!anggotaBody.angkatanId) {
-      newErrors.angkatanId = "Angkatan is required";
+    if (!anggotaBody.generationId) {
+      newErrors.generationId = "Angkatan is required";
       isValid = false;
     }
 
@@ -165,25 +166,22 @@ const FormEditAnggota: React.FC = () => {
             />
           </div>
           <div className="mb-4">
-            <InputGroup
+          <InputGroup
               disabled={mutation.isPending}
               type="select"
               label="Angkatan"
-              value={anggotaBody.angkatanId as string}
-              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-                setAnggotaBody({
-                  ...anggotaBody,
-                  angkatanId: e,
-                });
+              value={anggotaBody.generationId}
+              onChange={(e) => {
+                setAnggotaBody((prev) => ({
+                  ...prev,
+                  generationId: e as unknown as string,
+                }));
               }}
-              error={errors.angkatanId}
-              options={[
-                { value: "", label: "Pilih Angkatan" },
-                ...angkatan?.data.map((angkatan) => ({
-                  value: angkatan.id,
-                  label: angkatan.name,
-                })),
-              ]}
+              error={errors.generationId}
+              options={filteringAngkatan?.map((i) => ({
+                label: i.year,
+                value: i.id,
+              }))}
             />
           </div>
           <div className="mb-4 my-2">

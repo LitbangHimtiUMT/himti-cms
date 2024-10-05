@@ -8,6 +8,7 @@ import EditAnggotaView from "@features/admin/anggota/view/editAnggota";
 import { AngkatanView } from "@features/admin/angkatan/view/Angkatan";
 import { CreateAngkatanView } from "@features/admin/angkatan/view/CreateAngkatan";
 import { UpdateAngkatanView } from "@features/admin/angkatan/view/UpdateAngkatan";
+import { DefaultView } from "@features/admin/default/Default";
 import AddDosenView from "@features/admin/dosen/view/addDosen";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
 import EditDosenView from "@features/admin/dosen/view/editDosen";
@@ -19,11 +20,13 @@ import { CreateUserView } from "@features/admin/users/view/CreateUser";
 import { UpdateUserView } from "@features/admin/users/view/UpdateUser";
 import { UserView } from "@features/admin/users/view/users";
 import AdminView from "@features/admin/view/Admin";
+import { AttendanceViews } from "@features/attendances/views/AttendanceViews";
 import LoginView from "@features/auth/view/LoginView";
 import { CreateEventMeetingViews } from "@features/event-meeting/views/CreateEventMeetingViews";
 import { CreateMeetingViews } from "@features/event-meeting/views/CreateMeetingViews";
 import { EventMeetingView } from "@features/event-meeting/views/EventMeeting";
 import { EventMeetingDetail } from "@features/event-meeting/views/EventMeetingDetail";
+import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEventMeetingViews";
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -36,6 +39,10 @@ export const router = createBrowserRouter([
     path: "/",
     element: <AdminView />,
     children: [
+      {
+        path: "/",
+        element: <DefaultView />,
+      },
       {
         path: "/admin/acara",
         element: <AcaraView />,
@@ -125,6 +132,10 @@ export const router = createBrowserRouter([
         element: <CreateEventMeetingViews />,
       },
       {
+        path: "/admin/event-meeting/update/:eventMeetingId",
+        element: <UpdateEventMeetingViews />,
+      },
+      {
         path: "/admin/event-meeting/:eventMeetingId",
         element: <EventMeetingDetail />,
       },
@@ -135,6 +146,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/event-meeting/:eventMeetingId/meeting/update/:meetingId",
         element: <UpdateMeetingViews />,
+      },
+      {
+        path: "/admin/event-meeting/:eventMeetingId/:meetingId",
+        element: <AttendanceViews />,
       },
     ],
   },

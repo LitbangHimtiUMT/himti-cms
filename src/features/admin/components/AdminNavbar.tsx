@@ -1,20 +1,17 @@
 import { openSidenavAtom } from "@features/admin/store/sidenav";
-import {
-  Breadcrumbs,
-  IconButton,
-  Navbar,
-  Typography,
-} from "@material-tailwind/react";
+import { IconButton, Navbar } from "@material-tailwind/react";
 import { useAtom } from "jotai";
 import React from "react";
+import { IoChevronBackOutline } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { Link } from "react-router-dom";
+import { Link, To } from "react-router-dom";
 
 const AdminNavbar: React.FC<{
-  page: string;
-  layout: string;
+  page?: string;
+  layout?: string;
   link?: string;
-}> = ({ page, layout, link }) => {
+  showBackButton?: boolean;
+}> = ({ link, showBackButton = true }) => {
   const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
 
   return (
@@ -26,7 +23,7 @@ const AdminNavbar: React.FC<{
       <div className="flex justify-between gap-6 flex-row items-center">
         <div className="capitalize w-full px-5">
           <div className="flex flex-col gap-3">
-            <Breadcrumbs className={`bg-transparent p-0 transition-all`}>
+            {/* <Breadcrumbs className={`bg-transparent p-0 transition-all`}>
               <Link to={link ? link : `/admin/${layout}`}>
                 <Typography
                   variant="small"
@@ -46,7 +43,15 @@ const AdminNavbar: React.FC<{
             </Breadcrumbs>
             <Typography variant="h6" color="blue-gray">
               {page}
-            </Typography>
+            </Typography> */}
+            {showBackButton && link && (
+              <Link to={link || (-1 as To)}>
+                <div className="flex items-center gap-2">
+                  <IoChevronBackOutline size={20} color="#666" />
+                  <p className="text-sm font-semibold text-[#666]">Back</p>
+                </div>
+              </Link>
+            )}
           </div>
         </div>
         <div className="flex items-center">

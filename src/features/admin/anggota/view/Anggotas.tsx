@@ -8,6 +8,7 @@ export const AnggotaView: React.FC = () => {
       <AdminNavbar
         layout="anggota"
         page="list Anggota"
+        showBackButton={false}
       />
       <div className="mt-12 mb-8 flex flex-col gap-12 flex-1">
         <AnggotaContent />

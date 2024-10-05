@@ -18,6 +18,7 @@ export const AngkatanContent = () => {
     setSearchParams({ ...queryParams, page: page.toString() });
 
   const mutation = useAngkatanCreation();
+  const filtering = angkatans?.data?.filter(i => i.year !== 'all')
 
   const handleDelete = async (id: string) => {
     await mutation.mutateAsync({
@@ -58,7 +59,7 @@ export const AngkatanContent = () => {
             <SimpleLoadingTable ColSpan={5} />
           ) : (
             <>
-              {angkatans?.data?.map((item, key) => (
+              {filtering?.map((item, key) => (
                 <TableItem
                   key={key}
                   handleDelete={handleDelete}

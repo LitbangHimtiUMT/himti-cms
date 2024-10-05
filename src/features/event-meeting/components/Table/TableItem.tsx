@@ -6,6 +6,7 @@ interface ItemAcaraProps {
   show?: boolean;
   name: string;
   meetingCount: number;
+  description?: string;
   handleDelete: (id: string) => void;
   id: string;
   linkDetail?: string;
@@ -15,6 +16,7 @@ interface ItemAcaraProps {
 export const TableItem: React.FC<ItemAcaraProps> = ({
   show,
   name,
+  description,
   meetingCount,
   handleDelete,
   linkDetail,
@@ -31,6 +33,17 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
             className='font-semibold'
           >
             {name}
+          </Typography>
+        </div>
+      </td>
+      <td className='py-3 px-5'>
+        <div className='flex items-center gap-4'>
+          <Typography
+            variant='small'
+            color='blue-gray'
+            className='font-semibold'
+          >
+            {description || '-'}
           </Typography>
         </div>
       </td>

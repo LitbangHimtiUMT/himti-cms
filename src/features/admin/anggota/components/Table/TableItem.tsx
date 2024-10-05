@@ -12,7 +12,7 @@ interface IAnggotaItemProps {
   id: string;
   name: string;
   nim: string;
-  angkatan?: {
+  generation?: {
     id: string;
     year: string;
   };
@@ -27,7 +27,7 @@ interface IAnggotaItemProps {
 }
 
 export const TableItem: React.FC<IAnggotaItemProps> = ({
-  angkatan,
+  generation,
   email,
   facebook,
   instagram,
@@ -54,7 +54,7 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
       </td>
       <td className="py-3 px-5">
         <Typography className="text-xs font-semibold ext text-blue-gray-600">
-          {angkatan?.year}
+          {generation?.year}
         </Typography>
       </td>
       {/* <td className="py-3 px-5">

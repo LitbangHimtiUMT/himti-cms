@@ -44,6 +44,12 @@ export const useMeetingCreation = () => {
             ...data,
             eventMeetingId,
           } as CreateMeetingBodyRequest);
+       
+        case "delete":
+          return meetingService.delete({
+            path: data?.meetingId,
+          });
+       
         case "update":
           return meetingService.update(
             {
@@ -72,6 +78,8 @@ export const useMeetingCreation = () => {
       });
       navigate(`/admin/event-meeting/${eventMeetingId}`);
       queryClient.removeQueries({ queryKey: ["meetings"] });
+      queryClient.removeQueries({ queryKey: ["event-meeting-by-id"] });
+      queryClient.invalidateQueries({ queryKey: ["event-meeting-by-id"] });
     },
     onError: (res) => {
       toast.error(res.message, {

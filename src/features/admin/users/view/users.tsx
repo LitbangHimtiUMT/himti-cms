@@ -5,7 +5,7 @@ import { UserContent } from "../components/UserContent";
 export const UserView: React.FC = () => {
   return (
     <>
-      <AdminNavbar layout="user" page="list User" />
+      <AdminNavbar layout="user" page="list User" showBackButton={false} />
       <div className="mt-12 mb-8 flex flex-col gap-12 flex-1">
         <UserContent />
       </div>

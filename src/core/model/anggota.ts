@@ -5,7 +5,7 @@ export interface AnggotaModel {
     nim: string,
     name: string
     email?: string,
-    angkatan?: {
+    Generation?: {
         id: string
         year: string
     },
@@ -21,7 +21,7 @@ export interface AnggotaModel {
 export interface AnggotaDTO {
     nim?: string,
     name?: string
-    angkatanId?: string | ChangeEvent<HTMLSelectElement>,
+    generationId?: string,
     email?: string | null,
     facebook?: string | null,
     instagram?: string | null,

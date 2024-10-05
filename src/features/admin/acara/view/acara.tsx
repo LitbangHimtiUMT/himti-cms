@@ -5,7 +5,7 @@ import { AcaraContent } from "../components/AcaraContent";
 const AcaraView: React.FC = () => {
   return (
     <>
-      <AdminNavbar layout="Acara" page="List Acara" />
+      <AdminNavbar layout="Acara" page="List Acara" showBackButton={false} />
       <div className="mt-12 mb-8 flex flex-col gap-12 flex-1">
         <AcaraContent />
       </div>

@@ -6,12 +6,11 @@ import {
   TableHead,
 } from "@features/_global/components/Table";
 import { convertQueryParamsToObject } from "@features/_global/helper";
-import React from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAnggota, useAnggotaCreation } from "../hooks/useAnggota";
 import { TableItem } from "./Table/TableItem";
 
-export const AnggotaContent: React.FC = () => {
+export const AnggotaContent = () => {
   const { data: anggotas, isLoading } = useAnggota();
 
   const [searchParams, setSearchParams] = useSearchParams();
