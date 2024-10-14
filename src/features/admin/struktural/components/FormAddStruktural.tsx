@@ -35,7 +35,6 @@ const FormAddAcara: React.FC = () => {
 
   const mutation = useStrukturalCreation();
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // const cropperRef = useRef<any>(null);
 
   // const [isModal, setIsModal] = useState<boolean>(false);
