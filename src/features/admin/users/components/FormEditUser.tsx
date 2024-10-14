@@ -246,7 +246,7 @@ const FormEditUser: React.FC = () => {
                         });
                       },
                     },
-                    ...anggota?.data.map((anggota) => ({
+                    ...anggota.data.map((anggota) => ({
                       value: anggota.id,
                       label: anggota.name,
                       onClick: () => {

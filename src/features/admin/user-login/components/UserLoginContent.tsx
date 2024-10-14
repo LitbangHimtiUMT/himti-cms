@@ -54,7 +54,7 @@ export const UserLoginContent = () => {
           )
         }
         // searchField
-        searchPlaceholder="Search Acara"
+        // searchPlaceholder="Search Acara"
         pagination={pagination}
       >
         <div className="flex flex-col gap-6">

@@ -9,8 +9,8 @@ const ItemSidenav: React.FC<ItemMenuAdmin> = ({ name, to, icon }) => {
       <NavLink to={to}>
         {({ isActive }) => (
           <Button
-            variant={isActive ? "gradient" : "text"}
-            color={isActive ? "black" : "white"}
+            variant={isActive ? "inherit" : "text"}
+            color={isActive ? "white" : "white"}
             className="flex items-center gap-4 px-4 capitalize"
             fullWidth
           >

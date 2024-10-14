@@ -1,9 +1,10 @@
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import {
   useDropdownAcara,
-  useDropdownSubAcara,
+  // useDropdownSubAcara,
 } from "@features/admin/acara/hooks/useDropdownAcara";
 import { useNotificationCreation } from "@features/admin/notification/hooks/useNotification";
+import { useEventMeeting } from "@features/event-meeting/hooks/useEventMeeting";
 import { useState } from "react";
 
 interface ModalProps {
@@ -15,7 +16,7 @@ interface ModalProps {
 
 interface BodyRequest {
   acaraId?: string;
-  subAcaraId?: string;
+  eventMeetingId?: string;
   title: string;
   body: string;
 }
@@ -24,7 +25,7 @@ const inititalValue: BodyRequest = {
   title: "",
   body: "",
   acaraId: undefined,
-  subAcaraId: undefined,
+  eventMeetingId: undefined,
 };
 
 const initialError = {
@@ -41,10 +42,9 @@ export const ModalNotification: React.FC<ModalProps> = ({
   const [body, setBody] = useState<BodyRequest>(inititalValue);
   const [error, setError] = useState(initialError);
   const { data: acaras } = useDropdownAcara({ page: 1, perPage: 99999999 });
-  const { data: subAcaras } = useDropdownSubAcara({
+  const { data: eventMeeting } = useEventMeeting({
     page: 1,
     perPage: 99999999,
-    acaraId: body?.acaraId,
   });
 
   const mutation = useNotificationCreation();
@@ -134,15 +134,15 @@ export const ModalNotification: React.FC<ModalProps> = ({
                   <InputGroup
                     disabled={mutation.isPending}
                     type="select"
-                    label="Sub Acara"
+                    label="Meeting Acara"
                     variant="outlined"
                     options={
-                      subAcaras?.data?.length
-                        ? subAcaras.data.map((item) => ({
+                      eventMeeting?.data?.length
+                        ? eventMeeting.data.map((item) => ({
                             label: item.name,
                             value: item.id,
                             onClick: () =>
-                              setBody({ ...body, subAcaraId: item.id }),
+                              setBody({ ...body, eventMeetingId: item.id }),
                           }))
                         : []
                     }

@@ -19,41 +19,41 @@ const Sidenav: React.FC<{
     <aside
       className={`bg-gradient-to-br from-gray-800 to-gray-900 ${
         openSidenav ? "translate-x-0" : "-translate-x-80"
-      } fixed inset-0 z-50 my-4 ml-4 h-[calc(100vh-32px)] w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100`}
+      } fixed flex flex-col inset-0 z-50 mt-14 mb-5 ml-4 max-h-screen w-72 rounded-xl transition-transform duration-300 xl:translate-x-0 border border-blue-gray-100`}
     >
-      <div className={`relative`}>
-        <Link to="/" className="py-6 px-8 text-center">
-          <Typography variant="h6" color={"white"}>
-            {CONFIG_APP.APP_NAME}
-          </Typography>
-        </Link>
+      <div className="-mt-9 mx-3 shadow-lg relative hover:scale-[1.15] duration-200">
         <IconButton
           variant="text"
           color="white"
           size="sm"
           ripple={false}
-          className="absolute right-0 top-0 grid rounded-br-none rounded-tl-none xl:hidden"
+          className="absolute right-0 top-0 z-10 grid rounded-br-none rounded-tl-none xl:hidden"
           onClick={setOpenSidenav}
         >
-          <IoMdClose className="h-5 w-5 text-white" />
+          <IoMdClose className="h-5 w-5 text-black" />
         </IconButton>
-      </div>
-      <div className="m-4">
-        <Button
-          variant={"gradient"}
-          color={"white"}
-          className="flex items-center gap-4 px-4 capitalize"
-          fullWidth
-        >
-          <ImProfile />
-          <Typography color="inherit" className="font-bold ">
-            Hi, {profile?.data?.name}
-          </Typography>
-          {/* <Typography color="inherit" className="font-medium capitalize">
+        <Link to="/" className="block">
+          <Button
+            className="py-3 px-2 text-center active:opacity-100 focus:opacity-100 bg-white border border-gray-900 text-black"
+            fullWidth
+          >
+            <Typography className="font-bold" variant="h5">
+              {CONFIG_APP.APP_NAME}
+            </Typography>
+            <div className="flex items-center justify-center gap-2 px-4 capitalize">
+              <ImProfile />
+              <Typography color="inherit" variant="h6" className="font-bold ">
+                Hi, {profile?.data?.name}
+              </Typography>
+            </div>
+            {/* <Typography color="inherit" className="font-medium capitalize">
             {name}
           </Typography> */}
-        </Button>
-        <ul className="mb-4 flex flex-col gap-1">
+          </Button>
+        </Link>
+      </div>
+      <div className="my-5 mx-8 overflow-y-auto h-full">
+        <ul className="flex flex-col gap-1">
           {Menus.map(({ icon, name, to }, index) => (
             <ItemSidenav key={index} name={name} to={to} icon={icon} />
           ))}
@@ -77,6 +77,7 @@ const Sidenav: React.FC<{
           </li>
         </ul>
       </div>
+      {/* <div className="px-5 h-full py-2 flex-flex-col justify-between"></div> */}
     </aside>
   );
 };

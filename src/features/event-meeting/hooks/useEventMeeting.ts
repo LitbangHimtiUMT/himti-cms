@@ -7,16 +7,21 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
+interface Options {
+  page?: number;
+  perPage?: number;
+}
+
 interface ModalCreationOption {
   type: "create" | "update" | "delete";
   data?: GeneralEventMeetingRequest;
 }
 
-export const useEventMeeting = () => {
+export const useEventMeeting = (options?: Options) => {
   const [searchParams] = useSearchParams();
 
-  const page = searchParams.get("page") || 1;
-  const perPage = searchParams.get("perPage") || 10;
+  const page = options?.page || searchParams.get("page") || 1;
+  const perPage = options?.perPage || searchParams.get("perPage") || 10;
 
   const query = useQuery({
     queryKey: ["event-meeting"],

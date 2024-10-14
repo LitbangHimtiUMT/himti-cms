@@ -9,7 +9,7 @@ export function useUserLogin() {
     const perPage = searchParams.get("perPage") || 10;
 
     const query = useQuery({
-        queryKey: ["userLogin"],
+        queryKey: ["userLogin", { page, perPage }],
         queryFn: () => userLoginService.get({
             queryParams: {
                 page: page ? Number(page) : undefined,
