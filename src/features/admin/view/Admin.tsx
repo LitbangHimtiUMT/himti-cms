@@ -19,6 +19,7 @@ const AdminView: React.FC = () => {
       }
     };
     window.addEventListener("resize", handleResize);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [window.innerWidth]);
 
   const handleOpenSidenav = () => setOpenSidenav(!openSidenav);
