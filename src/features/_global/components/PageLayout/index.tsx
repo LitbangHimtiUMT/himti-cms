@@ -86,6 +86,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
       (e) => {
         setSearchParams({ ...queryParams, search: e.target.value });
       },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       [searchField, searchParams]
     );
 
