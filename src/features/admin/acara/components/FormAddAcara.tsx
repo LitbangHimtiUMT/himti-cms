@@ -12,7 +12,7 @@ import { AcaraDTO } from "../model/acara";
 const InitialValue: AcaraDTO = {
   name: "",
   description: "",
-  isOpen: undefined,
+  // isOpen: undefined,
   image: undefined,
   // startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
   // endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
@@ -52,10 +52,6 @@ const FormAddAcara: React.FC = () => {
       newErrors.description = "Description is required";
       isValid = false;
     }
-    if (typeof acaraBody.isOpen !== 'boolean') {
-      newErrors.isOpen = "Open Absen is required";
-      isValid = false;
-    }
     if (!acaraBody.startTime) {
       newErrors.startTime = "Start Time is required";
       isValid = false;
@@ -77,15 +73,6 @@ const FormAddAcara: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    // acaraBody.startTime = utcToZonedTime(
-    //   acaraBody.startTime as Date,
-    //   "Asia/Jakarta"
-    // ).toISOString();
-    // acaraBody.endTime = utcToZonedTime(
-    //   acaraBody.endTime as Date,
-    //   "Asia/Jakarta"
-    // ).toISOString();
-    // acaraBody.isOpenAbsen = acaraBody.isOpenAbsen === "true";
     const formData = new FormData();
     Object.entries(acaraBody).forEach(([key, value]) => {
       if (key === "startTime" || key === "endTime") {
