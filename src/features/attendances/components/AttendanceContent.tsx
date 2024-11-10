@@ -24,8 +24,8 @@ const AttendanceContent: React.FC = () => {
     setSearchParams({ ...queryParams, page: String(page) });
   };
   const pagination = {
-    currentPage: meeting?.meta?.page || 1,
-    totalPages: meeting?.meta?.totalPages || 1,
+    currentPage: attendances?.meta?.page || 1,
+    totalPages: attendances?.meta?.totalPages || 1,
     onPageChange,
   };
 
@@ -38,39 +38,47 @@ const AttendanceContent: React.FC = () => {
         buttonProps: { onClick: () => navigate(-1) },
         colorButton: "white",
       }}
+      showPagination={
+        !!(
+          attendances?.data?.length &&
+          !isLoadingAttend &&
+          (attendances.meta?.totalData as number) >
+            (attendances?.meta?.perPage as number)
+        )
+      }
       pagination={pagination}
     >
-      {isLoading && isLoadingAttend && (
+      {isLoading || isLoadingAttend ? (
         <table className="w-full justify-center items-center">
           <tbody>
             <SimpleLoadingTable />
           </tbody>
         </table>
-      )}
-      <Table>
-        <TableHead field={["Image", "Name", "NIM", "Action"]} />
-        <TableBody>
-          {!attendances?.data?.length ? (
-            <tr>
-              <td colSpan={6}>
-                <EmptyData title="Absensi" action />
-              </td>
-            </tr>
-          ) : (
-            attendances?.data?.map((item, index) => (
-              <TableItem
-                key={index}
-                show={index !== (attendances?.data?.length as number) - 1}
-                id={item.id}
-                image={item.image}
-                user={item.user}
-                location={item.location}
-                point={item.point}
-              />
-            ))
-          )}
-        </TableBody>
-      </Table>
+      ) : <Table>
+      <TableHead field={["Image", "Name", "NIM", "Action"]} />
+      <TableBody>
+        {!attendances?.data?.length ? (
+          <tr>
+            <td colSpan={6}>
+              <EmptyData title="Absensi" action />
+            </td>
+          </tr>
+        ) : (
+          attendances?.data?.map((item, index) => (
+            <TableItem
+              key={index}
+              show={index !== (attendances?.data?.length as number) - 1}
+              id={item.id}
+              image={item.image}
+              user={item.user}
+              location={item.location}
+              point={item.point}
+            />
+          ))
+        )}
+      </TableBody>
+    </Table>}
+      
       
     </PageLayout>
   );
