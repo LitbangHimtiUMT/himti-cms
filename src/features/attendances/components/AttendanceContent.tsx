@@ -7,17 +7,27 @@ import {
   TableHead,
 } from "@features/_global/components/Table";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAttendance } from "../hooks/useAttendance";
 import { TableItem } from "./Table/TableItem";
 import { useMeetingById } from "@features/event-meeting/hooks/useMeeting";
+import { convertQueryParamsToObject } from "../../_global/helper";
 
 const AttendanceContent: React.FC = () => {
   const { data: attendances, isLoading: isLoadingAttend } = useAttendance();
   const { data: meeting, isLoading } = useMeetingById();
-
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryParams = convertQueryParamsToObject(searchParams.toString());
   const navigate = useNavigate();
-  console.log(attendances)
+
+  const onPageChange = (page: number) => {
+    setSearchParams({ ...queryParams, page: String(page) });
+  };
+  const pagination = {
+    currentPage: meeting?.meta?.page || 1,
+    totalPages: meeting?.meta?.totalPages || 1,
+    onPageChange,
+  };
 
   return (
     <PageLayout
@@ -28,6 +38,7 @@ const AttendanceContent: React.FC = () => {
         buttonProps: { onClick: () => navigate(-1) },
         colorButton: "white",
       }}
+      pagination={pagination}
     >
       {isLoading && isLoadingAttend && (
         <table className="w-full justify-center items-center">
@@ -60,7 +71,7 @@ const AttendanceContent: React.FC = () => {
           )}
         </TableBody>
       </Table>
-      xx
+      
     </PageLayout>
   );
 };
