@@ -10,6 +10,7 @@ interface ItemAttendProps {
   };
   location: string;
   point: number;
+  time: string | Date;
   image: string;
   id: string;
 }
@@ -18,6 +19,7 @@ export const TableItem: React.FC<ItemAttendProps> = ({
   show,
   user,
   image,
+  time,
   location,
   point,
   id,
@@ -61,6 +63,17 @@ export const TableItem: React.FC<ItemAttendProps> = ({
             className="font-semibold"
           >
             {location}
+          </Typography>
+        </div>
+      </td>
+      <td className="py-3 px-5">
+        <div className="flex items-center gap-4">
+          <Typography
+            variant="small"
+            color="blue-gray"
+            className="font-semibold"
+          >
+            {time}
           </Typography>
         </div>
       </td>

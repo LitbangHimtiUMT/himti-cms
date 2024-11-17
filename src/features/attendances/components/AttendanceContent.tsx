@@ -6,12 +6,13 @@ import {
   TableBody,
   TableHead,
 } from "@features/_global/components/Table";
+import { useMeetingById } from "@features/event-meeting/hooks/useMeeting";
 import React from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { convertQueryParamsToObject } from "../../_global/helper";
+import { formatTime } from "../../_global/lib/FormatTime";
 import { useAttendance } from "../hooks/useAttendance";
 import { TableItem } from "./Table/TableItem";
-import { useMeetingById } from "@features/event-meeting/hooks/useMeeting";
-import { convertQueryParamsToObject } from "../../_global/helper";
 
 const AttendanceContent: React.FC = () => {
   const { data: attendances, isLoading: isLoadingAttend } = useAttendance();
@@ -54,32 +55,35 @@ const AttendanceContent: React.FC = () => {
             <SimpleLoadingTable />
           </tbody>
         </table>
-      ) : <Table>
-      <TableHead field={["Image", "Name", "NIM", "Action"]} />
-      <TableBody>
-        {!attendances?.data?.length ? (
-          <tr>
-            <td colSpan={6}>
-              <EmptyData title="Absensi" action />
-            </td>
-          </tr>
-        ) : (
-          attendances?.data?.map((item, index) => (
-            <TableItem
-              key={index}
-              show={index !== (attendances?.data?.length as number) - 1}
-              id={item.id}
-              image={item.image}
-              user={item.user}
-              location={item.location}
-              point={item.point}
-            />
-          ))
-        )}
-      </TableBody>
-    </Table>}
-      
-      
+      ) : (
+        <Table>
+          <TableHead
+            field={["Image", "Name", "NIM", "Location", "Time", "Point"]}
+          />
+          <TableBody>
+            {!attendances?.data?.length ? (
+              <tr>
+                <td colSpan={6}>
+                  <EmptyData title="Absensi" action />
+                </td>
+              </tr>
+            ) : (
+              attendances?.data?.map((item, index) => (
+                <TableItem
+                  key={index}
+                  show={index !== (attendances?.data?.length as number) - 1}
+                  id={item.id}
+                  time={formatTime(item.createdAt)}
+                  image={item.image}
+                  user={item.user}
+                  location={item.location}
+                  point={item.point}
+                />
+              ))
+            )}
+          </TableBody>
+        </Table>
+      )}
     </PageLayout>
   );
 };
