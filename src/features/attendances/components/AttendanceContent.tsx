@@ -13,6 +13,7 @@ import { convertQueryParamsToObject } from "../../_global/helper";
 import { formatTime } from "../../_global/lib/FormatTime";
 import { useAttendance } from "../hooks/useAttendance";
 import { TableItem } from "./Table/TableItem";
+import { DropdownPrint } from "./report/print-report";
 
 const AttendanceContent: React.FC = () => {
   const { data: attendances, isLoading: isLoadingAttend } = useAttendance();
@@ -44,11 +45,14 @@ const AttendanceContent: React.FC = () => {
           attendances?.data?.length &&
           !isLoadingAttend &&
           (attendances.meta?.totalData as number) >
-            (attendances?.meta?.perPage as number)
+          (attendances?.meta?.perPage as number)
         )
       }
       pagination={pagination}
     >
+      <div className="flex items-center justify-end mb-3">
+        <DropdownPrint />
+      </div>
       {isLoading || isLoadingAttend ? (
         <table className="w-full justify-center items-center">
           <tbody>
