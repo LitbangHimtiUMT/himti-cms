@@ -19,4 +19,5 @@ export const API_ENDPOINT = {
   notification: `${CONFIG_APP.BASE_URL}/notification`,
   eventMeeting: `${CONFIG_APP.BASE_URL}/event-meeting`,
   meeting: `${CONFIG_APP.BASE_URL}/meeting`,
-}
+  version: `${CONFIG_APP.BASE_URL}/version`,
+};

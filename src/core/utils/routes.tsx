@@ -28,6 +28,7 @@ import { EventMeetingView } from "@features/event-meeting/views/EventMeeting";
 import { EventMeetingDetail } from "@features/event-meeting/views/EventMeetingDetail";
 import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEventMeetingViews";
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
+import { VersionView } from "@features/version/view/version";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
@@ -150,6 +151,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/event-meeting/:eventMeetingId/:meetingId",
         element: <AttendanceViews />,
+      },
+      {
+        path: "/admin/version",
+        element: <VersionView />,
       },
     ],
   },

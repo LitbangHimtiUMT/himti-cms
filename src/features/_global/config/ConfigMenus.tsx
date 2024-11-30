@@ -4,6 +4,7 @@ import { FaCalendar, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
 import { ItemMenuAdmin } from "../types/MenuTypes";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
   {
@@ -32,18 +33,23 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     to: "/admin/anggota",
   },
   {
-    icon: <FaUserGroup />,
+    icon: <FaUserGroup size={12} />,
     name: "Struktural",
     to: "/admin/struktural",
   },
   {
-    icon: <GiTeacher />,
+    icon: <GiTeacher size={12} />,
     name: "Dosen",
     to: "/admin/dosen",
   },
   {
-    icon: <BiKey />,
+    icon: <BiKey size={16} />,
     name: "User Login",
     to: "/admin/user-login",
+  },
+  {
+    icon: <IoMdInformationCircleOutline size={16} />,
+    name: "Version",
+    to: "/admin/version",
   },
 ];

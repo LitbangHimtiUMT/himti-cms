@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 
 const ItemSidenav: React.FC<ItemMenuAdmin> = ({ name, to, icon }) => {
   return (
-    <li key={name}>
+    <li key={name} onDrag={(e) => console.log(e)}>
       <NavLink to={to}>
         {({ isActive }) => (
           <Button
