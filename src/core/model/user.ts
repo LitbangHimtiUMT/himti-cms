@@ -9,7 +9,7 @@ export interface UserModel {
   password: string;
   role: Role;
   nim: string;
-  isLogin: boolean
+  isLogin: boolean;
 }
 
 export interface UserDTO {
@@ -22,7 +22,9 @@ export interface UserDTO {
 }
 
 export interface CreateAdminUserBodyDTO {
-  name: string
-  email: string
-  password?: string
+  name: string;
+  email: string;
+  password?: string;
+  nim: string;
+  code: string;
 }

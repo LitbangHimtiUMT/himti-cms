@@ -11,12 +11,17 @@ interface Options {
   perPage?: number;
 }
 
-type PayloadType = "create" | "update" | "delete" | 'admin-create' | 'admin-update';
+type PayloadType =
+  | "create"
+  | "update"
+  | "delete"
+  | "admin-create"
+  | "admin-update";
 
 interface UserCreation {
   type: PayloadType;
   data?: UserDTO;
-  adminData?: CreateAdminUserBodyDTO
+  adminData?: CreateAdminUserBodyDTO;
   id?: string;
 }
 
@@ -45,10 +50,9 @@ export function useUserCreation() {
   // const auth = useAuth();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
-  const params = useParams()
+  const params = useParams();
   const mutation = useMutation({
     mutationFn: async ({ data, type, id, adminData }: UserCreation) => {
-
       switch (type) {
         case "create":
           return userService.post(data);
@@ -56,10 +60,12 @@ export function useUserCreation() {
           return userService.put(data, { path: id });
         case "delete":
           return userService.delete({ path: id });
-        case 'admin-create':
-          return userService.createAdmin(adminData, { path: 'admin' })
-        case 'admin-update':
-          return userService.updateAdmin(adminData, { path: `admin/${params.id}` })
+        case "admin-create":
+          return userService.createAdmin(adminData);
+        case "admin-update":
+          return userService.updateAdmin(adminData, {
+            path: `admin/${params.id}`,
+          });
         default:
           return userService.post(data);
       }

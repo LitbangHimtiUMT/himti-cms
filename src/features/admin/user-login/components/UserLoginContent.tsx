@@ -40,7 +40,6 @@ export const UserLoginContent = () => {
     totalPages: userLogin?.meta?.totalPages || 1,
     onPageChange,
   };
-  console.log(show);
   return (
     <>
       <PageLayout

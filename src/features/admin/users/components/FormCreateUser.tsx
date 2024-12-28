@@ -1,17 +1,20 @@
 import { Button } from "@material-tailwind/react";
 import React, { useState } from "react";
 
-import { CreateAdminUserBodyDTO, UserDTO } from "@core/model/user";
+import { CreateAdminUserBodyDTO } from "@core/model/user";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useUserCreation } from "../hooks/useUser";
+import { Checkbox, FormControlLabel } from "@mui/material";
 
 const InitialValue: CreateAdminUserBodyDTO = {
   name: "",
   email: "",
   password: "",
+  nim: "",
+  code: "",
 };
 
 export const FormCreateUserAdmin: React.FC = () => {
@@ -28,7 +31,7 @@ export const FormCreateUserAdmin: React.FC = () => {
   const navigate = useNavigate();
 
   const validate = () => {
-    const newErrors: Partial<Record<keyof UserDTO, string>> = {};
+    const newErrors: Partial<Record<keyof CreateAdminUserBodyDTO, string>> = {};
     let isValid = true;
 
     if (!userBody.name) {
@@ -46,6 +49,11 @@ export const FormCreateUserAdmin: React.FC = () => {
       isValid = false;
     }
 
+    if (!userBody.nim) {
+      newErrors.nim = "NIM is required";
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -53,7 +61,6 @@ export const FormCreateUserAdmin: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
-    console.log(userBody);
     await mutation.mutateAsync({
       type: "admin-create",
       adminData: userBody,
@@ -128,6 +135,36 @@ export const FormCreateUserAdmin: React.FC = () => {
               {show ? <FaEye /> : <FaEyeSlash />}
             </div>
           </div>
+        </div>
+        <div>
+          <InputGroup
+            mb={false}
+            disabled={mutation.isPending}
+            type="text"
+            label="NIM"
+            variant="outlined"
+            error={errors.nim}
+            value={userBody.nim as string}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setUserBody({ ...userBody, nim: e.target.value })
+            }
+          />
+        </div>
+        <div>
+          <FormControlLabel
+            control={
+              <Checkbox
+                value={userBody.code === "HIMTI091011"}
+                onChange={(e) =>
+                  setUserBody({
+                    ...userBody,
+                    code: e.target.checked ? "HIMTI091011" : "",
+                  })
+                }
+              />
+            }
+            label="Is Anggota HIMTI"
+          />
         </div>
 
         <div className="flex justify-center items-center gap-5">

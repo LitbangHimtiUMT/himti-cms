@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 interface Options {
   page?: number;
   perPage?: number;
+  eventMeetingId?: string;
 }
 
 interface ModalCreationOption {
@@ -87,14 +88,16 @@ export const useEventMeetingCreation = () => {
   return mutation;
 };
 
-export const useEventMeetingById = () => {
+export const useEventMeetingById = (options?: Options) => {
   const { eventMeetingId } = useParams();
+  const eventMeetingById = options?.eventMeetingId || eventMeetingId;
   const query = useQuery({
-    queryKey: ["event-meeting-by-id", { eventMeetingId }],
+    queryKey: ["event-meeting-by-id", { eventMeetingById }],
     queryFn: () =>
       eventMeetingService.getById({
-        path: eventMeetingId,
+        path: eventMeetingById,
       }),
+    enabled: !!eventMeetingById,
   });
   return query;
 };

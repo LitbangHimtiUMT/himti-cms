@@ -9,6 +9,6 @@ export const userService = {
   post: HTTP_REQUEST.post<ApiResponse<UserModel>>(API_ENDPOINT.users),
   put: HTTP_REQUEST.put<ApiResponse<UserModel>>(API_ENDPOINT.users),
   delete: HTTP_REQUEST.delete<ApiResponse<void>>(API_ENDPOINT.users),
-  createAdmin: HTTP_REQUEST.post<ApiResponse, CreateAdminUserBodyDTO>(API_ENDPOINT.users),
+  createAdmin: HTTP_REQUEST.post<ApiResponse, CreateAdminUserBodyDTO>(API_ENDPOINT.createUser),
   updateAdmin: HTTP_REQUEST.put<ApiResponse, CreateAdminUserBodyDTO>(API_ENDPOINT.users),
 };
