@@ -2,7 +2,7 @@ import { formatTime } from "@features/_global/lib/FormatTime";
 import { useAttendance } from "@features/attendances/hooks/useAttendance";
 import { useMeetingById } from "@features/event-meeting/hooks/useMeeting";
 import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import autoTable, { RowInput } from "jspdf-autotable";
 import { useState } from "react";
 import {
   FaChevronDown,
@@ -51,7 +51,7 @@ export const DropdownPrint = () => {
     XLSX.utils.book_append_sheet(
       workbook,
       worksheet,
-      `${meeting?.data?.name?.slice(0, 31)}`,
+      `${meeting?.data?.name?.slice(0, 31)}`
     );
 
     const excelBuffer = XLSX.write(workbook, {
@@ -85,7 +85,7 @@ export const DropdownPrint = () => {
     autoTable(doc, {
       startY: 30,
       head: [["No", "Name", "NIM", "Email", "Time", "Location"]],
-      body: [...(rows as any)],
+      body: [...(rows as RowInput[])],
       theme: "striped",
       headStyles: { fillColor: [41, 128, 185] },
       styles: { halign: "center" },
