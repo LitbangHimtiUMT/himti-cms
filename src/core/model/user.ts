@@ -25,6 +25,6 @@ export interface CreateAdminUserBodyDTO {
   name: string;
   email: string;
   password?: string;
-  nim: string;
-  code: string;
+  nim?: string;
+  code?: string;
 }
