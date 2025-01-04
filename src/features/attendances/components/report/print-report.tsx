@@ -84,7 +84,7 @@ export const DropdownPrint = () => {
     ]);
     autoTable(doc, {
       startY: 30,
-      head: [["No", "Name", "NIM", "Email", "Time", "Location"]],
+      head: [["No", "Name", "NIM", "Time", "Location"]],
       body: [...(rows as RowInput[])],
       theme: "striped",
       headStyles: { fillColor: [41, 128, 185] },
@@ -92,8 +92,8 @@ export const DropdownPrint = () => {
       columnStyles: {
         0: { halign: "center", cellWidth: 20 },
         1: { halign: "center", cellWidth: 40 },
-        3: { halign: "center", cellWidth: 35 },
-        4: { halign: "center", cellWidth: 25 },
+        2: { halign: "center", cellWidth: 35 },
+        3: { halign: "center", cellWidth: 25 },
       },
     });
 
