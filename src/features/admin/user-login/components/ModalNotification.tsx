@@ -45,7 +45,7 @@ export const ModalNotification: React.FC<ModalProps> = ({
     Partial<Record<keyof BodyRequest, string>>
   >({});
   const { data: acaras } = useDropdownAcara({ page: 1, perPage: 99999999 });
-  const [isField, setIsField] = useState("Acara");
+  const [isField, setIsField] = useState("");
   const { data: eventMeeting } = useEventMeeting({
     page: 1,
     perPage: 99999999,
@@ -93,9 +93,6 @@ export const ModalNotification: React.FC<ModalProps> = ({
         isValid = false;
       }
     }
-    console.log("====================================");
-    console.log(newErrors);
-    console.log("====================================");
 
     setErrors(newErrors);
     return isValid;
@@ -120,7 +117,11 @@ export const ModalNotification: React.FC<ModalProps> = ({
   };
 
   const handleChangeField = (field: string) => {
-    setIsField(field);
+    if (field === isField) {
+      setIsField("");
+    } else {
+      setIsField(field);
+    }
     setBody({ ...body, acaraId: "" });
     setBody({ ...body, eventMeetingId: "" });
   };
