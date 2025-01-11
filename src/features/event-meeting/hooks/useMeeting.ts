@@ -12,6 +12,13 @@ interface ModalCreationOption {
   data?: GeneralMeetingBodyRequest;
 }
 
+interface Option {
+  page?: number;
+  perPage?: number;
+  eventMeetingId?: string;
+  enabled?: boolean;
+}
+
 export const useMeeting = () => {
   const [searchParams] = useSearchParams();
   const { eventMeetingId } = useParams();
@@ -32,6 +39,28 @@ export const useMeeting = () => {
   return query;
 };
 
+export const useDropdownMeeting = ({
+  page = 1,
+  perPage = 10,
+  eventMeetingId,
+  enabled = true,
+}: Option) => {
+  const query = useQuery({
+    queryKey: ["meetings-dropdown", { page, perPage, eventMeetingId, enabled }],
+    queryFn: () =>
+      meetingService.getAll({
+        queryParams: {
+          page: Number(page),
+          perPage: Number(perPage),
+          eventMeetingId,
+        },
+      }),
+    enabled,
+  });
+
+  return query;
+};
+
 export const useMeetingCreation = () => {
   const { eventMeetingId } = useParams();
   const navigate = useNavigate();
@@ -44,12 +73,12 @@ export const useMeetingCreation = () => {
             ...data,
             eventMeetingId,
           } as CreateMeetingBodyRequest);
-       
+
         case "delete":
           return meetingService.delete({
             path: data?.meetingId,
           });
-       
+
         case "update":
           return meetingService.update(
             {

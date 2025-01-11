@@ -52,8 +52,8 @@ export const UserLoginContent = () => {
               (userLogin?.meta?.perPage as number)
           )
         }
-        // searchField
-        // searchPlaceholder="Search Acara"
+        searchField
+        searchPlaceholder="Search Acara"
         pagination={pagination}
       >
         <div className="flex flex-col gap-6">

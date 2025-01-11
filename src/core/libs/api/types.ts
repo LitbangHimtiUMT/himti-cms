@@ -3,6 +3,7 @@ export interface QueryParams {
   perPage?: number;
   search?: string;
   subAcaraId?: string;
+  eventMeetingId?: string;
 }
 
 export interface ApiOption {

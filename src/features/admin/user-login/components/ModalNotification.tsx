@@ -1,15 +1,12 @@
 import InputGroup from "@features/_global/components/Input/InputGroup";
-import {
-  useDropdownAcara,
-  // useDropdownSubAcara,
-} from "@features/admin/acara/hooks/useDropdownAcara";
+import { useDropdownAcara } from "@features/admin/acara/hooks/useDropdownAcara";
 import { useNotificationCreation } from "@features/admin/notification/hooks/useNotification";
-import {
-  useEventMeeting,
-  useEventMeetingById,
-} from "@features/event-meeting/hooks/useEventMeeting";
+import { useEventMeetingDropdown } from "@features/event-meeting/hooks/useEventMeeting";
 import { Button } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useDropdownMeeting } from "../../../event-meeting/hooks/useMeeting";
+
+type Field = "Acara" | "Meet";
 
 interface ModalProps {
   show: boolean;
@@ -19,9 +16,8 @@ interface ModalProps {
 }
 
 interface BodyRequest {
-  acaraId?: string;
-  eventMeetingId?: string;
-  eventMeetingChildren?: string;
+  meetingId?: string;
+  eventId?: string;
   title: string;
   body: string;
 }
@@ -29,9 +25,8 @@ interface BodyRequest {
 const inititalValue: BodyRequest = {
   title: "",
   body: "",
-  acaraId: undefined,
-  eventMeetingId: undefined,
-  eventMeetingChildren: undefined,
+  eventId: undefined,
+  meetingId: undefined,
 };
 
 export const ModalNotification: React.FC<ModalProps> = ({
@@ -40,25 +35,32 @@ export const ModalNotification: React.FC<ModalProps> = ({
   id,
   name,
 }) => {
-  const [body, setBody] = useState<BodyRequest>(inititalValue);
+  const [body, setBody] = useState<BodyRequest & { eventMeetingId?: string }>({
+    ...inititalValue,
+    eventMeetingId: undefined,
+  });
+  const [isField, setIsField] = useState<"Acara" | "Meet">("Acara");
   const [errors, setErrors] = useState<
     Partial<Record<keyof BodyRequest, string>>
   >({});
-  const { data: acaras } = useDropdownAcara({ page: 1, perPage: 99999999 });
-  const [isField, setIsField] = useState("");
-  const { data: eventMeeting } = useEventMeeting({
+
+  const { data: acaras, isFetching: loadingAcara } = useDropdownAcara({
     page: 1,
     perPage: 99999999,
+    enabled: show && isField === "Acara",
   });
-  const { data: eventMeetingById, refetch } = useEventMeetingById({
-    eventMeetingId: body.eventMeetingId,
+  const { data: eventMeeting } = useEventMeetingDropdown({
+    page: 1,
+    perPage: 99999999,
+    enabled: show && isField === "Meet",
   });
 
-  useEffect(() => {
-    if (body.eventMeetingId) {
-      refetch();
-    }
-  }, [body.eventMeetingId, refetch]);
+  const { data: meetings } = useDropdownMeeting({
+    page: 1,
+    perPage: 999999,
+    eventMeetingId: body?.eventMeetingId,
+    enabled: show && isField === "Meet" && !!body.eventMeetingId,
+  });
 
   const mutation = useNotificationCreation();
 
@@ -76,20 +78,15 @@ export const ModalNotification: React.FC<ModalProps> = ({
     }
 
     if (isField === "Acara") {
-      if (!body.acaraId) {
-        newErrors.acaraId = "Acara is required";
+      if (!body.eventId) {
+        newErrors.eventId = "Acara is required";
         isValid = false;
       }
     }
 
     if (isField === "Meet") {
-      if (!body.eventMeetingId) {
-        newErrors.eventMeetingId = "Event Meeting is required";
-        isValid = false;
-      }
-
-      if (!body.eventMeetingChildren) {
-        newErrors.eventMeetingChildren = "Event Meeting Children is required";
+      if (!body.meetingId) {
+        newErrors.meetingId = "Meeting is required";
         isValid = false;
       }
     }
@@ -110,20 +107,17 @@ export const ModalNotification: React.FC<ModalProps> = ({
     } else {
       await mutation.mutateAsync({
         type: "ALL",
-        data: body,
+        data: {
+          body: body.body,
+          title: body.title,
+        },
       });
     }
     onHide();
   };
 
-  const handleChangeField = (field: string) => {
-    if (field === isField) {
-      setIsField("");
-    } else {
-      setIsField(field);
-    }
-    setBody({ ...body, acaraId: "" });
-    setBody({ ...body, eventMeetingId: "" });
+  const handleChangeField = (field: Field) => {
+    setIsField(field);
   };
 
   return (
@@ -185,18 +179,25 @@ export const ModalNotification: React.FC<ModalProps> = ({
                 {isField === "Acara" && (
                   <div className="mb-4 my-2">
                     <InputGroup
-                      disabled={mutation.isPending}
+                      disabled={mutation.isPending || loadingAcara}
                       type="select"
                       label="Acara"
                       variant="outlined"
-                      error={errors.acaraId}
+                      error={errors.eventId}
                       options={
-                        acaras?.data?.length
+                        loadingAcara
+                          ? [
+                              {
+                                label: "Loading...",
+                                value: "",
+                              },
+                            ]
+                          : acaras?.data?.length
                           ? acaras.data.map((item) => ({
                               label: item.name,
                               value: item.id,
                               onClick: () =>
-                                setBody({ ...body, acaraId: item.id }),
+                                setBody({ ...body, eventId: item.id }),
                             }))
                           : []
                       }
@@ -210,7 +211,6 @@ export const ModalNotification: React.FC<ModalProps> = ({
                         disabled={mutation.isPending}
                         type="select"
                         label="Meeting Acara"
-                        error={errors.eventMeetingId}
                         variant="outlined"
                         options={
                           eventMeeting?.data?.length
@@ -229,17 +229,17 @@ export const ModalNotification: React.FC<ModalProps> = ({
                         disabled={mutation.isPending}
                         type="select"
                         label="Meeting Acara List"
-                        error={errors.eventMeetingChildren}
+                        error={errors.meetingId}
                         variant="outlined"
                         options={
-                          eventMeetingById?.data?.Meeting?.length
-                            ? eventMeetingById?.data?.Meeting?.map((item) => ({
+                          body.eventMeetingId
+                            ? meetings?.data?.map((item) => ({
                                 label: item.name,
                                 value: item.id,
                                 onClick: () =>
                                   setBody({
                                     ...body,
-                                    eventMeetingChildren: item.id,
+                                    meetingId: item.id,
                                   }),
                               }))
                             : []
@@ -265,7 +265,6 @@ export const ModalNotification: React.FC<ModalProps> = ({
                   data-ripple-light="true"
                   data-dialog-close="true"
                   className="middle none center rounded-lg bg-gradient-to-tr from-green-600 to-green-400 py-3 px-6 font-sans text-xs font-bold uppercase text-white shadow-md shadow-green-500/20 transition-all hover:shadow-lg hover:shadow-green-500/40 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                  // onClick={}
                 >
                   {mutation.isPending ? "Sending..." : "Send"}
                 </button>

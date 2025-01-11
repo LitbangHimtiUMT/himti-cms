@@ -11,6 +11,7 @@ interface Options {
   page?: number;
   perPage?: number;
   eventMeetingId?: string;
+  enabled?: boolean;
 }
 
 interface ModalCreationOption {
@@ -19,13 +20,14 @@ interface ModalCreationOption {
 }
 
 export const useEventMeeting = (options?: Options) => {
+  const { enabled = true } = options ?? {};
   const [searchParams] = useSearchParams();
 
   const page = options?.page || searchParams.get("page") || 1;
   const perPage = options?.perPage || searchParams.get("perPage") || 10;
 
   const query = useQuery({
-    queryKey: ["event-meeting"],
+    queryKey: ["event-meeting", { page, perPage }],
     queryFn: () =>
       eventMeetingService.get({
         queryParams: {
@@ -33,6 +35,24 @@ export const useEventMeeting = (options?: Options) => {
           perPage: Number(perPage),
         },
       }),
+    enabled,
+  });
+  return query;
+};
+
+export const useEventMeetingDropdown = (options?: Options) => {
+  const { enabled = true, page, perPage } = options ?? {};
+
+  const query = useQuery({
+    queryKey: ["event-meeting-dropdown", { enabled, page, perPage }],
+    queryFn: () =>
+      eventMeetingService.get({
+        queryParams: {
+          page: Number(page),
+          perPage: Number(perPage),
+        },
+      }),
+    enabled,
   });
   return query;
 };
