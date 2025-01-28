@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 interface Options {
   page?: number;
   perPage?: number;
+  path?: string;
 }
 
 type PayloadType =
@@ -41,6 +42,7 @@ export const useUser = (options?: Options) => {
           page: page ? Number(page) : undefined,
           search,
         },
+        path: options?.path || undefined,
       }),
   });
   return query;

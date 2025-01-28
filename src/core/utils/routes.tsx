@@ -30,6 +30,8 @@ import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEve
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
 import { VersionView } from "@features/version/view/version";
 import { createBrowserRouter } from "react-router-dom";
+import { CategoriesViews } from "../../features/lms/categories/views/Categories";
+import { MentorsViews } from "../../features/lms/mentors/views/Mentors";
 
 export const router = createBrowserRouter([
   {
@@ -151,6 +153,14 @@ export const router = createBrowserRouter([
       {
         path: "/admin/event-meeting/:eventMeetingId/:meetingId",
         element: <AttendanceViews />,
+      },
+      {
+        path: "/lms/categories",
+        element: <CategoriesViews />,
+      },
+      {
+        path: "/lms/mentors",
+        element: <MentorsViews />,
       },
       {
         path: "/admin/version",

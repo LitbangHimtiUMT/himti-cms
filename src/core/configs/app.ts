@@ -1,6 +1,7 @@
 export const CONFIG_APP = {
   APP_NAME: import.meta.env.HIMTI_APP_NAME,
   BASE_URL: import.meta.env.HIMTI_BASE_URL,
+  BASE_URL_LMS: `${import.meta.env.HIMTI_BASE_URL}/lms`,
 };
 
 export const API_ENDPOINT = {
@@ -21,4 +22,5 @@ export const API_ENDPOINT = {
   eventMeeting: `${CONFIG_APP.BASE_URL}/event-meeting`,
   meeting: `${CONFIG_APP.BASE_URL}/meeting`,
   version: `${CONFIG_APP.BASE_URL}/version`,
+  mentors: `${CONFIG_APP.BASE_URL_LMS}/mentors`,
 };

@@ -12,6 +12,7 @@ export interface ApiOption {
   headers?: HeadersInit;
   path?: string;
   queryParams?: QueryParams;
+  params?: Record<string, string | number | null | undefined>;
 }
 
 export interface MetaResponse {

@@ -1,10 +1,10 @@
 import { BiKey } from "react-icons/bi";
 import { BsCalendar2EventFill } from "react-icons/bs";
-import { FaCalendar, FaUser } from "react-icons/fa";
+import { FaCalendar, FaChalkboardTeacher, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
-import { ItemMenuAdmin } from "../types/MenuTypes";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { ItemMenuAdmin } from "../types/MenuTypes";
 
 export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
   {
@@ -46,6 +46,11 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <BiKey size={16} />,
     name: "User Login",
     to: "/admin/user-login",
+  },
+  {
+    icon: <FaChalkboardTeacher size={16} />,
+    name: "Mentors",
+    to: "/lms/mentors",
   },
   {
     icon: <IoMdInformationCircleOutline size={16} />,
