@@ -5,6 +5,7 @@ import { Input } from "../Input/InputV2";
 interface ListItem {
   label: string;
   value: string;
+  disabled?: boolean;
 }
 
 interface IDropdownProps {
@@ -19,6 +20,7 @@ interface IDropdownProps {
 const initValue: ListItem = {
   label: "",
   value: "",
+  disabled: false,
 };
 
 export const DropdownV2: React.FC<IDropdownProps> = ({
@@ -54,7 +56,10 @@ export const DropdownV2: React.FC<IDropdownProps> = ({
   }, []);
 
   return (
-    <div ref={ref} className={`relative w-full bg-white z-[${isFocused ? "50" : "20"}]`}>
+    <div
+      ref={ref}
+      className={`relative w-full bg-white z-[${isFocused ? "50" : "20"}]`}
+    >
       <div
         onClick={() => setShow((prev) => !prev)}
         onFocus={() => setIsFocused(true)}
@@ -104,16 +109,28 @@ export const DropdownV2: React.FC<IDropdownProps> = ({
                 />
               </div>
             )}
-            {data?.map((item) => (
+            {(data?.length
+              ? data
+              : [{ label: "Not Found", value: "Not Found", disabled: true }]
+            )?.map((item) => (
               <div
                 onClick={() => {
+                  if (item.disabled) return;
                   setShow((prev) => !prev);
                   setSelected(item);
                   onChange?.(item);
                 }}
-                className="w-full rounded-lg flex items-center px-4 py-3 cursor-pointer hover:bg-gray-100"
+                className={`w-full rounded-lg flex items-center px-4 py-3 ${
+                  !item.disabled ? "hover:bg-gray-100 cursor-pointer" : ""
+                }`}
               >
-                <p className="text-sm font-poppins">{item.label}</p>
+                <p
+                  className={`text-sm font-poppins ${
+                    item.disabled ? "text-gray-500" : ""
+                  }`}
+                >
+                  {item.label}
+                </p>
               </div>
             ))}
           </div>
