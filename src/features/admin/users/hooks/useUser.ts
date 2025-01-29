@@ -10,6 +10,7 @@ interface Options {
   page?: number;
   perPage?: number;
   path?: string;
+  enabled?: boolean;
 }
 
 type PayloadType =
@@ -27,6 +28,7 @@ interface UserCreation {
 }
 
 export const useUser = (options?: Options) => {
+  const { enabled = true } = options || {};
   const [searchParams] = useSearchParams();
   const page = options?.page || searchParams.get("page") || 1;
   const perPage = options?.perPage || searchParams.get("perPage") || 10;
@@ -44,6 +46,7 @@ export const useUser = (options?: Options) => {
         },
         path: options?.path || undefined,
       }),
+    enabled,
   });
   return query;
 };
