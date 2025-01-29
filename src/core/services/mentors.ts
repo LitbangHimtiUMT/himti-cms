@@ -7,4 +7,5 @@ export const mentorService = {
   get: request.get<ApiResponse<MentorsDTO[]>>(API_ENDPOINT.mentors),
   assign: request.post<ApiResponse, MentorCreationDTO>(API_ENDPOINT.mentors),
   delete: request.delete<ApiResponse>(API_ENDPOINT.mentors),
+  detail: request.get<ApiResponse<MentorsDTO>>(API_ENDPOINT.mentors),
 };

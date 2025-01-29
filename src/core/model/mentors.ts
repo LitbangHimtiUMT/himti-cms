@@ -3,6 +3,8 @@ export interface MentorsDTO {
   name: string;
   email: string;
   balance: number;
+  totalExpend?: number;
+  totalIncome?: number;
 }
 
 export interface MentorCreationDTO {

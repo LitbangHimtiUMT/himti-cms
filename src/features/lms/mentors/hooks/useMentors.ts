@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { mentorService } from "../../../../core/services/mentors";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import useDebounce from "../../../_global/hooks/useDebounce";
 
 export const useMentors = () => {
@@ -14,6 +14,19 @@ export const useMentors = () => {
         params: {
           search,
         },
+      }),
+  });
+  return query;
+};
+
+export const useMentorById = () => {
+  const { mentorId } = useParams();
+
+  const query = useQuery({
+    queryKey: ["mentor-by-id", { mentorId }],
+    queryFn: () =>
+      mentorService.detail({
+        path: mentorId,
       }),
   });
   return query;
