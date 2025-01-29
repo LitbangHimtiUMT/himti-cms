@@ -23,4 +23,5 @@ export const API_ENDPOINT = {
   meeting: `${CONFIG_APP.BASE_URL}/meeting`,
   version: `${CONFIG_APP.BASE_URL}/version`,
   mentors: `${CONFIG_APP.BASE_URL_LMS}/mentors`,
+  categories: `${CONFIG_APP.BASE_URL_LMS}/categories`,
 };

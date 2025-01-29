@@ -1,4 +1,4 @@
-import { BiKey } from "react-icons/bi";
+import { BiCategory, BiKey } from "react-icons/bi";
 import { BsCalendar2EventFill } from "react-icons/bs";
 import { FaCalendar, FaChalkboardTeacher, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
@@ -46,6 +46,11 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <BiKey size={16} />,
     name: "User Login",
     to: "/admin/user-login",
+  },
+  {
+    icon: <BiCategory size={16} />,
+    name: "Categories",
+    to: "/lms/categories",
   },
   {
     icon: <FaChalkboardTeacher size={16} />,
