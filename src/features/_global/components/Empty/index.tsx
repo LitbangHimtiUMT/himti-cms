@@ -1,5 +1,6 @@
 import { MdHourglassEmpty } from "react-icons/md";
 import { Poppins } from "../Text";
+import NoData from "@core/assets/Icon/no_data.svg";
 
 interface IEmptyProps {
   description?: string[];
@@ -22,7 +23,8 @@ export const EmptyState: React.FC<IEmptyProps> = ({
               minHeight: customMinHeight,
             }}
           >
-            <MdHourglassEmpty className="text-5xl" />
+            <img src={NoData} width={150} alt="no-data" />
+
             {description && (
               <div className="flex flex-col items-center justify-center">
                 {description.map((item) => (

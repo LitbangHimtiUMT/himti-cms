@@ -74,7 +74,7 @@ export const Button: React.FC<IButtonProps> = ({
        variant == "danger"
          ? "hover:bg-red-600"
          : variant == "secondary"
-         ? "hover:bg-gray-100"
+         ? "hover:bg-gray-300"
          : variant == "primary"
          ? "hover:bg-[#2b6394]"
          : variant == "success"

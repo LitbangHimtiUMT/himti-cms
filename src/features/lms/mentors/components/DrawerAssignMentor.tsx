@@ -33,7 +33,10 @@ export const DrawerAssignMentor: React.FC<DrawerAssignMentorProps> = ({
 
   const handleAssign = async () => {
     await mutation.mutateAsync({
-      userId: data.userId,
+      type: "create",
+      data: {
+        userId: data.userId,
+      },
     });
     onHide();
     setData({
@@ -60,7 +63,7 @@ export const DrawerAssignMentor: React.FC<DrawerAssignMentorProps> = ({
         <Button
           size="lg"
           variant={data.userId && !mutation.isPending ? "primary" : "disabled"}
-          onClick={handleAssign}
+          onClick={mutation.isPending || data.userId ? handleAssign : undefined}
         >
           <Poppins fontSize={"0.8rem"} color="white" className="text-white">
             {mutation.isPending ? "Loading..." : "Assign"}

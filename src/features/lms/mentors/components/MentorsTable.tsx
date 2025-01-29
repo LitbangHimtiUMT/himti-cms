@@ -5,17 +5,30 @@ import { Poppins } from "../../../_global/components/Text";
 import { formatRupiah } from "../../../_global/helper";
 import { useMentors } from "../hooks/useMentors";
 import { DrawerAssignMentor } from "./DrawerAssignMentor";
+import { Button } from "../../../_global/components/Button";
+import { BiDetail, BiTrash } from "react-icons/bi";
+import { ModalDeleteMentor } from "./ModalDeleteMentor";
 
 export const MentorsTable = () => {
   const { data: mentors, isFetching } = useMentors();
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState({
+    drawer: false,
+    modal: {
+      show: false,
+      id: "",
+    },
+  });
   return (
     <PageLayout
       action={{
         show: true,
         buttonTitle: "Assign Mentor",
         buttonProps: {
-          onClick: () => setShow((prev) => !prev),
+          onClick: () =>
+            setShow((prev) => ({
+              ...prev,
+              drawer: !prev.drawer,
+            })),
         },
       }}
       title="Mentors"
@@ -25,7 +38,7 @@ export const MentorsTable = () => {
       <MasterTable
         isLoading={isFetching}
         data={mentors?.data || []}
-        title={["NAMA", "EMAIL", "BALANCE"]}
+        title={["NAMA", "EMAIL", "BALANCE", ""]}
         columnTable={[
           {
             return: ({ name }) => (
@@ -48,9 +61,49 @@ export const MentorsTable = () => {
               </>
             ),
           },
+          {
+            return: ({ id }) => (
+              <div className="flex items-center justify-end gap-4 w-full">
+                <div className="w-max">
+                  <Button
+                    variant="danger"
+                    onClick={() =>
+                      setShow((prev) => ({
+                        ...prev,
+                        modal: { id, show: !prev.modal.show },
+                      }))
+                    }
+                  >
+                    <div className="flex items-center gap-2">
+                      <BiTrash />
+                      <p className="text-xs">Delete</p>
+                    </div>
+                  </Button>
+                </div>
+                <div className="w-max">
+                  <Button variant="secondary">
+                    <div className="flex items-center gap-2">
+                      <BiDetail className="text-black" />
+                      <p className="text-black text-xs">Detail</p>
+                    </div>
+                  </Button>
+                </div>
+              </div>
+            ),
+          },
         ]}
       />
-      <DrawerAssignMentor onHide={() => setShow((prev) => !prev)} show={show} />
+      <DrawerAssignMentor
+        onHide={() => setShow((prev) => ({ ...prev, drawer: !prev.drawer }))}
+        show={show.drawer}
+      />
+      <ModalDeleteMentor
+        show={show.modal.show}
+        id={show.modal.id}
+        onHide={() =>
+          setShow((prev) => ({ ...prev, modal: { id: "", show: !prev.modal.show } }))
+        }
+      />
     </PageLayout>
   );
 };
