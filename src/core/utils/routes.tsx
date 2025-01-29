@@ -32,6 +32,7 @@ import { VersionView } from "@features/version/view/version";
 import { createBrowserRouter } from "react-router-dom";
 import { CategoriesViews } from "../../features/lms/categories/views/Categories";
 import { MentorsViews } from "../../features/lms/mentors/views/Mentors";
+import { DetailMentorsViews } from "../../features/lms/mentors/views/DetailMentors";
 
 export const router = createBrowserRouter([
   {
@@ -161,6 +162,10 @@ export const router = createBrowserRouter([
       {
         path: "/lms/mentors",
         element: <MentorsViews />,
+      },
+      {
+        path: "/lms/mentors/:mentorId",
+        element: <DetailMentorsViews />,
       },
       {
         path: "/admin/version",

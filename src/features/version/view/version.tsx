@@ -10,22 +10,24 @@ export const VersionView: React.FC = () => {
   const onHide = () => setShow((prev) => !prev);
   const { data: version } = useVersion();
   return (
-    <div className="w-full h-[300px] bg-white mt-10 rounded-xl shadow-xl p-10 flex items-center gap-10">
-      <div className="flex flex-col justify-center">
-        <img src={HIMTI} width={200} />
-        <button
-          className="px-5 py-2 bg-blue-500 text-white rounded-lg font-bold"
-          onClick={onHide}
-        >
-          Update
-        </button>
+    <>
+      <div className="w-full h-min-[300px] bg-white mt-10 rounded-xl shadow-xl p-10 flex md:flex-row flex-col items-center gap-10">
+        <div className="flex flex-col justify-center">
+          <img src={HIMTI} width={200} />
+          <button
+            className="px-5 py-2 bg-blue-500 text-white rounded-lg font-bold"
+            onClick={onHide}
+          >
+            Update
+          </button>
+        </div>
+        <BaseTableVersion />
       </div>
-      <BaseTableVersion />
       <ModalUpdate
         show={show}
         onHide={onHide}
         data={version?.data as VersionModel}
       />
-    </div>
+    </>
   );
 };

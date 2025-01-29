@@ -8,9 +8,11 @@ import { DrawerAssignMentor } from "./DrawerAssignMentor";
 import { Button } from "../../../_global/components/Button";
 import { BiDetail, BiTrash } from "react-icons/bi";
 import { ModalDeleteMentor } from "./ModalDeleteMentor";
+import { useNavigate } from "react-router-dom";
 
 export const MentorsTable = () => {
   const { data: mentors, isFetching } = useMentors();
+  const navigate = useNavigate();
   const [show, setShow] = useState({
     drawer: false,
     modal: {
@@ -18,6 +20,7 @@ export const MentorsTable = () => {
       id: "",
     },
   });
+
   return (
     <PageLayout
       action={{
@@ -81,7 +84,10 @@ export const MentorsTable = () => {
                   </Button>
                 </div>
                 <div className="w-max">
-                  <Button variant="secondary">
+                  <Button
+                    variant="secondary"
+                    onClick={() => navigate(`/lms/mentors/${id}`)}
+                  >
                     <div className="flex items-center gap-2">
                       <BiDetail className="text-black" />
                       <p className="text-black text-xs">Detail</p>
@@ -101,7 +107,10 @@ export const MentorsTable = () => {
         show={show.modal.show}
         id={show.modal.id}
         onHide={() =>
-          setShow((prev) => ({ ...prev, modal: { id: "", show: !prev.modal.show } }))
+          setShow((prev) => ({
+            ...prev,
+            modal: { id: "", show: !prev.modal.show },
+          }))
         }
       />
     </PageLayout>

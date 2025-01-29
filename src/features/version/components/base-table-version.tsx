@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { useVersion } from "../hooks/useVersion";
 
-interface TRProps extends PropsWithChildren { }
+interface TRProps extends PropsWithChildren {}
 
 const TR = ({ children }: TRProps) => <tr>{children}</tr>;
 
@@ -10,7 +10,7 @@ export const BaseTableVersion = () => {
 
   return (
     <>
-      <div className="flex items-center gap-5">
+      <div className="md:flex hidden items-center gap-5">
         <table className="h-[220px]">
           <TR>
             <td>
@@ -73,6 +73,42 @@ export const BaseTableVersion = () => {
             </td>
           </TR>
         </table>
+      </div>
+      <div className="md:hidden flex flex-col gap-4 w-full">
+        <div className="w-full">
+          <p>Android Version</p>
+          <p>{version?.data?.androidVersion || "-"}</p>
+        </div>
+        <div className="w-full">
+          <p>Play Store URL</p>
+          {version?.data?.playstoreLink ? (
+            <a
+              href={version.data.playstoreLink}
+              className="p-2 text-blue-800 underline"
+            >
+              {version?.data?.playstoreLink}
+            </a>
+          ) : (
+            <p className="p-2">{"-"}</p>
+          )}
+        </div>
+        <div className="w-full">
+          <p>IOS Version</p>
+          <p>{version?.data?.iosVersion || "-"}</p>
+        </div>
+        <div className="w-full">
+          <p>App Store Version</p>
+          {version?.data?.appStoreLink ? (
+            <a
+              href={version.data.appStoreLink}
+              className="p-2 text-blue-800 underline"
+            >
+              {version?.data?.appStoreLink}
+            </a>
+          ) : (
+            <p className="p-2">{"-"}</p>
+          )}
+        </div>
       </div>
     </>
   );
