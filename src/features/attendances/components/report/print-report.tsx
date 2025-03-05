@@ -79,7 +79,7 @@ export const DropdownPrint = () => {
       index + 1,
       row.user.name,
       row.user.nim,
-      formatTime(new Date()),
+      formatTime(row.createdAt),
       row.location,
     ]);
     autoTable(doc, {
