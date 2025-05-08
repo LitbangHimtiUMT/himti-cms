@@ -7,7 +7,7 @@ import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AcaraDTO } from "../model/acara";
+import { AcaraDTO, EventType } from "../model/acara";
 
 const InitialValue: AcaraDTO = {
   name: "",
@@ -16,6 +16,7 @@ const InitialValue: AcaraDTO = {
   image: undefined,
   // startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
   // endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
+  eventType: "COMMON",
   startTime: new Date(),
   endTime: new Date(),
 };
@@ -31,9 +32,9 @@ const FormAddAcara: React.FC = () => {
 
   // const [isModal, setIsModal] = useState<boolean>(false);
   const [acaraBody, setAcaraBody] = useState<AcaraDTO>({ ...InitialValue });
-  const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string | null>(
-    DefaultImage
-  );
+  const [imageFile, setImageFile] = useState<
+    ImageFile | ArrayBuffer | string | null
+  >(DefaultImage);
   const [errors, setErrors] = useState<Partial<Record<keyof AcaraDTO, string>>>(
     {}
   );
@@ -87,49 +88,6 @@ const FormAddAcara: React.FC = () => {
     });
   };
 
-  // const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   console.log(e.target);
-  //   const file = e.target.files?.[0];
-  //   if (file && file.type.startsWith("image/")) {
-  //     const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-  //     if (!validExtensions.includes(file.type)) {
-  //       setErrors((prevErrors) => ({
-  //         ...prevErrors,
-  //         image: "Invalid image format. Please upload jpg, jpeg, or png files.",
-  //       }));
-  //       return;
-  //     }
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       // console.log(reader.result as ArrayBuffer);
-  //       setImageFile(reader.result as ArrayBuffer);
-  //       // setIsModal(true); // Open modal when image is loaded
-  //     };
-  //     reader.readAsDataURL(file);
-  //   } else {
-  //     setErrors((prevErrors) => ({
-  //       ...prevErrors,
-  //       image: "Please upload a valid image file.",
-  //     }));
-  //   }
-  // };
-
-  // const getCropData = () => {
-  //   if (typeof cropperRef.current?.cropper !== "undefined") {
-  //     const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
-  //       width: 1080,
-  //       height: 1080,
-  //     });
-  //     croppedCanvas.toBlob((blob: File) => {
-  //       setAcaraBody({ ...acaraBody, image: blob });
-  //       setIsModal(false); // Close modal after cropping
-  //       setImageFile(URL.createObjectURL(blob) as string);
-  //     });
-  //   }
-  // };
-
   const handleReset = () => {
     setAcaraBody(InitialValue);
     setImageFile(DefaultImage);
@@ -142,16 +100,6 @@ const FormAddAcara: React.FC = () => {
     setErrors({});
   };
 
-  // const handleCancelCrop = () => {
-  //   setImageFile(DefaultImage);
-  //   const fileInput = document.getElementById(
-  //     "image-input"
-  //   ) as HTMLInputElement;
-  //   if (fileInput) {
-  //     fileInput.value = "";
-  //   }
-  //   setIsModal(false);
-  // };
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files?.[0];
     setAcaraBody((prev) => ({
@@ -169,8 +117,8 @@ const FormAddAcara: React.FC = () => {
 
   return (
     <PageLayout
-      title='Add Acara'
-      headBackground='blue'
+      title="Add Acara"
+      headBackground="blue"
       action={{
         show: true,
         buttonTitle: "Cancel",
@@ -178,13 +126,13 @@ const FormAddAcara: React.FC = () => {
         colorButton: "red",
       }}
     >
-      <form onSubmit={handleSubmit} className='w-full'>
-        <div className='mb-4 my-2'>
+      <form onSubmit={handleSubmit} className="w-full">
+        <div className="mb-4 my-2">
           <InputGroup
             disabled={mutation.isPending}
-            type='text'
-            label='Name'
-            variant='outlined'
+            type="text"
+            label="Name"
+            variant="outlined"
             error={errors.name}
             value={acaraBody.name as string}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -193,12 +141,12 @@ const FormAddAcara: React.FC = () => {
           />
         </div>
 
-        <div className='mb-4'>
+        <div className="mb-4">
           <InputGroup
             disabled={mutation.isPending}
-            type='textarea'
-            label='Description'
-            variant='outlined'
+            type="textarea"
+            label="Description"
+            variant="outlined"
             error={errors.description}
             value={acaraBody.description}
             onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
@@ -210,32 +158,31 @@ const FormAddAcara: React.FC = () => {
           />
         </div>
 
-        {/* <div className='mb-4'>
+        <div className="mb-4">
           <InputGroup
             disabled={mutation.isPending}
-            type='select'
-            label='Select Status'
+            type="select"
+            label="Select Type"
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setAcaraBody({
                 ...acaraBody,
-                isOpen: e,
+                eventType: e as unknown as EventType,
               });
             }}
             error={errors.isOpen}
             options={[
-              { value: "", label: "Pilih Status" },
-              { value: true, label: "Open" },
-              { value: false, label: "Close" },
+              { value: "COMMON", label: "Common" },
+              { value: "REGISTRATION", label: "Registration" },
             ]}
           />
-        </div> */}
+        </div>
 
-        <div className='flex gap-4 mb-4'>
-          <div className='flex-1'>
+        <div className="flex gap-4 mb-4">
+          <div className="flex-1">
             <DateTimePicker
               disabled={mutation.isPending}
-              className='w-full'
-              label='Start Time'
+              className="w-full"
+              label="Start Time"
               value={acaraBody.startTime}
               onChange={(value: Date | null) => {
                 console.log({ value });
@@ -249,11 +196,11 @@ const FormAddAcara: React.FC = () => {
             />
             <InputGroup error={errors.startTime} />
           </div>
-          <div className='flex-1'>
+          <div className="flex-1">
             <DateTimePicker
               disabled={mutation.isPending}
-              className='w-full'
-              label='End Time'
+              className="w-full"
+              label="End Time"
               value={acaraBody.endTime}
               minDateTime={new Date(acaraBody.startTime as string)}
               onChange={(value: Date | null) => {
@@ -268,18 +215,18 @@ const FormAddAcara: React.FC = () => {
           </div>
         </div>
 
-        <div className='flex justify-start items-center my-6'>
+        <div className="flex justify-start items-center my-6">
           <img
             src={imageFile as string}
-            alt='Acara Image'
-            className='max-w-[200px] h-[200px] max-h-[200px] rounded-md object-cover'
+            alt="Acara Image"
+            className="max-w-[200px] h-[200px] max-h-[200px] rounded-md object-cover"
           />
         </div>
-        <div className='mb-4'>
-          <div className='flex items-center w-full'>
+        <div className="mb-4">
+          <div className="flex items-center w-full">
             <input
-              type='file'
-              className='file-input w-full border border-solid border-black'
+              type="file"
+              className="file-input w-full border border-solid border-black"
               onChange={handleImageChange}
             />
           </div>
@@ -301,19 +248,19 @@ const FormAddAcara: React.FC = () => {
             hanldeCancelCrop={handleCancelCrop}
           /> */}
         </div>
-        <div className='flex justify-center items-center gap-5'>
+        <div className="flex justify-center items-center gap-5">
           <Button
             disabled={mutation.isPending}
             onClick={handleReset}
-            variant='outlined'
+            variant="outlined"
             fullWidth
           >
             Reset
           </Button>
           <Button
-            type='submit'
-            variant='gradient'
-            color='blue'
+            type="submit"
+            variant="gradient"
+            color="blue"
             fullWidth
             disabled={mutation.isPending}
           >

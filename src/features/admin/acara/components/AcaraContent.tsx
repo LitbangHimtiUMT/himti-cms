@@ -56,7 +56,7 @@ export const AcaraContent: React.FC = () => {
         pagination={pagination}
       >
         <Table>
-          <TableHead field={["Image", "Name", "Time", "Status", "Action"]} />
+          <TableHead field={["Image", "Name", "Time", "Event Type" ,"Status", "Action"]} />
           <TableBody>
             {isLoading || mutation.isPending ? (
               <SimpleLoadingTable ColSpan={6} />

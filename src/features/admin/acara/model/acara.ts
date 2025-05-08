@@ -9,6 +9,7 @@ export interface AcaraModel {
   startTime: Date;
   endTime: Date;
   createdAt: Date;
+  type: EventType
   updatedAt: Date;
 }
 
@@ -36,6 +37,8 @@ export interface AcaraDetailModel extends AcaraModel {
   subAcara: subAcara[];
 }
 
+export type EventType = "COMMON" | "REGISTRATION";
+
 export interface AcaraDTO {
   name?: string;
   description?: string;
@@ -44,4 +47,5 @@ export interface AcaraDTO {
   image?: File | string;
   startTime?: Date | string;
   endTime?: Date | string;
+  eventType: EventType;
 }

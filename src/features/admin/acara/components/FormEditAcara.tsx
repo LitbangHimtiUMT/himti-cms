@@ -12,7 +12,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { utcToZonedTime } from "date-fns-tz";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { AcaraDTO } from "../model/acara";
+import { AcaraDTO, EventType } from "../model/acara";
 
 const InitialValue: AcaraDTO = {
   name: "",
@@ -21,6 +21,7 @@ const InitialValue: AcaraDTO = {
   image: undefined,
   startTime: new Date(),
   endTime: new Date(),
+  eventType: "COMMON",
 };
 
 interface ImageFile extends File {
@@ -34,7 +35,7 @@ const FormEditAcara: React.FC = () => {
 
   useEffect(() => {
     if (acaraById && acaraById.data) {
-      const { name, description, isOpen, image, startTime, endTime } =
+      const { name, description, isOpen, image, startTime, endTime, type } =
         acaraById.data;
       // const categoryId = category ? category.id : "";
       setAcaraBody({
@@ -44,6 +45,7 @@ const FormEditAcara: React.FC = () => {
         image,
         startTime,
         endTime,
+        eventType: type,
       });
     }
   }, [acaraById]);
@@ -123,71 +125,6 @@ const FormEditAcara: React.FC = () => {
       id,
     });
   };
-
-  // const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   e.preventDefault();
-  //   const file = e.target.files?.[0];
-  //   if (file && file.type.startsWith("image/")) {
-  //     const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
-  //     if (!validExtensions.includes(file.type)) {
-  //       setErrors((prevErrors) => ({
-  //         ...prevErrors,
-  //         image: "Invalid image format. Please upload jpg, jpeg, or png files.",
-  //       }));
-  //       return;
-  //     }
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       // console.log(reader.result as ArrayBuffer);
-  //       setImageFile(reader.result as ArrayBuffer);
-  //       setIsModal(true); // Open modal when image is loaded
-  //     };
-  //     reader.readAsDataURL(file);
-  //   } else {
-  //     setErrors((prevErrors) => ({
-  //       ...prevErrors,
-  //       image: "Please upload a valid image file.",
-  //     }));
-  //   }
-  // };
-
-  // const getCropData = () => {
-  //   if (typeof cropperRef.current?.cropper !== "undefined") {
-  //     const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
-  //       width: 1080,
-  //       height: 1080,
-  //     });
-  //     croppedCanvas.toBlob((blob: File) => {
-  //       setAcaraBody({ ...acaraBody, image: blob });
-  //       setIsModal(false); // Close modal after cropping
-  //       setImageFile(URL.createObjectURL(blob) as string);
-  //     });
-  //   }
-  // };
-
-  // const handleReset = () => {
-  //   setAcaraBody(InitialValue);
-  //   setImageFile(DefaultImage);
-  //   const fileInput = document.getElementById(
-  //     "image-input"
-  //   ) as HTMLInputElement;
-  //   if (fileInput) {
-  //     fileInput.value = "";
-  //   }
-  //   setErrors({});
-  // };
-
-  // const handleCancelCrop = () => {
-  //   setImageFile(DefaultImage);
-  //   const fileInput = document.getElementById(
-  //     "image-input"
-  //   ) as HTMLInputElement;
-  //   if (fileInput) {
-  //     fileInput.value = "";
-  //   }
-  //   setIsModal(false);
-  // };
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e?.target?.files?.[0];
@@ -271,19 +208,18 @@ const FormEditAcara: React.FC = () => {
             <InputGroup
               disabled={mutation.isPending}
               type="select"
-              label="Status"
-              value={String(acaraBody.isOpen)}
+              label="Select Type"
+              value={acaraBody.eventType}
               onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
                 setAcaraBody({
                   ...acaraBody,
-                  isOpen: e,
+                  eventType: e as unknown as EventType,
                 });
               }}
               error={errors.isOpen}
               options={[
-                { value: "", label: "Pilih Status" },
-                { value: "true", label: "Open" },
-                { value: "false", label: "Close" },
+                { value: "COMMON", label: "Common" },
+                { value: "REGISTRATION", label: "Registration" },
               ]}
             />
           </div>
@@ -348,13 +284,6 @@ const FormEditAcara: React.FC = () => {
                 onChange={handleImageChange}
               />
             </div>
-            {/* <CropperImage
-              image={imageFile as ArrayBuffer}
-              isModal={isModal}
-              cropperRef={cropperRef}
-              getCropData={getCropData}
-              hanldeCancelCrop={handleCancelCrop}
-            /> */}
           </div>
           <div className="flex justify-center items-center gap-5">
             <Button
