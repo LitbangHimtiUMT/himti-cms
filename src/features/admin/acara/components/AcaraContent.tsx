@@ -8,13 +8,23 @@ import {
 } from "@features/_global/components/Table";
 import { convertQueryParamsToObject } from "@features/_global/helper";
 import { useAcara, useAcaraCreation } from "@features/_global/hooks/useAcara";
-import React from "react";
+import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TableItem } from "./Table/TableItem";
 
-export const AcaraContent: React.FC = () => {
-  const { data: acara, isLoading } = useAcara();
+type EventFilter = "all" | "active" | "archive";
 
+export const AcaraContent: React.FC = () => {
+  const [filter, setFilter] = useState<EventFilter>("active");
+  const { data: acara, isLoading } = useAcara({
+    ...(filter === "all"
+      ? { withDeleted: "true" }
+      : filter === "active"
+      ? undefined
+      : {
+          onlyDeleted: "true",
+        }),
+  });
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
   const onPageChange = (page: number) => {
@@ -29,6 +39,11 @@ export const AcaraContent: React.FC = () => {
       id,
     });
   };
+
+  const changeFilterEvent = (filter: EventFilter) => {
+    setFilter(filter);
+    onPageChange(1);
+  }
 
   const pagination = {
     currentPage: acara?.meta?.page || 1,
@@ -55,8 +70,48 @@ export const AcaraContent: React.FC = () => {
         searchPlaceholder="Search Acara"
         pagination={pagination}
       >
+        <div className="flex items-center gap-5">
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => changeFilterEvent("all")}
+          >
+            <input
+              type="radio"
+              name="radio-1"
+              className="radio w-5 h-5"
+              checked={filter === "all"}
+            />
+            <p>All</p>
+          </div>
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => changeFilterEvent("active")}
+          >
+            <input
+              type="radio"
+              name="radio-1"
+              className="radio w-5 h-5"
+              checked={filter === "active"}
+            />
+            <p>Active</p>
+          </div>
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => changeFilterEvent("archive")}
+          >
+            <input
+              type="radio"
+              name="radio-1"
+              className="radio w-5 h-5"
+              checked={filter === "archive"}
+            />
+            <p>Archive</p>
+          </div>
+        </div>
         <Table>
-          <TableHead field={["Image", "Name", "Time", "Event Type" ,"Status", "Action"]} />
+          <TableHead
+            field={["Image", "Name", "Time", "Event Type", "Status", "Action"]}
+          />
           <TableBody>
             {isLoading || mutation.isPending ? (
               <SimpleLoadingTable ColSpan={6} />
@@ -75,13 +130,6 @@ export const AcaraContent: React.FC = () => {
                   show={index !== (acara?.data?.length as number) - 1}
                   {...item}
                   isOpenAbsen={item.isOpen}
-                  // id={item.id}
-                  // title="Acara"
-                  // endTime={item.endTime}
-                  // startTime={item.startTime}
-                  // image={item.image}
-                  // isOpenAbsen={item.isOpen}
-                  // name={item.name}
                   handleDelete={handleDelete}
                 />
               ))

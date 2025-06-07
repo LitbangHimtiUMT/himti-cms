@@ -4,6 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { EventType } from "../../model/acara";
 import { EventTypeMap } from "../../store";
+import HIMTI from '@core/assets/Logo/HIMTI.png'
 
 interface ItemAcaraProps {
   show?: boolean;
@@ -41,6 +42,9 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
           <img
             src={image}
             alt={name}
+            onError={(e) => {
+              e.currentTarget.src = HIMTI
+            }}
             className="max-w-[150px] max-h-[150px] object-cover rounded-md"
           />
         </td>

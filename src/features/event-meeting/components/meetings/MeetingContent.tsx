@@ -61,7 +61,7 @@ export const MeetingContent = () => {
         pagination={pagination}
       >
         <Table>
-          <TableHead field={["Name", "Description", "Time", "Action"]} />
+          <TableHead field={["Name", "Description", "Time", "Class", "Action"]} />
           <TableBody>
             {isLoading ? (
               <SimpleLoadingTable ColSpan={3} />

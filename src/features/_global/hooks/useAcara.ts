@@ -13,6 +13,8 @@ interface Options extends QueryParams {
   page?: number;
   perPage?: number;
   name?: string;
+  withDeleted?: string;
+  onlyDeleted?: string;
 }
 
 type PayloadType = "create" | "update" | "delete";
@@ -32,13 +34,28 @@ export function useAcara(options?: Options) {
   const search = useDebounce(searchQuery as string, 500);
 
   const query = useQuery({
-    queryKey: ["acaras", { page, perPage, search }],
+    queryKey: [
+      "acaras",
+      {
+        page,
+        perPage,
+        search,
+        withDeleted: options?.withDeleted,
+        onlyDeleted: options?.onlyDeleted,
+      },
+    ],
     queryFn: () =>
       acaraService.get({
         queryParams: {
           perPage: perPage ? Number(perPage) : undefined,
           page: page ? Number(page) : undefined,
           name: search,
+          ...(options?.withDeleted && {
+            withDeleted: options?.withDeleted,
+          }),
+          ...(options?.onlyDeleted && {
+            onlyDeleted: options?.onlyDeleted,
+          }),
         } as Options,
       }),
   });
@@ -46,7 +63,6 @@ export function useAcara(options?: Options) {
 }
 
 export function useAcaraCreation() {
-
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const mutation = useMutation({
@@ -55,20 +71,17 @@ export function useAcaraCreation() {
         case "create":
           return acaraService.post(data, {
             contentType: "form-data",
-
           });
         case "update":
           return acaraService.put(data, {
             contentType: "form-data",
             path: id,
-
           });
         case "delete":
           return acaraService.delete({ path: id });
         default:
           return acaraService.post(data, {
             contentType: "form-data",
-
           });
       }
     },

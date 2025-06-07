@@ -20,6 +20,7 @@ export const TableItem: React.FC<ItemMeetingProps> = ({
   handleDelete,
   linkDetail,
   linkUpdate,
+  class: classess,
   id,
 }) => {
   return (
@@ -43,6 +44,11 @@ export const TableItem: React.FC<ItemMeetingProps> = ({
       <td className='py-3 px-5'>
         <Typography className='text-xs font-semibold text-blue-gray-600'>
           {formatTime(startTime as Date)} - {formatTime(endTime as Date)}
+        </Typography>
+      </td>
+      <td className='py-3 px-5'>
+        <Typography className='text-xs font-semibold text-blue-gray-600'>
+          {classess?.name || '-'}
         </Typography>
       </td>
 

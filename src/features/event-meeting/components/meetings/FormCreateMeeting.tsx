@@ -8,6 +8,7 @@ import { useMeetingCreation } from "@features/event-meeting/hooks/useMeeting";
 import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
+import { useClasses } from "../../../lms/class/useClass";
 
 const InitialValue: CreateMeetingBodyRequest = {
   name: "",
@@ -15,6 +16,7 @@ const InitialValue: CreateMeetingBodyRequest = {
   endTime: new Date(),
   startTime: new Date(),
   eventMeetingId: "",
+  classId: "",
 };
 
 export const FormCreateMeeting: React.FC = () => {
@@ -28,6 +30,11 @@ export const FormCreateMeeting: React.FC = () => {
   >({});
 
   const navigate = useNavigate();
+  const { data: classess } = useClasses({
+    page: 1,
+    perPage: 99999,
+    ignoreUser: "true",
+  });
 
   const validate = () => {
     const newErrors: Partial<Record<keyof CreateMeetingBodyRequest, string>> =
@@ -106,12 +113,31 @@ export const FormCreateMeeting: React.FC = () => {
           />
         </div>
 
-        <div className='flex gap-4 mb-4'>
-          <div className='flex-1'>
+        <div className="mb-4 my-2">
+          <InputGroup
+            disabled={mutation.isPending}
+            type="select"
+            label="Select Type"
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setMeetingBody((prev) => ({
+                ...prev,
+                classId: e as unknown as string,
+              }));
+            }}
+            // error={errors.isOpen}
+            options={classess?.data?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            }))}
+          />
+        </div>
+
+        <div className="flex gap-4 mb-4">
+          <div className="flex-1">
             <DateTimePicker
               disabled={mutation.isPending}
-              className='w-full'
-              label='Start Time'
+              className="w-full"
+              label="Start Time"
               value={meetingBody.startTime}
               onChange={(value: Date | null) => {
                 console.log({ value });
@@ -125,11 +151,11 @@ export const FormCreateMeeting: React.FC = () => {
             />
             <InputGroup error={errors.startTime} />
           </div>
-          <div className='flex-1'>
+          <div className="flex-1">
             <DateTimePicker
               disabled={mutation.isPending}
-              className='w-full'
-              label='End Time'
+              className="w-full"
+              label="End Time"
               value={meetingBody.endTime}
               minDateTime={new Date(meetingBody.startTime)}
               onChange={(value: Date | null) => {

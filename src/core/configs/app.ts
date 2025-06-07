@@ -26,4 +26,7 @@ export const API_ENDPOINT = {
   version: `${CONFIG_APP.BASE_URL}/version`,
   mentors: `${CONFIG_APP.BASE_URL_LMS}/mentors`,
   categories: `${CONFIG_APP.BASE_URL_LMS}/categories`,
+  lms: {
+    class: `${CONFIG_APP.BASE_URL_LMS}/class`,
+  }
 };

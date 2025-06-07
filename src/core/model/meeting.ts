@@ -10,6 +10,10 @@ export interface MeetingItem {
     id: string;
     name: string;
   };
+  class?: {
+    id: string;
+    name: string;
+  }
 }
 
 export interface MeetingModel {
@@ -24,6 +28,7 @@ export interface CreateMeetingBodyRequest {
   startTime: Date;
   endTime: Date;
   eventMeetingId?: string;
+  classId?: string
 }
 
 export interface UpdateMeetingBodyRequest {
@@ -31,6 +36,7 @@ export interface UpdateMeetingBodyRequest {
   description?: string;
   startTime: Date;
   endTime: Date;
+  classId?: string
 }
 
 export interface GeneralMeetingBodyRequest {
