@@ -35,13 +35,13 @@ export const DrawerHistories: React.FC<DrawerHistoriesProps> = ({
       >
         <div className="px-3 ml-2 flex flex-col gap-6">
           <Poppins fontSize={"0.9rem"}>Histories {module}</Poppins>
-            <div className="flex-col justify-center gap-4">
+            <div className="flex flex-col justify-center">
               {isFetching ? (
                 <>
-                  {Array.from({ length: 5 }).map(() => (
-                    <>
-                      <Skeleton width="100%" height="8rem" />
-                    </>
+                  {Array.from({ length: 4 }).map(() => (
+                    <div className="mb-4">
+                      <Skeleton width="100%" height="4rem" />
+                    </div>
                   ))}
                 </>
               ) : (
@@ -49,7 +49,7 @@ export const DrawerHistories: React.FC<DrawerHistoriesProps> = ({
                   <>
                     <div
                       key={index}
-                      className="px-4 py-6 border-b border-solid border-gray-700 flex-col gap-4"
+                      className="px-4 py-6 border-b border-solid border-gray-700 flex flex-col gap-4"
                     >
                       <div className="flex justify-between">
                         <Poppins fontSize={"0.8rem"}>{item.title}</Poppins>
@@ -65,7 +65,7 @@ export const DrawerHistories: React.FC<DrawerHistoriesProps> = ({
                           {item.flag}
                         </Poppins>
                       </div>
-                      <div className="flex items-center gap-2 mt-4">
+                      <div className="flex items-center gap-2">
                         <img
                           className="w-6 h-6 rounded-full"
                           src={item.user?.photo || DefaultPhoto}
