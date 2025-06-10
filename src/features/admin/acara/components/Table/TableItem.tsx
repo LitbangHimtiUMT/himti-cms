@@ -4,7 +4,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { EventType } from "../../model/acara";
 import { EventTypeMap } from "../../store";
-import HIMTI from '@core/assets/Logo/HIMTI.png'
+import HIMTI from "@core/assets/Logo/HIMTI.png";
 
 interface ItemAcaraProps {
   show?: boolean;
@@ -19,6 +19,7 @@ interface ItemAcaraProps {
   linkUpdate?: string;
   title?: "Acara" | "Sub Acara";
   type?: EventType;
+  isDeleted?: boolean;
 }
 
 export const TableItem: React.FC<ItemAcaraProps> = ({
@@ -32,6 +33,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
   linkDetail,
   linkUpdate,
   id,
+  isDeleted,
   title = "Acara",
   type,
 }) => {
@@ -43,7 +45,7 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
             src={image}
             alt={name}
             onError={(e) => {
-              e.currentTarget.src = HIMTI
+              e.currentTarget.src = HIMTI;
             }}
             className="max-w-[150px] max-h-[150px] object-cover rounded-md"
           />
@@ -79,37 +81,39 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
         />
       </td>
       <td className="py-3 px-5">
-        <div className="flex items-center gap-2">
-          <Link to={linkDetail as string}>
+        {isDeleted ? null : (
+          <div className="flex items-center gap-2">
+            <Link to={linkDetail as string}>
+              <Typography
+                as="button"
+                className="text-xs font-semibold text-blue-600"
+              >
+                View
+              </Typography>
+            </Link>
+            <Link to={linkUpdate as string}>
+              <Typography
+                as="button"
+                className="text-xs font-semibold text-yellow-900"
+              >
+                Edit
+              </Typography>
+            </Link>
             <Typography
               as="button"
-              className="text-xs font-semibold text-blue-600"
+              className="text-xs font-semibold text-red-600"
+              onClick={() => {
+                const confirm = window.confirm(
+                  `Are you sure you want to delete this ${title}?`
+                );
+                if (!confirm) return;
+                handleDelete(id);
+              }}
             >
-              View
+              Delete
             </Typography>
-          </Link>
-          <Link to={linkUpdate as string}>
-            <Typography
-              as="button"
-              className="text-xs font-semibold text-yellow-900"
-            >
-              Edit
-            </Typography>
-          </Link>
-          <Typography
-            as="button"
-            className="text-xs font-semibold text-red-600"
-            onClick={() => {
-              const confirm = window.confirm(
-                `Are you sure you want to delete this ${title}?`
-              );
-              if (!confirm) return;
-              handleDelete(id);
-            }}
-          >
-            Delete
-          </Typography>
-        </div>
+          </div>
+        )}
       </td>
     </tr>
   );

@@ -10,6 +10,7 @@ export interface UserModel {
   role: Role;
   nim: string;
   isLogin: boolean;
+  photo?: string
 }
 
 export interface UserDTO {

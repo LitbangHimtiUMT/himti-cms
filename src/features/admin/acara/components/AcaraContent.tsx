@@ -11,6 +11,8 @@ import { useAcara, useAcaraCreation } from "@features/_global/hooks/useAcara";
 import React, { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TableItem } from "./Table/TableItem";
+import { DrawerHistories } from "../../../histories/components/DrawerHistories";
+import { HistoryModuleEnum } from "../../../../core/model/histories";
 
 type EventFilter = "all" | "active" | "archive";
 
@@ -43,13 +45,15 @@ export const AcaraContent: React.FC = () => {
   const changeFilterEvent = (filter: EventFilter) => {
     setFilter(filter);
     onPageChange(1);
-  }
+  };
 
   const pagination = {
     currentPage: acara?.meta?.page || 1,
     totalPages: acara?.meta?.totalPages || 1,
     onPageChange,
   };
+
+  const [show, setShow] = useState(false);
   return (
     <>
       <PageLayout
@@ -66,8 +70,10 @@ export const AcaraContent: React.FC = () => {
             (acara.meta?.totalData as number) > (acara?.meta?.perPage as number)
           )
         }
+        histories
         searchField
         searchPlaceholder="Search Acara"
+        onClickHistories={() => setShow(prev => !prev)}
         pagination={pagination}
       >
         <div className="flex items-center gap-5">
@@ -137,6 +143,11 @@ export const AcaraContent: React.FC = () => {
           </TableBody>
         </Table>
       </PageLayout>
+      <DrawerHistories
+        module={HistoryModuleEnum.EVENT}
+        onHide={() => setShow(prev => !prev)}
+        show={show}
+      />
     </>
   );
 };

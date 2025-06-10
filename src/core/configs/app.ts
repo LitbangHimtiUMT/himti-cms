@@ -17,6 +17,7 @@ export const API_ENDPOINT = {
   struktural: `${CONFIG_APP.BASE_URL}/struktural`,
   subAcara: `${CONFIG_APP.BASE_URL}/sub-acara`,
   absensi: `${CONFIG_APP.BASE_URL}/absensi`,
+  histories: `${CONFIG_APP.BASE_URL}/histories`,
   angkatan: `${CONFIG_APP.BASE_URL}/angkatan`,
   userLogin: `${CONFIG_APP.BASE_URL}/user-fcm`,
   profile: `${CONFIG_APP.BASE_URL}/profile`,

@@ -17,6 +17,7 @@ export const Poppins: React.FC<IPoppinsProps> = ({
       id="poppins"
       {...rest}
       style={{
+        ...rest.style,
         fontSize,
         color
       }}

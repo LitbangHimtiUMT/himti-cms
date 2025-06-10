@@ -34,6 +34,8 @@ interface IPageLayoutProps extends PropsWithChildren {
   };
   headBackground?: string;
   searchField?: boolean;
+  histories?: boolean;
+  onClickHistories?: VoidFunction;
   searchPlaceholder?: string;
 }
 
@@ -46,6 +48,8 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   headBackground = "gray",
   searchField = false,
   searchPlaceholder = "search kambing..",
+  histories,
+  onClickHistories,
 }) => {
   const renderAction = () => {
     if (action?.show && action.link) {
@@ -103,20 +107,30 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
               {title}
             </Typography>
           )}
-          <div className="md:mt-0 mt-4">
-          {renderAction()}
-          </div>
+          <div className="md:mt-0 mt-4">{renderAction()}</div>
         </CardHeader>
-        {searchField && (
-          <div className="w-72 ms-auto mx-4">
-            <Input
-              onChange={handeSearchChange}
-              placeholder={searchPlaceholder}
-              label="Search"
-              // className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
-            />
-          </div>
-        )}
+        <div className="flex items-center gap-4 pr-4">
+          {searchField && (
+            <div className="w-72 ms-auto mx-4">
+              <Input
+                onChange={handeSearchChange}
+                placeholder={searchPlaceholder}
+                label="Search"
+                // className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
+              />
+            </div>
+          )}
+          {histories && (
+            <Button
+              size="sm"
+              color={"#fff"}
+              variant="gradient"
+              onClick={onClickHistories}
+            >
+              Histories
+            </Button>
+          )}
+        </div>
         <CardBody className="overflow-x-auto px-4 py-2">
           <>{children}</>
         </CardBody>
