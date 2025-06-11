@@ -8,7 +8,6 @@ import EditAnggotaView from "@features/admin/anggota/view/editAnggota";
 import { AngkatanView } from "@features/admin/angkatan/view/Angkatan";
 import { CreateAngkatanView } from "@features/admin/angkatan/view/CreateAngkatan";
 import { UpdateAngkatanView } from "@features/admin/angkatan/view/UpdateAngkatan";
-import { DefaultView } from "@features/admin/default/Default";
 import AddDosenView from "@features/admin/dosen/view/addDosen";
 import { DosenView } from "@features/admin/dosen/view/Dosen";
 import EditDosenView from "@features/admin/dosen/view/editDosen";
@@ -30,9 +29,10 @@ import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEve
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
 import { VersionView } from "@features/version/view/version";
 import { createBrowserRouter } from "react-router-dom";
+import { HistoriesViews } from "../../features/histories/views/HistoriesViews";
 import { CategoriesViews } from "../../features/lms/categories/views/Categories";
-import { MentorsViews } from "../../features/lms/mentors/views/Mentors";
 import { DetailMentorsViews } from "../../features/lms/mentors/views/DetailMentors";
+import { MentorsViews } from "../../features/lms/mentors/views/Mentors";
 
 export const router = createBrowserRouter([
   {
@@ -45,7 +45,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <DefaultView />,
+        element: <HistoriesViews />,
+      },
+      {
+        path: "/histories",
+        element: <HistoriesViews />,
       },
       {
         path: "/admin/acara",

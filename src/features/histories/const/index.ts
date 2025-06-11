@@ -1,4 +1,5 @@
 import { HistoryFlag } from "../../../core/model/histories";
+import { BadgeVariant } from "../../_global/components/Badges";
 
 export const textFlag: Record<HistoryFlag, { class: string; color: string }> = {
   CREATE: {
@@ -22,3 +23,11 @@ export const textFlag: Record<HistoryFlag, { class: string; color: string }> = {
     color: "#F87171",
   },
 };
+
+export const FlagMappingVariant: Record<HistoryFlag, BadgeVariant> = {
+  CREATE: 'warning',
+  DELETE: 'danger',
+  LOGIN: 'primary',
+  LOGOUT: 'danger',
+  UPDATE: 'success'
+}

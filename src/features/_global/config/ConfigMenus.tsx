@@ -1,12 +1,17 @@
 import { BiCategory, BiKey } from "react-icons/bi";
 import { BsCalendar2EventFill } from "react-icons/bs";
-import { FaCalendar, FaChalkboardTeacher, FaUser } from "react-icons/fa";
+import { FaCalendar, FaChalkboardTeacher, FaHistory, FaUser } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { ItemMenuAdmin } from "../types/MenuTypes";
 
 export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
+  {
+    icon: <FaHistory />,
+    name: "Log History",
+    to: "/",
+  },
   {
     icon: <FaUser />,
     name: "User",
