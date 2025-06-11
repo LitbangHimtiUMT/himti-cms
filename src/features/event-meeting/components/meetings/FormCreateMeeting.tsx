@@ -117,7 +117,7 @@ export const FormCreateMeeting: React.FC = () => {
           <InputGroup
             disabled={mutation.isPending}
             type="select"
-            label="Select Type"
+            label="Select Class"
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               setMeetingBody((prev) => ({
                 ...prev,
