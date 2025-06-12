@@ -1,3 +1,4 @@
+import * as InternalButton from "../../../_global/components/Button";
 import { Button } from "@material-tailwind/react";
 import React, { useState } from "react";
 
@@ -9,6 +10,7 @@ import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
 import { useClasses } from "../../../lms/class/useClass";
+import { DropdownV2 } from "../../../_global/components/Dropdown/DropdownV2";
 
 const InitialValue: CreateMeetingBodyRequest = {
   name: "",
@@ -16,7 +18,7 @@ const InitialValue: CreateMeetingBodyRequest = {
   endTime: new Date(),
   startTime: new Date(),
   eventMeetingId: "",
-  classId: "",
+  classId: undefined,
 };
 
 export const FormCreateMeeting: React.FC = () => {
@@ -30,7 +32,7 @@ export const FormCreateMeeting: React.FC = () => {
   >({});
 
   const navigate = useNavigate();
-  const { data: classess } = useClasses({
+  const { data: classess, isFetching: classFetching } = useClasses({
     page: 1,
     perPage: 99999,
     ignoreUser: "true",
@@ -71,7 +73,6 @@ export const FormCreateMeeting: React.FC = () => {
     setMeetingBody(InitialValue);
     setErrors({});
   };
-
   return (
     <PageLayout
       title="Create Meeting"
@@ -114,22 +115,44 @@ export const FormCreateMeeting: React.FC = () => {
         </div>
 
         <div className="mb-4 my-2">
-          <InputGroup
-            disabled={mutation.isPending}
-            type="select"
-            label="Select Class"
-            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
-              setMeetingBody((prev) => ({
-                ...prev,
-                classId: e as unknown as string,
-              }));
-            }}
-            // error={errors.isOpen}
-            options={classess?.data?.map((item) => ({
-              value: item.id,
-              label: item.name,
-            }))}
-          />
+          <div className="flex md:flex-row flex-col gap-4 h-max">
+            <div className="md:w-[300%] w-full">
+              <DropdownV2
+                list={
+                  classFetching
+                    ? [
+                        {
+                          label: "Loading...",
+                          value: "",
+                          disabled: true,
+                        },
+                      ]
+                    : (classess?.data || []).map((item) => ({
+                        label: item.name,
+                        value: item.id,
+                      }))
+                }
+                reset={!meetingBody.classId}
+                placeholder="Select Class"
+                onChange={(e) =>
+                  setMeetingBody((prev) => ({ ...prev, classId: e.value }))
+                }
+              />
+            </div>
+            {meetingBody.classId ? (
+              <div className="h-full">
+                <InternalButton.Button
+                  size="sm"
+                  variant="danger"
+                  onClick={() =>
+                    setMeetingBody((prev) => ({ ...prev, classId: undefined }))
+                  }
+                >
+                  Reset
+                </InternalButton.Button>
+              </div>
+            ) : null}
+          </div>
         </div>
 
         <div className="flex gap-4 mb-4">
@@ -140,7 +163,6 @@ export const FormCreateMeeting: React.FC = () => {
               label="Start Time"
               value={meetingBody.startTime}
               onChange={(value: Date | null) => {
-                console.log({ value });
                 setMeetingBody({
                   ...meetingBody,
                   startTime: value as Date,

@@ -6,7 +6,7 @@ export type HistoryModule =
   | "EVENT_MEETING"
   | "MEETING"
   | "MEMBER"
-  | "USER_ACTION";
+  | 'AUTH';
 export type HistoryFlag = "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "LOGOUT";
 
 export enum HistoryModuleEnum {

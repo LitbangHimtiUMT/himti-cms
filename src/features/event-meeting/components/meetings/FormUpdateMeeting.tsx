@@ -1,4 +1,5 @@
 import { Button } from "@material-tailwind/react";
+import * as InternalButton from "../../../_global/components/Button";
 import React, { useEffect, useState } from "react";
 
 import { UpdateMeetingBodyRequest } from "@core/model/meeting";
@@ -12,6 +13,8 @@ import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useNavigate, useParams } from "react-router-dom";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
+import { useClasses } from "../../../lms/class/useClass";
+import { DropdownV2 } from "../../../_global/components/Dropdown/DropdownV2";
 
 const InitialValue: UpdateMeetingBodyRequest = {
   name: "",
@@ -27,11 +30,20 @@ export const FormUpdateMeeting: React.FC = () => {
   const [meetingBody, setMeetingBody] = useState<UpdateMeetingBodyRequest>({
     ...InitialValue,
   });
+
+  const { data: classess, isFetching: classFetching } = useClasses({
+    page: 1,
+    perPage: 99999,
+    ignoreUser: "true",
+  });
   const [errors, setErrors] = useState<
     Partial<Record<keyof UpdateMeetingBodyRequest, string>>
   >({});
 
   const navigate = useNavigate();
+  const defaultClass = meetingBody.classId
+    ? classess?.data?.find((c) => c.id === meetingBody.classId)
+    : undefined;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,7 +58,6 @@ export const FormUpdateMeeting: React.FC = () => {
       },
     });
   };
-  console.log(meetingBody, "body");
   const handleReset = () => {
     setMeetingBody(InitialValue);
     setErrors({});
@@ -54,12 +65,19 @@ export const FormUpdateMeeting: React.FC = () => {
 
   useEffect(() => {
     if (meeting?.data) {
-      const { endTime, name, startTime, description } = meeting?.data ?? {};
+      const {
+        endTime,
+        name,
+        startTime,
+        description,
+        class: classess,
+      } = meeting?.data ?? {};
       setMeetingBody({
         endTime,
         name,
         startTime,
         description,
+        classId: classess ? classess.id : undefined,
       });
     }
   }, [meeting?.data]);
@@ -112,6 +130,55 @@ export const FormUpdateMeeting: React.FC = () => {
               variant="outlined"
               rows={4}
             />
+          </div>
+
+          <div className="mb-4 my-2">
+            <div className="flex md:flex-row flex-col gap-4 h-max">
+              <div className="md:w-[300%] w-full">
+                <DropdownV2
+                  list={
+                    classFetching
+                      ? [
+                          {
+                            label: "Loading...",
+                            value: "",
+                            disabled: true,
+                          },
+                        ]
+                      : (classess?.data || []).map((item) => ({
+                          label: item.name,
+                          value: item.id,
+                        }))
+                  }
+                  defaultValue={
+                    defaultClass
+                      ? { label: defaultClass.name, value: defaultClass.id }
+                      : undefined
+                  }
+                  reset={!meetingBody.classId}
+                  placeholder="Select Class"
+                  onChange={(e) =>
+                    setMeetingBody((prev) => ({ ...prev, classId: e.value }))
+                  }
+                />
+              </div>
+              {meetingBody.classId ? (
+                <div className="h-full">
+                  <InternalButton.Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() =>
+                      setMeetingBody((prev) => ({
+                        ...prev,
+                        classId: undefined,
+                      }))
+                    }
+                  >
+                    Reset
+                  </InternalButton.Button>
+                </div>
+              ) : null}
+            </div>
           </div>
 
           <div className="flex gap-4 mb-4">

@@ -131,7 +131,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
             </Button>
           )}
         </div>
-        <CardBody className="overflow-x-auto px-4 py-2">
+        <CardBody className="overflow-x-auto overflow-y-visible px-4 py-2">
           <>{children}</>
         </CardBody>
       </Card>

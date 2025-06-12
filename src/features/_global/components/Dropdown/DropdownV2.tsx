@@ -15,6 +15,7 @@ interface IDropdownProps {
   searchInput?: boolean;
   onSearch?: (e: string) => void;
   onChange?: (e: ListItem) => void;
+  reset?: boolean;
 }
 
 const initValue: ListItem = {
@@ -30,11 +31,12 @@ export const DropdownV2: React.FC<IDropdownProps> = ({
   onChange,
   searchInput = false,
   onSearch,
+  reset,
 }) => {
   const [show, setShow] = useState(false);
   const [data, setData] = useState(list || []);
   const [isFocused, setIsFocused] = useState(false);
-  const [selected, setSelected] = useState(defaultValue || initValue);
+  const [selected, setSelected] = useState(reset ? initValue : defaultValue);
 
   const ref = useRef<HTMLDivElement>(null);
 
@@ -55,6 +57,10 @@ export const DropdownV2: React.FC<IDropdownProps> = ({
     };
   }, []);
 
+  useEffect(() => {
+    if (reset) setSelected(initValue);
+  }, [reset]);
+
   return (
     <div
       ref={ref}
@@ -70,10 +76,10 @@ export const DropdownV2: React.FC<IDropdownProps> = ({
       >
         <p
           className={`text-sm font-poppins font-medium duration-200 ${
-            !selected.label && placeholder ? "opacity-50" : ""
+            !selected?.label && !defaultValue && placeholder ? "opacity-50" : ""
           }`}
         >
-          {defaultValue?.label || selected.label || placeholder || ""}
+          {defaultValue?.label || selected?.label || placeholder || ""}
         </p>
         <MdKeyboardArrowDown
           className={`text-2xl text-gray-500 duration-300 ${
@@ -82,10 +88,22 @@ export const DropdownV2: React.FC<IDropdownProps> = ({
         />
       </div>
       {show && (
-        <div className="relative z-20">
-          <div className="absolute z-20 overflow-auto max-h-96 flex flex-col gap-1 w-full bg-white border border-solid border-gray-300 rounded-lg mt-2 px-2 pb-2">
+        <div
+          className="fixed z-[999]"
+          style={{
+            width: ref.current?.clientWidth,
+            left: ref.current?.getBoundingClientRect().left,
+            top: ref.current
+              ? ref.current.getBoundingClientRect().top +
+                ref.current.clientHeight +
+                window.scrollY
+              : undefined,
+            minWidth: ref.current?.clientWidth, // Memastikan lebar minimum
+          }}
+        >
+          <div className="absolute z-[999] overflow-auto max-h-96 flex flex-col gap-1 w-full bg-white border border-solid border-gray-300 rounded-lg mt-2 px-2 pb-2 pt-2">
             {searchInput && (
-              <div className="sticky top-0 bg-white z-20 py-2">
+              <div className="sticky top-0 bg-white z-[700] py-2">
                 <Input
                   inputSize="md"
                   placeholder="Search"

@@ -12,7 +12,7 @@ interface InputGroupProps {
   variant?: "outlined" | "filled" | "standard";
   error?: string;
   mb?: boolean;
-  value?: string | number;
+  value?: string | number | { label: string; value: string };
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange?: (e: React.ChangeEvent<any>) => void | string;
   type?:
