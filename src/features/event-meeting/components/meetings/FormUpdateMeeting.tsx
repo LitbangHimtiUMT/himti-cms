@@ -13,8 +13,8 @@ import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useNavigate, useParams } from "react-router-dom";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
-import { useClasses } from "../../../lms/class/useClass";
 import { DropdownV2 } from "../../../_global/components/Dropdown/DropdownV2";
+import { useClasses } from "../../../lms/class/hooks/useClass";
 
 const InitialValue: UpdateMeetingBodyRequest = {
   name: "",

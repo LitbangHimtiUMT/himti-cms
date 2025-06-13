@@ -5,6 +5,7 @@ import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { ItemMenuAdmin } from "../types/MenuTypes";
+import { MdClass } from "react-icons/md";
 
 export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
   {
@@ -51,6 +52,11 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <BiKey size={16} />,
     name: "User Login",
     to: "/admin/user-login",
+  },
+  {
+    icon: <MdClass size={16} />,
+    name: "Classess",
+    to: "/lms/class",
   },
   {
     icon: <BiCategory size={16} />,

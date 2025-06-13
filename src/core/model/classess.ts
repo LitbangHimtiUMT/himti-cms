@@ -18,6 +18,9 @@ export interface ClassModel {
   thumbnail: string;
   price: number;
   creator: ProfileModel;
+  createdAt?: Date | string;
+  totalParticipant: number;
+  totalMentor: number;
   progressStatus: "Completed" | "In Progress";
   total: {
     module: number;

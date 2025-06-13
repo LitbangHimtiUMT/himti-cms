@@ -1,8 +1,8 @@
 import { useSearchParams } from "react-router-dom";
-import { QueryParams } from "../../../core/libs/api/types";
-import useDebounce from "../../_global/hooks/useDebounce";
+import { QueryParams } from "../../../../core/libs/api/types";
+import useDebounce from "../../../_global/hooks/useDebounce";
 import { useQuery } from "@tanstack/react-query";
-import { classService } from "../../../core/services/classess";
+import { classService } from "../../../../core/services/classess";
 
 interface Options extends QueryParams {
   page?: number;

@@ -33,6 +33,7 @@ import { HistoriesViews } from "../../features/histories/views/HistoriesViews";
 import { CategoriesViews } from "../../features/lms/categories/views/Categories";
 import { DetailMentorsViews } from "../../features/lms/mentors/views/DetailMentors";
 import { MentorsViews } from "../../features/lms/mentors/views/Mentors";
+import { ClassViews } from "../../features/lms/class/views/ClassViews";
 
 export const router = createBrowserRouter([
   {
@@ -166,6 +167,10 @@ export const router = createBrowserRouter([
       {
         path: "/lms/mentors",
         element: <MentorsViews />,
+      },
+      {
+        path: "/lms/class",
+        element: <ClassViews />,
       },
       {
         path: "/lms/mentors/:mentorId",

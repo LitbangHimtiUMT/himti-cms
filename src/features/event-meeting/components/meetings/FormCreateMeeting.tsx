@@ -9,8 +9,8 @@ import { useMeetingCreation } from "@features/event-meeting/hooks/useMeeting";
 import { TextField } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers";
 import { useNavigate } from "react-router-dom";
-import { useClasses } from "../../../lms/class/useClass";
 import { DropdownV2 } from "../../../_global/components/Dropdown/DropdownV2";
+import { useClasses } from "../../../lms/class/hooks/useClass";
 
 const InitialValue: CreateMeetingBodyRequest = {
   name: "",
