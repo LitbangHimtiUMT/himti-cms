@@ -2,13 +2,16 @@ import { useState } from "react";
 import { PageLayout } from "../../../_global/components/PageLayout";
 import { MasterTable } from "../../../_global/components/Table/Master";
 import { Poppins } from "../../../_global/components/Text";
-import { formatRupiah } from "../../../_global/helper";
+import {
+  convertQueryParamsToObject,
+  formatRupiah,
+} from "../../../_global/helper";
 import { useMentors } from "../hooks/useMentors";
 import { DrawerAssignMentor } from "./DrawerAssignMentor";
 import { Button } from "../../../_global/components/Button";
 import { BiDetail, BiTrash } from "react-icons/bi";
 import { ModalDeleteMentor } from "./ModalDeleteMentor";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const MentorsTable = () => {
   const { data: mentors, isFetching } = useMentors();
@@ -20,6 +23,9 @@ export const MentorsTable = () => {
       id: "",
     },
   });
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queries = convertQueryParamsToObject(searchParams.toString());
 
   return (
     <PageLayout
@@ -37,6 +43,17 @@ export const MentorsTable = () => {
       title="Mentors"
       searchField
       searchPlaceholder="Search Mentor"
+      showPagination
+      pagination={{
+        currentPage: mentors?.meta?.page || 1,
+        onPageChange: (page) => {
+          setSearchParams({
+            ...queries,
+            page: String(page),
+          });
+        },
+        totalPages: mentors?.meta?.totalPages || 0,
+      }}
     >
       <MasterTable
         isLoading={isFetching}

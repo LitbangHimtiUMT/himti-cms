@@ -54,6 +54,7 @@ export const DrawerAssignMentor: React.FC<DrawerAssignMentorProps> = ({
           <div className="w-full flex flex-col gap-2">
             <Poppins fontSize={"0.8rem"}>Name</Poppins>
             <DropdownV2
+              withPortal
               placeholder="Select User"
               list={
                 isFetching
