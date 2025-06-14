@@ -1,9 +1,10 @@
 import DefaultPhoto from "../../../core/assets/default-photo.svg";
 import { HistoryFlag, HistoryModule } from "../../../core/model/histories";
+import { Badge } from "../../_global/components/Badges";
 import { Drawer } from "../../_global/components/Drawer";
 import { Skeleton } from "../../_global/components/Skeleton";
 import { Poppins } from "../../_global/components/Text";
-import { textFlag } from "../const";
+import { FlagMappingVariant } from "../const";
 import { useHistories } from "../hooks/userHistories";
 
 interface DrawerHistoriesProps {
@@ -35,51 +36,43 @@ export const DrawerHistories: React.FC<DrawerHistoriesProps> = ({
       >
         <div className="px-3 ml-2 flex flex-col gap-6">
           <Poppins fontSize={"0.9rem"}>Histories {module}</Poppins>
-            <div className="flex flex-col justify-center">
-              {isFetching ? (
+          <div className="flex flex-col justify-center">
+            {isFetching ? (
+              <>
+                {Array.from({ length: 4 }).map(() => (
+                  <div className="mb-4">
+                    <Skeleton width="100%" height="4rem" />
+                  </div>
+                ))}
+              </>
+            ) : (
+              histories?.data?.map((item, index) => (
                 <>
-                  {Array.from({ length: 4 }).map(() => (
-                    <div className="mb-4">
-                      <Skeleton width="100%" height="4rem" />
+                  <div
+                    key={index}
+                    className="px-4 py-6 border-b border-solid border-gray-700 flex flex-col gap-4"
+                  >
+                    <div className="flex justify-between">
+                      <Poppins fontSize={"0.8rem"}>{item.title}</Poppins>
+                      <Badge variant={FlagMappingVariant[item.flag]} size="sm">
+                        {item.flag}
+                      </Badge>
                     </div>
-                  ))}
+                    <div className="flex items-center gap-2">
+                      <img
+                        className="w-6 h-6 rounded-full"
+                        src={item.user?.photo || DefaultPhoto}
+                        onError={(e) => {
+                          e.currentTarget.src = DefaultPhoto;
+                        }}
+                      />
+                      <Poppins>{item.user?.name}</Poppins>
+                    </div>
+                  </div>
                 </>
-              ) : (
-                histories?.data?.map((item, index) => (
-                  <>
-                    <div
-                      key={index}
-                      className="px-4 py-6 border-b border-solid border-gray-700 flex flex-col gap-4"
-                    >
-                      <div className="flex justify-between">
-                        <Poppins fontSize={"0.8rem"}>{item.title}</Poppins>
-                        <Poppins
-                          fontSize={"0.8rem"}
-                          color={`#fff`}
-                          style={{
-                            backgroundColor: textFlag[item.flag].color,
-                            padding: "2px 5px",
-                            borderRadius: 20,
-                          }}
-                        >
-                          {item.flag}
-                        </Poppins>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <img
-                          className="w-6 h-6 rounded-full"
-                          src={item.user?.photo || DefaultPhoto}
-                          onError={(e) => {
-                            e.currentTarget.src = DefaultPhoto;
-                          }}
-                        />
-                        <Poppins>{item.user?.name}</Poppins>
-                      </div>
-                    </div>
-                  </>
-                ))
-              )}
-            </div>
+              ))
+            )}
+          </div>
         </div>
       </Drawer>
     </>

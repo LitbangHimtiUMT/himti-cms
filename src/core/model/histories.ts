@@ -7,7 +7,7 @@ export type HistoryModule =
   | "MEETING"
   | "MEMBER"
   | 'AUTH';
-export type HistoryFlag = "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "LOGOUT";
+export type HistoryFlag = "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "LOGOUT" | 'ERROR';
 
 export enum HistoryModuleEnum {
   USER = "USER",
@@ -31,6 +31,7 @@ export interface HistoriesDTO {
   module: HistoryModule;
   flag: HistoryFlag;
   actionId: string | null;
+  statusCode: string | null;
   createdAt: Date;
   user: UserModel | null;
 }

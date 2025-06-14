@@ -1,38 +1,16 @@
 import { HistoryFlag, HistoryModule } from "../../../core/model/histories";
 import { BadgeVariant } from "../../_global/components/Badges";
 
-export const textFlag: Record<HistoryFlag, { class: string; color: string }> = {
-  CREATE: {
-    class: "text-yellow-400",
-    color: "#FBBF24",
-  },
-  UPDATE: {
-    class: "text-green-400",
-    color: "#34D399",
-  },
-  DELETE: {
-    class: "text-red-400",
-    color: "#F87171",
-  },
-  LOGIN: {
-    class: "text-blue-400",
-    color: "#60A5FA",
-  },
-  LOGOUT: {
-    class: "text-red-400",
-    color: "#F87171",
-  },
-};
-
 export const FlagMappingVariant: Record<HistoryFlag, BadgeVariant> = {
   CREATE: "warning",
   DELETE: "danger",
   LOGIN: "primary",
   LOGOUT: "danger",
   UPDATE: "success",
+  ERROR: "danger",
 };
 
-export type FlagType = "Create" | "Update" | "Delete" | "Login" | "Logout";
+export type FlagType = "Create" | "Update" | "Delete" | "Login" | "Logout" | 'Error';
 export type ModuleType =
   | "Auth"
   | "Event"
@@ -47,6 +25,7 @@ export const FlagMapping: Record<HistoryFlag, FlagType> = {
   LOGIN: "Login",
   LOGOUT: "Logout",
   UPDATE: "Update",
+  ERROR: 'Error'
 };
 
 export const ModuleMapping: Record<HistoryModule, ModuleType> = {

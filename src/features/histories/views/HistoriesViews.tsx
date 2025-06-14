@@ -133,12 +133,19 @@ export const HistoriesViews = () => {
             <MasterTable
               isLoading={isFetching}
               data={histories?.data || []}
-              title={["Title", "Action By", "Module", "Flag", "Action At"]}
+              title={["Title", 'Status Code', "Action By", "Module", "Flag", "Action At"]}
               columnTable={[
                 {
                   return: ({ title }) => (
                     <>
                       <Poppins>{title}</Poppins>
+                    </>
+                  ),
+                },
+                {
+                  return: ({ statusCode }) => (
+                    <>
+                      <Poppins>{statusCode || '-'}</Poppins>
                     </>
                   ),
                 },
