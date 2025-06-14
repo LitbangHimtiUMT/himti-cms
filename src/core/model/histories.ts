@@ -6,25 +6,43 @@ export type HistoryModule =
   | "EVENT_MEETING"
   | "MEETING"
   | "MEMBER"
-  | 'AUTH';
-export type HistoryFlag = "CREATE" | "UPDATE" | "DELETE" | "LOGIN" | "LOGOUT" | 'ERROR';
+  | "AUTH"
+  | "VERSION"
+  | "CLASS"
+  | "MENTOR"
+  | "LECTURER"
+  | "SYSTEM";
 
-export enum HistoryModuleEnum {
-  USER = "USER",
-  EVENT = "EVENT",
-  EVENT_MEETING = "EVENT_MEETING",
-  MEETING = "MEETING",
-  MEMBER = "MEMBER",
-  USER_ACTION = "USER_ACTION",
-}
+export type HistoryFlag =
+  | "CREATE"
+  | "UPDATE"
+  | "DELETE"
+  | "LOGIN"
+  | "LOGOUT"
+  | "ERROR";
 
-export enum HistoryFlagEnum {
-  CREATE = "CREATE",
-  UPDATE = "UPDATE",
-  DELETE = "DELETE",
-  LOGIN = "LOGIN",
-  LOGOUT = "LOGOUT",
-}
+export const HistoryModuleEnum: Record<HistoryModule, HistoryModule> = {
+  USER: "USER",
+  EVENT: "EVENT",
+  EVENT_MEETING: "EVENT_MEETING",
+  MEETING: "MEETING",
+  MEMBER: "MEMBER",
+  AUTH: "AUTH",
+  VERSION: "VERSION",
+  CLASS: "CLASS",
+  MENTOR: "MENTOR",
+  LECTURER: "LECTURER",
+  SYSTEM: "SYSTEM",
+};
+
+export const HistoryFlagEnum: Record<HistoryFlag, HistoryFlag> = {
+  CREATE: "CREATE",
+  UPDATE: "UPDATE",
+  DELETE: "DELETE",
+  LOGIN: "LOGIN",
+  LOGOUT: "LOGOUT",
+  ERROR: "ERROR",
+};
 export interface HistoriesDTO {
   id: string;
   title: string;

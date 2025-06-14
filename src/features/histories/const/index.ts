@@ -10,14 +10,25 @@ export const FlagMappingVariant: Record<HistoryFlag, BadgeVariant> = {
   ERROR: "danger",
 };
 
-export type FlagType = "Create" | "Update" | "Delete" | "Login" | "Logout" | 'Error';
+export type FlagType =
+  | "Create"
+  | "Update"
+  | "Delete"
+  | "Login"
+  | "Logout"
+  | "Error";
 export type ModuleType =
   | "Auth"
   | "Event"
   | "Meeting"
   | "Event Meeting"
   | "Member"
-  | "User";
+  | "User"
+  | "Class"
+  | "Lecturer"
+  | "Mentor"
+  | "System"
+  | "Version";
 
 export const FlagMapping: Record<HistoryFlag, FlagType> = {
   CREATE: "Create",
@@ -25,7 +36,7 @@ export const FlagMapping: Record<HistoryFlag, FlagType> = {
   LOGIN: "Login",
   LOGOUT: "Logout",
   UPDATE: "Update",
-  ERROR: 'Error'
+  ERROR: "Error",
 };
 
 export const ModuleMapping: Record<HistoryModule, ModuleType> = {
@@ -35,4 +46,9 @@ export const ModuleMapping: Record<HistoryModule, ModuleType> = {
   MEMBER: "Member",
   AUTH: "Auth",
   USER: "User",
+  CLASS: "Class",
+  LECTURER: "Lecturer",
+  MENTOR: "Mentor",
+  SYSTEM: "System",
+  VERSION: "Version",
 };

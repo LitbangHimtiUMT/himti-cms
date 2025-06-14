@@ -1,5 +1,10 @@
 import { useSearchParams } from "react-router-dom";
-import { HistoryFlag, HistoryModule } from "../../../core/model/histories";
+import {
+  HistoryFlag,
+  HistoryFlagEnum,
+  HistoryModule,
+  HistoryModuleEnum,
+} from "../../../core/model/histories";
 import { Badge } from "../../_global/components/Badges";
 import { Button } from "../../_global/components/Button";
 import { DropdownV2 } from "../../_global/components/Dropdown/DropdownV2";
@@ -7,7 +12,7 @@ import { PageLayout } from "../../_global/components/PageLayout";
 import { MasterTable } from "../../_global/components/Table/Master";
 import { Poppins } from "../../_global/components/Text";
 import { convertQueryParamsToObject } from "../../_global/helper";
-import { FlagMapping, FlagMappingVariant } from "../const";
+import { FlagMapping, FlagMappingVariant, ModuleMapping } from "../const";
 import { useHistories } from "../hooks/userHistories";
 import { formatTime } from "../../_global/lib/FormatTime";
 import AdminNavbar from "../../admin/components/AdminNavbar";
@@ -46,7 +51,11 @@ export const HistoriesViews = () => {
   };
   return (
     <>
-      <AdminNavbar layout="Histories" page="List Histories" showBackButton={false} />
+      <AdminNavbar
+        layout="Histories"
+        page="List Histories"
+        showBackButton={false}
+      />
       <div className="mt-12 mb-8 flex flex-col gap-12 flex-1">
         <PageLayout
           title="Histories"
@@ -61,26 +70,30 @@ export const HistoriesViews = () => {
             <div className="flex md:flex-row flex-col gap-4 items-center">
               <div className="md:w-64 w-full">
                 <DropdownV2
+                  withPortal
                   onChange={(e) => onChangeModule(e.value as HistoryModule)}
                   reset={!module}
                   placeholder="Select Module"
+                  defaultValue={
+                    module
+                      ? {
+                          label: ModuleMapping[module as HistoryModule],
+                          value: module,
+                        }
+                      : {
+                          label: "All",
+                          value: "",
+                        }
+                  }
                   list={[
                     {
                       label: "All",
                       value: "",
                     },
-                    {
-                      label: "Auth",
-                      value: "AUTH",
-                    },
-                    {
-                      label: "Meeting",
-                      value: "MEETING",
-                    },
-                    {
-                      label: "Event Meeting",
-                      value: "EVENT_MEETING",
-                    },
+                    ...Object.entries(HistoryModuleEnum).map(([, value]) => ({
+                      label: ModuleMapping[value],
+                      value: value,
+                    })),
                   ]}
                 />
               </div>
@@ -92,33 +105,20 @@ export const HistoriesViews = () => {
                   defaultValue={
                     flag
                       ? { label: FlagMapping[flag as HistoryFlag], value: flag }
-                      : undefined
+                      : {
+                          label: "All",
+                          value: "",
+                        }
                   }
                   list={[
                     {
                       label: "All",
                       value: "",
                     },
-                    {
-                      label: "Create",
-                      value: "CREATE",
-                    },
-                    {
-                      label: "Update",
-                      value: "UPDATE",
-                    },
-                    {
-                      label: "Delete",
-                      value: "DELETE",
-                    },
-                    {
-                      label: "Login",
-                      value: "LOGIN",
-                    },
-                    {
-                      label: "Logout",
-                      value: "LOGOUT",
-                    },
+                    ...Object.entries(HistoryFlagEnum).map(([, value]) => ({
+                      label: FlagMapping[value],
+                      value: value,
+                    })),
                   ]}
                 />
               </div>
@@ -133,7 +133,14 @@ export const HistoriesViews = () => {
             <MasterTable
               isLoading={isFetching}
               data={histories?.data || []}
-              title={["Title", 'Status Code', "Action By", "Module", "Flag", "Action At"]}
+              title={[
+                "Title",
+                "Status Code",
+                "Action By",
+                "Module",
+                "Flag",
+                "Action At",
+              ]}
               columnTable={[
                 {
                   return: ({ title }) => (
@@ -145,7 +152,7 @@ export const HistoriesViews = () => {
                 {
                   return: ({ statusCode }) => (
                     <>
-                      <Poppins>{statusCode || '-'}</Poppins>
+                      <Poppins>{statusCode || "-"}</Poppins>
                     </>
                   ),
                 },
