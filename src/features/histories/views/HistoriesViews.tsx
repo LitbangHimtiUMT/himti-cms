@@ -135,6 +135,7 @@ export const HistoriesViews = () => {
               data={histories?.data || []}
               title={[
                 "Title",
+                'Endpoint',
                 "Status Code",
                 "Action By",
                 "Module",
@@ -150,6 +151,13 @@ export const HistoriesViews = () => {
                   ),
                 },
                 {
+                  return: ({ endpoint }) => (
+                    <>
+                      <Poppins>{endpoint || "-"}</Poppins>
+                    </>
+                  ),
+                },
+                {
                   return: ({ statusCode }) => (
                     <>
                       <Poppins>{statusCode || "-"}</Poppins>
@@ -159,7 +167,7 @@ export const HistoriesViews = () => {
                 {
                   return: ({ user }) => (
                     <>
-                      <Poppins>{user?.name}</Poppins>
+                      <Poppins>{user?.name || '-'}</Poppins>
                     </>
                   ),
                 },

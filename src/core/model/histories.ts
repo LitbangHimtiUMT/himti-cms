@@ -50,6 +50,7 @@ export interface HistoriesDTO {
   flag: HistoryFlag;
   actionId: string | null;
   statusCode: string | null;
+  endpoint: string | null;
   createdAt: Date;
   user: UserModel | null;
 }
