@@ -33,6 +33,11 @@ export const AcaraContent: React.FC = () => {
     setSearchParams({ ...queryParams, page: String(page) });
   };
 
+  const changeFilterEvent = (filter: EventFilter) => {
+    setFilter(filter);
+    onPageChange(1);
+  };
+
   const mutation = useAcaraCreation();
 
   const handleDelete = async (id: string) => {
@@ -40,11 +45,6 @@ export const AcaraContent: React.FC = () => {
       type: "delete",
       id,
     });
-  };
-
-  const changeFilterEvent = (filter: EventFilter) => {
-    setFilter(filter);
-    onPageChange(1);
   };
 
   const pagination = {

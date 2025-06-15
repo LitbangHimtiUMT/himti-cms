@@ -1,5 +1,5 @@
 import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
-import { CreateAdminUserBodyDTO, UserDTO } from "@core/model/user";
+import { CreateAdminUserBodyDTO, Role, UserDTO } from "@core/model/user";
 import { userService } from "@core/services/user";
 import useDebounce from "@features/_global/hooks/useDebounce";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -11,6 +11,8 @@ interface Options {
   perPage?: number;
   path?: string;
   enabled?: boolean;
+  role?: Role
+  roles?: string
 }
 
 type PayloadType =
@@ -36,13 +38,15 @@ export const useUser = (options?: Options) => {
 
   const search = useDebounce(searchQuery as string, 500);
   const query = useQuery({
-    queryKey: ["users", { page, perPage, search }],
+    queryKey: ["users", { page, perPage, search, role: options?.role, roles: options?.roles }],
     queryFn: () =>
       userService.get({
         queryParams: {
           perPage: perPage ? Number(perPage) : undefined,
           page: page ? Number(page) : undefined,
           search,
+          ...options?.role && { role: options?.role },
+          ...options?.roles && { roles: options?.roles }
         },
         path: options?.path || undefined,
       }),
