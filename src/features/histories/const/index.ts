@@ -8,6 +8,8 @@ export const FlagMappingVariant: Record<HistoryFlag, BadgeVariant> = {
   LOGOUT: "danger",
   UPDATE: "success",
   ERROR: "danger",
+  APPROVE: "success",
+  REJECT: "danger",
 };
 
 export type FlagType =
@@ -16,7 +18,9 @@ export type FlagType =
   | "Delete"
   | "Login"
   | "Logout"
-  | "Error";
+  | "Error"
+  | "Approve"
+  | "Reject";
 export type ModuleType =
   | "Auth"
   | "Event"
@@ -37,6 +41,8 @@ export const FlagMapping: Record<HistoryFlag, FlagType> = {
   LOGOUT: "Logout",
   UPDATE: "Update",
   ERROR: "Error",
+  APPROVE: "Approve",
+  REJECT: "Reject",
 };
 
 export const ModuleMapping: Record<HistoryModule, ModuleType> = {

@@ -19,7 +19,10 @@ export type HistoryFlag =
   | "DELETE"
   | "LOGIN"
   | "LOGOUT"
-  | "ERROR";
+  | "ERROR"
+  | 'APPROVE'
+  | 'REJECT'
+  ;
 
 export const HistoryModuleEnum: Record<HistoryModule, HistoryModule> = {
   USER: "USER",
@@ -42,6 +45,8 @@ export const HistoryFlagEnum: Record<HistoryFlag, HistoryFlag> = {
   LOGIN: "LOGIN",
   LOGOUT: "LOGOUT",
   ERROR: "ERROR",
+  APPROVE: 'APPROVE',
+  REJECT: 'REJECT'
 };
 export interface HistoriesDTO {
   id: string;

@@ -5,7 +5,7 @@ import AuthLayout from "../containers/AuthLayout";
 const LoginView: React.FC = () => {
   return (
     <AuthLayout>
-      <Login />∏
+      <Login />
     </AuthLayout>
   );
 };
