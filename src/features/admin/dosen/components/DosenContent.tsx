@@ -52,7 +52,7 @@ export const DosenContent = () => {
     >
       <Table>
         <TableHead
-          field={["NIDN", "Name", "Number Phone", "Email", "Lesson", "Action"]}
+          field={["NIDN", "Name", "Email", "Number Phone", "Lesson", "Action"]}
         />
         <TableBody>
           {isLoading ? (
