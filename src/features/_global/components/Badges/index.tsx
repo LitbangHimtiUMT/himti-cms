@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { ReactNode } from "react";
 import { Poppins } from "../Text";
 
-export type BadgeVariant = 
+export type BadgeVariant =
   | "default"
   | "primary"
   | "secondary"
@@ -24,14 +24,14 @@ interface BadgeProps {
 }
 
 const variantClasses: Record<BadgeVariant, string> = {
-  default: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200 border border-solid border-gray-800",
-  primary: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border border-solid border-blue-800",
-  secondary: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border border-solid border-purple-800",
-  success: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border border-solid border-green-800",
-  warning: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 border border-solid border-amber-800",
-  danger: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 border border-solid border-red-800",
-  outline: "border border-gray-300 text-gray-700 dark:border-gray-600 dark:text-gray-300 border border-solid border-gray-700",
-  ghost: "text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 border border-solid border-gray-700",
+  default: "bg-gray-100 text-gray-700 border border-gray-200",
+  primary: "bg-primary-50 text-primary-700 border border-primary-200",
+  secondary: "bg-purple-50 text-purple-700 border border-purple-200",
+  success: "bg-green-50 text-green-700 border border-green-200",
+  warning: "bg-amber-50 text-amber-700 border border-amber-200",
+  danger: "bg-red-50 text-red-700 border border-red-200",
+  outline: "border border-gray-300 text-gray-700 bg-white",
+  ghost: "text-gray-700 hover:bg-gray-100",
 };
 
 const sizeClasses = {
@@ -47,7 +47,7 @@ const sizeText = {
 }
 
 const roundedClasses = {
-  sm: "rounded-sm",
+  sm: "rounded",
   md: "rounded-md",
   lg: "rounded-lg",
   full: "rounded-full",
@@ -65,7 +65,7 @@ export const Badge = ({
   return (
     <div
       className={clsx(
-        "inline-flex items-center font-medium whitespace-nowrap transition-colors",
+        "inline-flex items-center font-medium whitespace-nowrap transition-all duration-200",
         variantClasses[variant],
         sizeClasses[size],
         roundedClasses[rounded],
@@ -75,7 +75,7 @@ export const Badge = ({
       {icon && iconPosition === "left" && (
         <span className="mr-1.5">{icon}</span>
       )}
-      <Poppins className={`text-[Poppins] ${sizeText[size]}`}>
+      <Poppins className={`font-poppins ${sizeText[size]}`}>
         {children}
       </Poppins>
       {icon && iconPosition === "right" && (

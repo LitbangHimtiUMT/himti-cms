@@ -1,4 +1,3 @@
-import { Typography } from "@material-tailwind/react";
 import React from "react";
 
 interface ITableHeadProps {
@@ -7,19 +6,16 @@ interface ITableHeadProps {
 
 export const TableHead: React.FC<ITableHeadProps> = ({ field }) => {
   return (
-    <thead>
+    <thead className="bg-gray-50">
       <tr>
         {field.map((item, index) => (
           <th
             key={index}
-            className="border-b border-blue-gray-50 py-3 px-5 text-left"
+            className="border-b border-gray-200 py-3.5 px-5 text-left"
           >
-            <Typography
-              variant="small"
-              className="text-[11px] font-bold uppercase text-blue-gray-400"
-            >
+            <span className="text-xs font-semibold uppercase text-gray-600 tracking-wider">
               {item}
-            </Typography>
+            </span>
           </th>
         ))}
       </tr>

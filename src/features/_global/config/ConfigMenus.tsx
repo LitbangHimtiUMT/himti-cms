@@ -4,6 +4,7 @@ import { FaCalendar, FaChalkboardTeacher, FaHistory, FaUser } from "react-icons/
 import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
 import { IoMdInformationCircleOutline } from "react-icons/io";
+import { HiClipboardDocumentList } from "react-icons/hi2";
 import { ItemMenuAdmin } from "../types/MenuTypes";
 import { MdClass } from "react-icons/md";
 
@@ -27,6 +28,11 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <BsCalendar2EventFill />,
     name: "Event Meeting",
     to: "/admin/event-meeting",
+  },
+  {
+    icon: <HiClipboardDocumentList size={16} />,
+    name: "Event Registration",
+    to: "/admin/event-registration",
   },
   {
     icon: <FaUserGroup />,

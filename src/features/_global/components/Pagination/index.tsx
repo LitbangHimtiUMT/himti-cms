@@ -1,4 +1,5 @@
 import React from "react";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 
 interface IPaginationProps {
   totalPages: number;
@@ -32,8 +33,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
         onClick={() => handlePageChange(1)}
         className={
           currentPage === 1
-            ? "border border-solid bg-gradient-to-tr from-gray-900 to-gray-800 border-gray-800 w-8 h-8 rounded-md text-white"
-            : "border border-solid border-gray-800 w-8 h-8 rounded-md text-black"
+            ? "w-9 h-9 rounded-lg bg-primary-600 text-white font-medium shadow-soft transition-all duration-200"
+            : "w-9 h-9 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 font-medium transition-all duration-200"
         }
       >
         1
@@ -41,7 +42,11 @@ export const Pagination: React.FC<IPaginationProps> = ({
     );
 
     if (range.start > 2) {
-      pageNumbers.push(<span key="start-ellipsis">...</span>);
+      pageNumbers.push(
+        <span key="start-ellipsis" className="text-gray-400 px-1">
+          ...
+        </span>
+      );
     }
 
     for (let i = range.start; i <= range.end; i++) {
@@ -51,8 +56,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
           onClick={() => handlePageChange(i)}
           className={
             i === currentPage
-              ? "border border-solid bg-gradient-to-tr from-gray-900 to-gray-800 border-gray-800 w-8 h-8 rounded-md text-white"
-              : "border border-solid border-gray-800 w-8 h-8 rounded-md text-black"
+              ? "w-9 h-9 rounded-lg bg-primary-600 text-white font-medium shadow-soft transition-all duration-200"
+              : "w-9 h-9 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 font-medium transition-all duration-200"
           }
         >
           {i}
@@ -61,7 +66,11 @@ export const Pagination: React.FC<IPaginationProps> = ({
     }
 
     if (range.end < totalPages - 1) {
-      pageNumbers.push(<span key="end-ellipsis text-black">...</span>);
+      pageNumbers.push(
+        <span key="end-ellipsis" className="text-gray-400 px-1">
+          ...
+        </span>
+      );
     }
 
     if (totalPages > 1) {
@@ -71,8 +80,8 @@ export const Pagination: React.FC<IPaginationProps> = ({
           onClick={() => handlePageChange(totalPages)}
           className={
             currentPage === totalPages
-              ? "border border-solid bg-gradient-to-tr from-gray-900 to-gray-800 border-gray-800 w-8 h-8 rounded-md text-white"
-              : "border border-solid border-gray-800 w-8 h-8 rounded-md text-black"
+              ? "w-9 h-9 rounded-lg bg-primary-600 text-white font-medium shadow-soft transition-all duration-200"
+              : "w-9 h-9 rounded-lg bg-white border border-gray-300 text-gray-700 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700 font-medium transition-all duration-200"
           }
         >
           {totalPages}
@@ -84,29 +93,41 @@ export const Pagination: React.FC<IPaginationProps> = ({
   };
 
   return (
-    <div className="pagination my-6 flex items-center gap-2">
+    <div className="flex items-center gap-2 my-6">
       <button
         onClick={() => handlePageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={
-          currentPage === 1
-            ? "border border-solid bg-gray-400 border-gray-400 h-8 rounded-md px-2 text-xs text-white"
-            : "border border-solid border-gray-800 h-8 rounded-md px-2 text-black text-xs"
-        }
+        className={`
+          flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium text-sm
+          transition-all duration-200
+          ${
+            currentPage === 1
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-white border border-gray-300 text-gray-700 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700"
+          }
+        `}
       >
+        <FiChevronLeft className="w-4 h-4" />
         Previous
       </button>
-      <div className="flex items-center gap-2">{renderPageNumbers()}</div>
+
+      <div className="flex items-center gap-1.5">{renderPageNumbers()}</div>
+
       <button
         onClick={() => handlePageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={
-          currentPage === totalPages
-            ? "border border-solid bg-gray-400 border-gray-400 h-8 rounded-md px-2 text-xs text-white"
-            : "border border-solid border-gray-800 h-8 rounded-md px-2 text-black text-xs"
-        }
+        className={`
+          flex items-center gap-1.5 px-4 py-2 rounded-lg font-medium text-sm
+          transition-all duration-200
+          ${
+            currentPage === totalPages
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-white border border-gray-300 text-gray-700 hover:bg-primary-50 hover:border-primary-300 hover:text-primary-700"
+          }
+        `}
       >
         Next
+        <FiChevronRight className="w-4 h-4" />
       </button>
     </div>
   );

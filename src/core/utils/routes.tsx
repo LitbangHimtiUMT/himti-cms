@@ -28,6 +28,7 @@ import { EventMeetingDetail } from "@features/event-meeting/views/EventMeetingDe
 import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEventMeetingViews";
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
 import { VersionView } from "@features/version/view/version";
+import { EventRegistrationView } from "@features/event-registration/views/EventRegistration";
 import { createBrowserRouter } from "react-router-dom";
 import { HistoriesViews } from "../../features/histories/views/HistoriesViews";
 import { CategoriesViews } from "../../features/lms/categories/views/Categories";
@@ -159,6 +160,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/event-meeting/:eventMeetingId/:meetingId",
         element: <AttendanceViews />,
+      },
+      {
+        path: "/admin/event-registration",
+        element: <EventRegistrationView />,
       },
       {
         path: "/lms/categories",

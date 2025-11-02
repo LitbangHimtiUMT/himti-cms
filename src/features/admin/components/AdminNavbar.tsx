@@ -1,5 +1,4 @@
 import { openSidenavAtom } from "@features/admin/store/sidenav";
-import { IconButton, Navbar } from "@material-tailwind/react";
 import { useAtom } from "jotai";
 import React from "react";
 import { IoChevronBackOutline } from "react-icons/io5";
@@ -15,57 +14,36 @@ const AdminNavbar: React.FC<{
   const [openSidenav, setOpenSidenav] = useAtom(openSidenavAtom);
 
   return (
-    <Navbar
-      color="transparent"
-      className={`rounded-xl transition-all px-0 py-1`}
-      fullWidth
-    >
-      <div className="flex justify-between gap-6 flex-row items-center">
-        <div className="capitalize w-full px-5">
-          <div className="flex flex-col gap-3">
-            {/* <Breadcrumbs className={`bg-transparent p-0 transition-all`}>
-              <Link to={link ? link : `/admin/${layout}`}>
-                <Typography
-                  variant="small"
-                  color="blue-gray"
-                  className="font-normal opacity-50 transition-all hover:text-blue-500 hover:opacity-100"
-                >
-                  {layout}
-                </Typography>
-              </Link>
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="font-normal"
-              >
-                {page}
-              </Typography>
-            </Breadcrumbs>
-            <Typography variant="h6" color="blue-gray">
-              {page}
-            </Typography> */}
-            {showBackButton && link && (
-              <Link to={link || (-1 as To)}>
-                <div className="flex items-center gap-2">
-                  <IoChevronBackOutline size={20} color="#666" />
-                  <p className="text-sm font-semibold text-[#666]">Back</p>
-                </div>
-              </Link>
-            )}
-          </div>
+    <nav className="bg-white/80 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-40 transition-all">
+      <div className="flex justify-between items-center px-6 py-4">
+        {/* Left Section - Back Button */}
+        <div className="flex-1">
+          {showBackButton && link && (
+            <Link to={link || (-1 as To)}>
+              <button className="flex items-center gap-2 px-3 py-2 rounded-lg
+                               text-gray-600 hover:text-primary-600 hover:bg-primary-50
+                               transition-all duration-200 group">
+                <IoChevronBackOutline
+                  className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-200"
+                />
+                <span className="text-sm font-medium">Back</span>
+              </button>
+            </Link>
+          )}
         </div>
-        <div className="flex items-center">
-          <IconButton
-            variant="text"
-            color="blue-gray"
-            className="grid xl:hidden"
+
+        {/* Right Section - Hamburger Menu */}
+        <div className="xl:hidden">
+          <button
             onClick={() => setOpenSidenav(!openSidenav)}
+            className="p-2 rounded-lg text-gray-600 hover:text-primary-600 hover:bg-primary-50
+                     transition-all duration-200 group"
           >
-            <RxHamburgerMenu className="h-6 w-6 text-blue-gray-500" />
-          </IconButton>
+            <RxHamburgerMenu className="h-6 w-6 group-hover:scale-110 transition-transform duration-200" />
+          </button>
         </div>
       </div>
-    </Navbar>
+    </nav>
   );
 };
 

@@ -5,5 +5,9 @@ interface ITableBodyProps extends PropsWithChildren {
 }
 
 export const TableBody: React.FC<ITableBodyProps> = ({ children }) => {
-  return <tbody>{children}</tbody>;
+  return (
+    <tbody className="bg-white divide-y divide-gray-200">
+      {children}
+    </tbody>
+  );
 };

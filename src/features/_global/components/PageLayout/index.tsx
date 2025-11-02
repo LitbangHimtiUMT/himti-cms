@@ -1,15 +1,9 @@
 import { convertQueryParamsToObject } from "@features/_global/helper";
-import {
-  Button,
-  Card,
-  CardBody,
-  CardHeader,
-  Input,
-  Typography,
-} from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { ButtonHTMLAttributes, PropsWithChildren, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination } from "../Pagination";
+import { FiPlus, FiSearch, FiClock } from "react-icons/fi";
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {}
@@ -45,9 +39,8 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   showPagination,
   title,
   action,
-  headBackground = "gray",
   searchField = false,
-  searchPlaceholder = "search kambing..",
+  searchPlaceholder = "Search...",
   histories,
   onClickHistories,
 }) => {
@@ -55,28 +48,34 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
     if (action?.show && action.link) {
       return (
         <Link to={action.link.to as string}>
-          <Button
+          <button
             {...action?.buttonProps}
-            size="sm"
-            color={action?.colorButton || "blue"}
-            variant="gradient"
+            className="px-5 py-2.5 bg-white text-primary-700 rounded-lg font-semibold
+                     hover:bg-white/95 hover:shadow-lg hover:-translate-y-0.5
+                     transition-all duration-200 flex items-center gap-2
+                     focus:outline-none focus:ring-4 focus:ring-white/30
+                     border border-white/20 shadow-soft"
           >
+            <FiPlus className="w-4 h-4 stroke-[3]" />
             {action?.buttonTitle}
-          </Button>
+          </button>
         </Link>
       );
     }
 
     if (action?.show) {
       return (
-        <Button
+        <button
           {...action?.buttonProps}
-          size="sm"
-          color={action?.colorButton || "blue"}
-          variant="gradient"
+          className="px-5 py-2.5 bg-white text-primary-700 rounded-lg font-semibold
+                   hover:bg-white/95 hover:shadow-lg hover:-translate-y-0.5
+                   transition-all duration-200 flex items-center gap-2
+                   focus:outline-none focus:ring-4 focus:ring-white/30
+                   border border-white/20 shadow-soft"
         >
+          <FiPlus className="w-4 h-4 stroke-[3]" />
           {action?.buttonTitle}
-        </Button>
+        </button>
       );
     }
     return null;
@@ -95,46 +94,68 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
     );
 
   return (
-    <div>
-      <Card>
-        <CardHeader
-          variant="gradient"
-          color={headBackground}
-          className="mb-4 p-6 flex justify-between items-center flex-wrap"
-        >
-          {title && (
-            <Typography variant="h6" color="white">
-              {title}
-            </Typography>
-          )}
-          <div className="md:mt-0 mt-4">{renderAction()}</div>
-        </CardHeader>
-        <div className="flex items-center gap-4 pr-4">
-          {searchField && (
-            <div className="w-72 ms-auto mx-4">
-              <Input
-                onChange={handeSearchChange}
-                placeholder={searchPlaceholder}
-                label="Search"
-                // className="bg-transparent text-gray-800 p-1.5 w-full border border-solid border-black duration-200 outline-none rounded-md focus:outline focus:outline-gray-600"
-              />
+    <div className="space-y-4">
+      <div className="bg-white rounded-xl shadow-soft border border-gray-100 overflow-hidden">
+        {/* Header - Matching Sidebar Gradient */}
+        <div className="bg-gradient-sidebar p-6 relative overflow-hidden">
+          {/* Decorative Element */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
+
+          <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
+            {title && (
+              <div>
+                <Typography variant="h5" className="text-white font-bold drop-shadow-sm">
+                  {title}
+                </Typography>
+              </div>
+            )}
+            <div className="flex items-center gap-3">
+              {renderAction()}
             </div>
-          )}
-          {histories && (
-            <Button
-              size="sm"
-              color={"#fff"}
-              variant="gradient"
-              onClick={onClickHistories}
-            >
-              Histories
-            </Button>
-          )}
+          </div>
         </div>
-        <CardBody className="overflow-x-auto overflow-y-visible px-4 py-2">
-          <>{children}</>
-        </CardBody>
-      </Card>
+
+        {/* Search & Filters */}
+        {(searchField || histories) && (
+          <div className="p-4 bg-gray-50 border-b border-gray-100">
+            <div className="flex flex-wrap items-center gap-3">
+              {searchField && (
+                <div className="flex-1 min-w-[240px] max-w-md relative">
+                  <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    onChange={handeSearchChange}
+                    placeholder={searchPlaceholder}
+                    className="w-full pl-10 pr-4 py-2.5 bg-white border border-gray-300 rounded-lg
+                             focus:border-primary-500 focus:ring-4 focus:ring-primary-100
+                             transition-all duration-200 outline-none
+                             text-sm font-poppins text-gray-700
+                             placeholder:text-gray-400"
+                  />
+                </div>
+              )}
+              {histories && (
+                <button
+                  onClick={onClickHistories}
+                  className="px-4 py-2.5 bg-white text-gray-700 border border-gray-300 rounded-lg font-medium
+                           hover:bg-gray-50 hover:border-gray-400
+                           transition-all duration-200 flex items-center gap-2
+                           focus:outline-none focus:ring-4 focus:ring-gray-200"
+                >
+                  <FiClock className="w-4 h-4" />
+                  Histories
+                </button>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Content */}
+        <div className="p-6">
+          {children}
+        </div>
+      </div>
+
+      {/* Pagination */}
       {showPagination && <Pagination {...pagination} />}
     </div>
   );

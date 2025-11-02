@@ -2,23 +2,138 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-  scrollbar-width: thin;
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 130, 246, 0.3) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.3);
+    border-radius: 4px;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background: rgba(59, 130, 246, 0.5);
+  }
+
+  html, body {
+    scrollbar-width: none;
+    @apply bg-gray-50;
+  }
+
+  #poppins {
+    font-family: 'Poppins', system-ui, -apple-system, sans-serif !important;
+    font-size: 12px;
+    color: #546e7a;
+    font-weight: 500;
+  }
 }
 
-html, body{
-  scrollbar-width: none;
+@layer components {
+  ul[role="listbox"] {
+    @apply max-h-40;
+  }
+
+  /* Glass Effect Utility */
+  .glass-effect {
+    @apply bg-white/80 backdrop-blur-xl border border-white/20;
+  }
+
+  .glass-effect-dark {
+    @apply bg-gray-900/80 backdrop-blur-xl border border-white/10;
+  }
+
+  /* Modern Card */
+  .card-modern {
+    @apply bg-white rounded-xl shadow-soft hover:shadow-soft-lg transition-all duration-300;
+  }
+
+  /* Modern Input */
+  .input-modern {
+    @apply w-full px-4 py-3 bg-white border border-gray-200 rounded-lg
+           focus:border-primary-500 focus:ring-4 focus:ring-primary-100
+           transition-all duration-200 outline-none
+           placeholder:text-gray-400;
+  }
+
+  /* Modern Button Base */
+  .btn-modern {
+    @apply px-6 py-2.5 rounded-lg font-medium
+           transition-all duration-200
+           focus:outline-none focus:ring-4
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn-modern bg-primary-600 text-white
+           hover:bg-primary-700 hover:shadow-lg hover:-translate-y-0.5
+           focus:ring-primary-200
+           active:translate-y-0;
+  }
+
+  .btn-secondary {
+    @apply btn-modern bg-gray-100 text-gray-700 border border-gray-300
+           hover:bg-gray-200 hover:border-gray-400
+           focus:ring-gray-200;
+  }
+
+  .btn-danger {
+    @apply btn-modern bg-red-500 text-white
+           hover:bg-red-600 hover:shadow-lg hover:-translate-y-0.5
+           focus:ring-red-200
+           active:translate-y-0;
+  }
+
+  .btn-success {
+    @apply btn-modern bg-green-500 text-white
+           hover:bg-green-600 hover:shadow-lg hover:-translate-y-0.5
+           focus:ring-green-200
+           active:translate-y-0;
+  }
+
+  .btn-warning {
+    @apply btn-modern bg-amber-500 text-white
+           hover:bg-amber-600 hover:shadow-lg hover:-translate-y-0.5
+           focus:ring-amber-200
+           active:translate-y-0;
+  }
+
+  /* Modern Table Rows */
+  tbody tr {
+    @apply transition-colors duration-150;
+  }
+
+  tbody tr:hover {
+    @apply bg-primary-50/50;
+  }
+
+  tbody tr td {
+    @apply py-3 px-5 text-sm text-gray-700;
+  }
 }
 
-ul[role="listbox"] {
-  @apply max-h-40;
-}
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent;
+  }
 
-#poppins {
-  font-family: 'Poppins' !important;
-  font-size: 12px;
-  color: #546e7a;
-  font-weight: 500;
+  .bg-gradient-modern {
+    @apply bg-gradient-to-br from-primary-500 via-primary-600 to-primary-700;
+  }
+
+  .bg-gradient-sidebar {
+    background: linear-gradient(135deg, #0f172a 0%, #172554 50%, #0f172a 100%);
+  }
 }
 
 @keyframes loading {

@@ -17,15 +17,17 @@ interface CardContentProps {
 
 export const Card: React.FC<CardProps> = ({ title, children }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg p-6 border border-gray-200">
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
+    <div className="bg-white shadow-soft hover:shadow-soft-lg rounded-xl p-6 border border-gray-100 transition-all duration-300">
+      <h2 className="text-lg font-bold text-gray-800 mb-6 pb-3 border-b border-gray-100">
+        {title}
+      </h2>
       <div>{children}</div>
     </div>
   );
 };
 
 export const CardContent: React.FC<CardContentProps> = ({ children }) => {
-  return <div className="text-black flex flex-col gap-4">{children}</div>;
+  return <div className="text-gray-700 flex flex-col gap-4">{children}</div>;
 };
 
 export const CardTitle: React.FC<CardTitleProps> = ({
@@ -34,14 +36,12 @@ export const CardTitle: React.FC<CardTitleProps> = ({
   separator,
 }) => {
   return (
-    <>
-      <div className="flex items-center gap-2">
-        <div className="flex items-center gap-2">
-          <strong className="min-w-40">{label}</strong>
-          {separator ? <p>{separator}</p> : null}
-        </div>
-        <p className="text-gray-700">{value}</p>
+    <div className="flex items-start gap-3 py-2 hover:bg-gray-50 px-3 -mx-3 rounded-lg transition-colors duration-150">
+      <div className="flex items-center gap-2 min-w-[160px]">
+        <strong className="text-sm font-semibold text-gray-800">{label}</strong>
+        {separator && <span className="text-gray-400">{separator}</span>}
       </div>
-    </>
+      <div className="text-sm text-gray-700 flex-1">{value}</div>
+    </div>
   );
 };

@@ -21,60 +21,69 @@ export const Input: React.FC<InputProps> = ({
   inputSize = "md",
   ...rest
 }) => {
+  const getSizeClasses = () => {
+    switch (inputSize) {
+      case "sm":
+        return "h-9 px-3 py-2 text-sm";
+      case "lg":
+        return "h-12 px-5 py-3.5 text-base";
+      default:
+        return "h-11 px-4 py-3 text-sm";
+    }
+  };
+
+  const getRoundedClasses = () => {
+    switch (rounded) {
+      case "sm":
+        return "rounded-md";
+      case "lg":
+        return "rounded-xl";
+      default:
+        return "rounded-lg";
+    }
+  };
+
   return (
-    <div className="flex items-center justify-between">
+    <div className="relative w-full">
       {LeftIcon && (
-        <div className="absolute py-4 px-2" onClick={onClickLeftIcon}>
+        <div
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-200 z-10"
+          onClick={onClickLeftIcon}
+        >
           {LeftIcon}
         </div>
       )}
       <input
         {...rest}
         className={`
-          border
-          ${
-            inputSize === "sm"
-              ? "px-2"
-              : inputSize === "md"
-              ? "px-4"
-              : inputSize === "lg"
-              ? "px-6"
-              : ""
-          }
-              ${
-                inputSize === "sm"
-                  ? "h-8"
-                  : inputSize === "md"
-                  ? "h-10"
-                  : "h-12"
-              }
-          ${inputSize === "sm" ? "py-2" : inputSize === "md" ? "py-3" : "py-4"}
+          w-full
+          ${getSizeClasses()}
+          ${getRoundedClasses()}
           ${LeftIcon ? "pl-10" : ""}
           ${RightIcon ? "pr-10" : ""}
-          ${error ? "border-red-500" : "border-[#DADADA]"}
-          focus:border
-          placeholder:text-sm
-          placeholder:font-[Poppins]
-          placeholder:text-[#87898E]
-          ${error ? "focus:border-red-500" : "focus:border-blue-500"}
-          duration-300
-          font-poppins
-          text-sm
-          focus:outline-none
-          w-full
-          ${error ? "text-red-500" : ""}
           ${
-            rounded == "sm"
-              ? "rounded-sm"
-              : rounded == "md"
-              ? "rounded-md"
-              : "rounded-lg"
+            error
+              ? "border-2 border-red-500 focus:border-red-600 focus:ring-4 focus:ring-red-100 text-red-600"
+              : "border border-gray-300 focus:border-primary-500 focus:ring-4 focus:ring-primary-100 text-gray-700"
           }
-          `}
+          bg-white
+          placeholder:text-gray-400
+          placeholder:font-normal
+          font-poppins
+          outline-none
+          transition-all
+          duration-200
+          disabled:bg-gray-50
+          disabled:text-gray-500
+          disabled:cursor-not-allowed
+        `}
       />
       {RightIcon && (
-        <div className="absolute right-10 p-4" onClick={onClickRightIcon}>
-          <div>{RightIcon}</div>
+        <div
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer hover:text-gray-600 transition-colors duration-200 z-10"
+          onClick={onClickRightIcon}
+        >
+          {RightIcon}
         </div>
       )}
     </div>
