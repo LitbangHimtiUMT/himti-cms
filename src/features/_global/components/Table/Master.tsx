@@ -1,4 +1,3 @@
-import { Typography } from "@material-tailwind/react";
 import { Button } from "../Button";
 import { EmptyState } from "../Empty";
 import { Loading } from "../Loading";
@@ -37,25 +36,24 @@ export const MasterTable = <T extends DefaultKey>({
   return (
     <div
       className={`${
-        border
-          ? "border-[1.5px] border-solid border-[#cdcdcd] bg-[#fefefe]"
-          : ""
+        border ? "border border-gray-200" : ""
       } overflow-auto rounded-md`}
     >
       <table className="w-full min-w-[640px] table-auto">
-        <thead>
+        <thead className="bg-gray-50">
           <tr>
             {title?.map((item, index) => (
               <th
                 key={index}
-                className="border-b border-blue-gray-50 py-3 px-4 text-left"
+                // className="border-b border-blue-gray-50 py-3 px-4 text-left"
+                className="border-b border-gray-200 py-3.5 px-5 text-left"
               >
-                <Typography
-                  variant="small"
-                  className="text-[11px] font-bold uppercase text-blue-gray-400"
+                <span
+                  // variant="small"
+                  className="text-xs font-semibold uppercase text-gray-600 tracking-wider"
                 >
                   {item}
-                </Typography>
+                </span>
               </th>
             ))}
             {withAction ? <th></th> : null}
