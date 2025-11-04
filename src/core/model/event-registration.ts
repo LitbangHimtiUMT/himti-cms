@@ -3,7 +3,11 @@ export interface EventRegistrationModel {
   eventId: string;
   userId: string;
   image?: string;
-  material?: string;
+  registrationType: {
+    id: string;
+    name: string;
+    year: number;
+  };
   class: string;
   name: string;
   createdAt: Date;
