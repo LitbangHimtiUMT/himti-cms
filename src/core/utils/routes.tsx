@@ -27,19 +27,24 @@ import { EventMeetingView } from "@features/event-meeting/views/EventMeeting";
 import { EventMeetingDetail } from "@features/event-meeting/views/EventMeetingDetail";
 import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEventMeetingViews";
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
-import { VersionView } from "@features/version/view/version";
 import { EventRegistrationView } from "@features/event-registration/views/EventRegistration";
+import { VersionView } from "@features/version/view/version";
 import { createBrowserRouter } from "react-router-dom";
+import { Playground } from "../../features/_global/views/playground";
 import { HistoriesViews } from "../../features/histories/views/HistoriesViews";
 import { CategoriesViews } from "../../features/lms/categories/views/Categories";
+import { ClassViews } from "../../features/lms/class/views/ClassViews";
 import { DetailMentorsViews } from "../../features/lms/mentors/views/DetailMentors";
 import { MentorsViews } from "../../features/lms/mentors/views/Mentors";
-import { ClassViews } from "../../features/lms/class/views/ClassViews";
 
 export const router = createBrowserRouter([
   {
     path: "/admin/login",
     element: <LoginView />,
+  },
+  {
+    path: "/playground",
+    element: <Playground />,
   },
   {
     path: "/",
