@@ -70,7 +70,7 @@ export const HistoriesViews = () => {
             <div className="flex md:flex-row flex-col gap-4 items-center">
               <div className="md:w-64 w-full">
                 <DropdownV2
-                  withPortal
+                  // withPortal
                   onChange={(e) => onChangeModule(e.value as HistoryModule)}
                   reset={!module}
                   placeholder="Select Module"

@@ -15,10 +15,10 @@ export const ElementRenderer = ({ el }: { el: TemplateElement }) => {
       position={{ x: el.x, y: el.y }}
       disableDragging={el.fixed}
       enableResizing={!el.fixed}
-      onDragStop={(e, d) =>
+      onDragStop={(_, d) =>
         updateElement({ id: el.id, data: { x: snap(d.x), y: snap(d.y) } })
       }
-      onResizeStop={(e, dir, ref, delta, pos) =>
+      onResizeStop={(___, __, ref, _, pos) =>
         updateElement({
           id: el.id,
           data: {

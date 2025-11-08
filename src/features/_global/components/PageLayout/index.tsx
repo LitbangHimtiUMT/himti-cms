@@ -104,14 +104,15 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-4 relative z-10">
             {title && (
               <div>
-                <Typography variant="h5" className="text-white font-bold drop-shadow-sm">
+                <Typography
+                  variant="h5"
+                  className="text-white font-bold drop-shadow-sm"
+                >
                   {title}
                 </Typography>
               </div>
             )}
-            <div className="flex items-center gap-3">
-              {renderAction()}
-            </div>
+            <div className="flex items-center gap-3">{renderAction()}</div>
           </div>
         </div>
 
@@ -150,9 +151,7 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
         )}
 
         {/* Content */}
-        <div className="p-6">
-          {children}
-        </div>
+        <div className="p-6">{children}</div>
       </div>
 
       {/* Pagination */}

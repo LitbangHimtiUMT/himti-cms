@@ -25,6 +25,8 @@ export const API_ENDPOINT = {
   eventMeeting: `${CONFIG_APP.BASE_URL}/event-meeting`,
   meeting: `${CONFIG_APP.BASE_URL}/meeting`,
   eventRegistration: `${CONFIG_APP.BASE_URL}/event-registration`,
+  eventRegistrationByRegistrationType: `${CONFIG_APP.BASE_URL}/event-registration/registration-type`,
+  registrationType: `${CONFIG_APP.BASE_URL}/registration-type`,
   version: `${CONFIG_APP.BASE_URL}/version`,
   mentors: `${CONFIG_APP.BASE_URL_LMS}/mentors`,
   categories: `${CONFIG_APP.BASE_URL_LMS}/categories`,

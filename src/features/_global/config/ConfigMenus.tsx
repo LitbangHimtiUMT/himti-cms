@@ -31,8 +31,8 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
   },
   {
     icon: <HiClipboardDocumentList size={16} />,
-    name: "Event Registration",
-    to: "/admin/event-registration",
+    name: "Registration",
+    to: "/admin/registration-type",
   },
   {
     icon: <FaUserGroup />,

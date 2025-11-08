@@ -21,4 +21,7 @@ export const eventRegistrationService = {
   getById: request.get<ApiResponse<EventRegistrationModel>>(
     API_ENDPOINT.eventRegistration
   ),
+  getByRegistrationType: request.get<ApiResponse<EventRegistrationModel[]>>(
+    API_ENDPOINT.eventRegistrationByRegistrationType
+  ),
 };

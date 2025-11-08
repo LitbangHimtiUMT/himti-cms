@@ -27,7 +27,9 @@ import { EventMeetingView } from "@features/event-meeting/views/EventMeeting";
 import { EventMeetingDetail } from "@features/event-meeting/views/EventMeetingDetail";
 import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEventMeetingViews";
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
-import { EventRegistrationView } from "@features/event-registration/views/EventRegistration";
+import { RegistrationTypeView } from "@features/registration-type/views/RegistrationType";
+import { RegistrationTypeDetailView } from "@features/registration-type/views/RegistrationTypeDetail";
+import { CreateRegistrationTypeView } from "@features/registration-type/views/CreateRegistrationType";
 import { VersionView } from "@features/version/view/version";
 import { createBrowserRouter } from "react-router-dom";
 import { Playground } from "../../features/_global/views/playground";
@@ -167,8 +169,16 @@ export const router = createBrowserRouter([
         element: <AttendanceViews />,
       },
       {
-        path: "/admin/event-registration",
-        element: <EventRegistrationView />,
+        path: "/admin/registration-type",
+        element: <RegistrationTypeView />,
+      },
+      {
+        path: "/admin/registration-type/create",
+        element: <CreateRegistrationTypeView />,
+      },
+      {
+        path: "/admin/registration-type/:registrationTypeId",
+        element: <RegistrationTypeDetailView />,
       },
       {
         path: "/lms/categories",

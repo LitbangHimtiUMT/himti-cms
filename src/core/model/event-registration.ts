@@ -10,6 +10,8 @@ export interface EventRegistrationModel {
   };
   class: string;
   name: string;
+  nim: string;
+  phoneNumber: string;
   createdAt: Date;
   updatedAt: Date;
 }
