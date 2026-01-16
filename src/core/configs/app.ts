@@ -32,5 +32,6 @@ export const API_ENDPOINT = {
   categories: `${CONFIG_APP.BASE_URL_LMS}/categories`,
   lms: {
     class: `${CONFIG_APP.BASE_URL_LMS}/class`,
-  }
+  },
+  potentialUser: `${CONFIG_APP.BASE_URL}/potential-user`,
 };

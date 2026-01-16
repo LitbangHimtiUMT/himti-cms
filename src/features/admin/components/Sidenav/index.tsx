@@ -19,7 +19,7 @@ const Sidenav: React.FC<{
     <aside
       className={`bg-gradient-sidebar backdrop-blur-sm ${
         openSidenav ? "translate-x-0" : "-translate-x-80"
-      } fixed flex flex-col inset-0 z-50 mt-14 mb-5 ml-4 max-h-screen w-72 rounded-2xl transition-all duration-300 xl:translate-x-0 border border-white/10 shadow-soft-xl`}
+      } fixed flex flex-col top-4 bottom-5 left-4 z-50 w-72 rounded-2xl transition-all duration-300 xl:translate-x-0 border border-white/10 shadow-soft-xl`}
     >
       {/* Close Button - Mobile Only */}
       <div className="absolute right-3 top-3 xl:hidden z-20">

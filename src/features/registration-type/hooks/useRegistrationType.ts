@@ -114,3 +114,48 @@ export const useRegistrationTypeById = (options?: Options) => {
   });
   return query;
 };
+
+export const useRegistrationTypeToggleStatus = () => {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: ({
+      registrationTypeId,
+      isActive,
+    }: {
+      registrationTypeId: string;
+      isActive: boolean;
+    }) => {
+      return registrationTypeService.update(
+        {
+          isActive,
+        } as RegistrationTypeUpdate,
+        {
+          path: registrationTypeId,
+        }
+      );
+    },
+    onSuccess: (res) => {
+      toast.success(res.message, {
+        position: "top-right",
+        autoClose: 2000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["registration-type"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["registration-type-by-id"],
+      });
+    },
+    onError: (res) => {
+      toast.error(res.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+    },
+  });
+  return mutation;
+};

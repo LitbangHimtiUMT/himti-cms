@@ -1,4 +1,4 @@
-import { Button } from "@material-tailwind/react";
+import { Button, Switch } from "@material-tailwind/react";
 import React, { useState } from "react";
 
 import {
@@ -148,7 +148,7 @@ export const FormCreateRegistrationType: React.FC = () => {
         </div>
 
         <div className="mb-4 my-2">
-          <label className="block text-sm font-medium mb-2">Event</label>
+          <label className="block text-sm font-medium mb-2">Event (Optional)</label>
           <DropdownV2
           searchInput
             list={
@@ -157,32 +157,34 @@ export const FormCreateRegistrationType: React.FC = () => {
                 value: item.id,
               })) || []
             }
-            placeholder="Select Event"
+            placeholder="Select Event (Optional)"
             onChange={(value) =>
               setRegistrationTypeBody((prev) => ({
                 ...prev,
-                type: value.value as RegistrationEventTypeEnum,
+                eventId: value.value as string,
               }))
             }
           />
         </div>
 
         <div className="mb-4 my-2">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              disabled={mutation.isPending}
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium">Status</label>
+            <Switch
               checked={registrationTypeBody.isActive}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              onChange={() =>
                 setRegistrationTypeBody((prev) => ({
                   ...prev,
-                  isActive: e.target.checked,
+                  isActive: !prev.isActive,
                 }))
               }
-              className="w-4 h-4"
+              disabled={mutation.isPending}
+              color="green"
             />
-            <span className="text-sm font-medium">Is Active</span>
-          </label>
+            <span className="text-sm text-gray-600">
+              {registrationTypeBody.isActive ? "Active" : "Inactive"}
+            </span>
+          </div>
         </div>
 
         <div className="flex justify-center items-center gap-5">

@@ -30,6 +30,7 @@ import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingV
 import { RegistrationTypeView } from "@features/registration-type/views/RegistrationType";
 import { RegistrationTypeDetailView } from "@features/registration-type/views/RegistrationTypeDetail";
 import { CreateRegistrationTypeView } from "@features/registration-type/views/CreateRegistrationType";
+import { UpdateRegistrationTypeView } from "@features/registration-type/views/UpdateRegistrationType";
 import { VersionView } from "@features/version/view/version";
 import { createBrowserRouter } from "react-router-dom";
 import { Playground } from "../../features/_global/views/playground";
@@ -175,6 +176,10 @@ export const router = createBrowserRouter([
       {
         path: "/admin/registration-type/create",
         element: <CreateRegistrationTypeView />,
+      },
+      {
+        path: "/admin/registration-type/update/:registrationTypeId",
+        element: <UpdateRegistrationTypeView />,
       },
       {
         path: "/admin/registration-type/:registrationTypeId",

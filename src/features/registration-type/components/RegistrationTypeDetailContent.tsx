@@ -1,14 +1,15 @@
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { Poppins } from "../../_global/components/Text";
 import { formatTime } from "../../_global/lib/FormatTime";
-import { useRegistrationTypeById } from "../hooks/useRegistrationType";
+import { useRegistrationTypeById, useRegistrationTypeCreation, useRegistrationTypeToggleStatus } from "../hooks/useRegistrationType";
 import { MasterTable } from "../../_global/components/Table/Master";
-import { Card, CardBody } from "@material-tailwind/react";
+import { Card, CardBody, Switch } from "@material-tailwind/react";
 import { useEventRegistrationByRegistrationType } from "@features/event-registration/hooks/useEventRegistration";
 import { convertQueryParamsToObject } from "@features/_global/helper";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { RegistrationEventTypeEnum } from "@core/model/registration-type";
 import { Badge } from "../../_global/components/Badges";
+import { Button } from "../../_global/components/Button";
 
 export const RegistrationTypeDetailContent = () => {
   const { data: registrationType } = useRegistrationTypeById();
@@ -16,6 +17,9 @@ export const RegistrationTypeDetailContent = () => {
     useEventRegistrationByRegistrationType();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
+  const navigate = useNavigate();
+  const mutation = useRegistrationTypeCreation();
+  const toggleStatusMutation = useRegistrationTypeToggleStatus();
 
   const onPageChange = (page: number) => {
     setSearchParams({ ...queryParams, page: String(page) });
@@ -40,16 +44,61 @@ export const RegistrationTypeDetailContent = () => {
     }
   };
 
+  const handleEdit = () => {
+    navigate(`/admin/registration-type/update/${registrationType?.data?.id}`);
+  };
+
+  const handleDelete = async () => {
+    const confirm = window.confirm(
+      "Are you sure you want to delete this registration type?"
+    );
+    if (!confirm) return;
+
+    await mutation.mutateAsync({
+      type: "delete",
+      data: {
+        registrationTypeId: registrationType?.data?.id,
+      },
+    });
+  };
+
+  const handleToggleStatus = async () => {
+    if (!registrationType?.data) return;
+
+    await toggleStatusMutation.mutateAsync({
+      registrationTypeId: registrationType.data.id,
+      isActive: !registrationType.data.isActive,
+    });
+  };
+
   return (
     <>
       <div className="px-6">
         {/* Registration Type Information Card */}
         <Card className="mb-6">
           <CardBody>
-            <div className="mb-4">
+            <div className="mb-4 flex justify-between items-center">
               <Poppins className="text-2xl font-bold">
                 {registrationType?.data?.name || "-"}
               </Poppins>
+              <div className="flex gap-2">
+                <Button
+                  variant="warning"
+                  size="sm"
+                  onClick={handleEdit}
+                  disabled={mutation.isPending}
+                >
+                  Edit
+                </Button>
+                <Button
+                  variant="danger"
+                  size="sm"
+                  onClick={handleDelete}
+                  disabled={mutation.isPending}
+                >
+                  {mutation.isPending ? "Deleting..." : "Delete"}
+                </Button>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               <div>
@@ -68,13 +117,21 @@ export const RegistrationTypeDetailContent = () => {
               </div>
               <div>
                 <Poppins className="text-gray-600 text-sm">Status</Poppins>
-                <Badge
-                  variant={
-                    registrationType?.data?.isActive ? "success" : "danger"
-                  }
-                >
-                  {registrationType?.data?.isActive ? "Active" : "Inactive"}
-                </Badge>
+                <div className="flex items-center gap-2 mt-1">
+                  <Switch
+                    checked={registrationType?.data?.isActive}
+                    onChange={handleToggleStatus}
+                    disabled={toggleStatusMutation.isPending}
+                    color="green"
+                  />
+                  <Badge
+                    variant={
+                      registrationType?.data?.isActive ? "success" : "danger"
+                    }
+                  >
+                    {registrationType?.data?.isActive ? "Active" : "Inactive"}
+                  </Badge>
+                </div>
               </div>
               <div>
                 <Poppins className="text-gray-600 text-sm">Created At</Poppins>
