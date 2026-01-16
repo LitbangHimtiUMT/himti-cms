@@ -4,6 +4,7 @@ export interface QueryParams {
   search?: string;
   subAcaraId?: string;
   eventMeetingId?: string;
+  generationId?: string;
 }
 
 export interface ApiOption {

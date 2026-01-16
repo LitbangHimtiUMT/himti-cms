@@ -13,8 +13,7 @@ import { useAngkatan } from "../../angkatan/hooks/useAngkatan";
 import { Button } from "@material-tailwind/react";
 import { useState, useMemo } from "react";
 import { SiMicrosoftexcel } from "react-icons/si";
-import { DropdownV2 } from "@features/_global/components/Dropdown/DropdownV2";
-import { ListItem } from "@features/_global/components/Dropdown/DropdownV2.types";
+import { DropdownV2, ListItem } from "@features/_global/components/Dropdown/DropdownV2";
 
 export const AnggotaContent = () => {
   const [searchParams, setSearchParams] = useSearchParams();

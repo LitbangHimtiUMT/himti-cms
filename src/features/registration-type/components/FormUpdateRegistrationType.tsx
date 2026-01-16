@@ -164,7 +164,7 @@ export const FormUpdateRegistrationType: React.FC = () => {
           <DropdownV2
             list={registrationTypeOptions}
             placeholder="Select Type"
-            value={registrationTypeOptions.find(
+            defaultValue={registrationTypeOptions.find(
               (opt) => opt.value === registrationTypeBody.type
             )}
             onChange={(value) =>
@@ -192,7 +192,7 @@ export const FormUpdateRegistrationType: React.FC = () => {
               })) || []
             }
             placeholder="Select Event (Optional)"
-            value={
+            defaultValue={
               registrationTypeBody.eventId
                 ? events?.data
                     ?.map((item) => ({
