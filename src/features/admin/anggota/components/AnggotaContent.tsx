@@ -9,7 +9,7 @@ import { convertQueryParamsToObject } from "@features/_global/helper";
 import { useSearchParams } from "react-router-dom";
 import { useAnggota, useAnggotaCreation, useExportAnggota } from "../hooks/useAnggota";
 import { TableItem } from "./Table/TableItem";
-import { useAngkatan } from "../../angkatan/hooks/useAngkatan";
+import { useAngkatanDropdown } from "../../angkatan/hooks/useAngkatan";
 import { Button } from "@material-tailwind/react";
 import { useState, useMemo } from "react";
 import { SiMicrosoftexcel } from "react-icons/si";
@@ -23,7 +23,7 @@ export const AnggotaContent = () => {
   const { data: anggotas, isLoading } = useAnggota({
     generationId: selectedGenerationId || undefined,
   });
-  const { data: generations } = useAngkatan({ perPage: 100 });
+  const { data: generations } = useAngkatanDropdown();
   const exportMutation = useExportAnggota();
 
   // Transform generations data to ListItem format

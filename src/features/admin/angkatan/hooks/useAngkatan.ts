@@ -83,3 +83,17 @@ export function useAngkatanById() {
     enabled: !!id,
   });
 }
+
+export const useAngkatanDropdown = () => {
+  const query = useQuery({
+    queryKey: ["angkatans-dropdown"],
+    queryFn: () =>
+      angkatanService.get({
+        queryParams: {
+          perPage: 50,
+          page: 1,
+        },
+      }),
+  });
+  return query;
+};
