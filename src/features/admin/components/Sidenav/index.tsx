@@ -1,6 +1,6 @@
 import { CONFIG_APP } from "@core/configs/app";
 import { MenuAdminConfig } from "@features/_global/types/MenuTypes";
-import { useProfile } from "@features/auth/hooks/useProfile";
+// import { useProfile } from "@features/auth/hooks/useProfile";
 import React, { useMemo } from "react";
 import { IoMdClose, IoMdLogOut } from "react-icons/io";
 import { Link } from "react-router-dom";
@@ -12,7 +12,7 @@ const Sidenav: React.FC<{
   openSidenav: boolean;
   setOpenSidenav: () => void;
 }> = ({ Menus, openSidenav, setOpenSidenav }) => {
-  const { data: profile } = useProfile();
+  // const { data: profile } = useProfile();
 
   const groupedMenus = useMemo(() => {
     const groups = {
