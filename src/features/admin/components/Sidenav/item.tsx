@@ -1,46 +1,44 @@
 import { ItemMenuAdmin } from "@features/_global/types/MenuTypes";
-import { Typography } from "@material-tailwind/react";
 import React from "react";
 import { NavLink } from "react-router-dom";
 
-const ItemSidenav: React.FC<ItemMenuAdmin> = ({ name, to, icon }) => {
+interface ExtendedItemMenuProps extends ItemMenuAdmin {
+  onClick?: () => void;
+}
+
+const ItemSidenav: React.FC<ExtendedItemMenuProps> = ({ name, to, icon, onClick }) => {
   return (
     <li>
-      <NavLink to={to}>
+      <NavLink to={to} onClick={onClick}>
         {({ isActive }) => (
           <div
             className={`
-              flex items-center gap-3 px-4 py-3 rounded-xl
-              transition-all duration-200 group relative overflow-hidden
+              flex items-center gap-3 px-3.5 py-2.5 rounded-xl
+              transition-all duration-200 group relative overflow-hidden text-xs
               ${
                 isActive
-                  ? "bg-white/15 text-white shadow-soft backdrop-blur-sm"
-                  : "text-white/70 hover:bg-white/10 hover:text-white"
+                  ? "bg-gradient-to-r from-[#4C76A3] to-[#203D5D] text-white shadow-md shadow-[#203D5D]/20 font-semibold"
+                  : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-100"
               }
             `}
           >
-            {/* Active Indicator */}
+            {/* Left Micro-Glow Indicator */}
             {isActive && (
-              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full" />
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-5 bg-amber-400 rounded-r-full" />
             )}
 
-            {/* Icon */}
+            {/* Icon Alignment */}
             <div className={`
-              text-lg transition-transform duration-200
-              ${isActive ? "scale-110" : "group-hover:scale-110"}
+              text-base transition-transform duration-200 shrink-0
+              ${isActive ? "text-white scale-105" : "text-slate-400 group-hover:text-slate-200 group-hover:scale-105"}
             `}>
               {icon}
             </div>
 
-            {/* Text */}
-            <Typography
-              className={`
-                font-medium capitalize transition-all duration-200
-                ${isActive ? "text-white font-semibold" : "text-white/80 group-hover:text-white"}
-              `}
-            >
+            {/* Clean Typography */}
+            <span className="truncate tracking-wide">
               {name}
-            </Typography>
+            </span>
           </div>
         )}
       </NavLink>
