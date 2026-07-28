@@ -24,8 +24,8 @@ const Sidenav: React.FC<{
 
     Menus.forEach((menu) => {
       if (menu.to.startsWith("/lms")) groups.lms.items.push(menu);
-      else if (["Angkatan", "Anggota", "Struktural", "Dosen"].includes(menu.name)) groups.organization.items.push(menu);
-      else if (["Log History", "Version", "User Login"].includes(menu.name) || menu.to === "/") groups.system.items.push(menu);
+      else if (["Angkatan", "Anggota", "Struktural", "Dosen", "Prodi Structural", "Tenure Period"].includes(menu.name)) groups.organization.items.push(menu);
+      else if (["Log History", "Version", "User Login", "Potential Keys", "Contact Info"].includes(menu.name) || menu.to === "/") groups.system.items.push(menu);
       else groups.core.items.push(menu);
     });
 

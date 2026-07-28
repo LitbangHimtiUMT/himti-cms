@@ -40,6 +40,19 @@ import { ClassViews } from "../../features/lms/class/views/ClassViews";
 import { DetailMentorsViews } from "../../features/lms/mentors/views/DetailMentors";
 import { MentorsViews } from "../../features/lms/mentors/views/Mentors";
 
+// New CRUD CMS Imports
+import PotentialUserKeysView from "@features/admin/potential-user-keys/view/potentialUserKeys";
+import AddPotentialUserKeyView from "@features/admin/potential-user-keys/view/addPotentialUserKey";
+import ProdiStructuralView from "@features/admin/prodi-structural/view/prodiStructural";
+import AddProdiStructuralView from "@features/admin/prodi-structural/view/addProdiStructural";
+import EditProdiStructuralView from "@features/admin/prodi-structural/view/editProdiStructural";
+import PeriodeView from "@features/admin/periode/view/periode";
+import AddPeriodeView from "@features/admin/periode/view/addPeriode";
+import EditPeriodeView from "@features/admin/periode/view/editPeriode";
+import ContactInfoView from "@features/admin/contact-info/view/contactInfo";
+import AddContactInfoView from "@features/admin/contact-info/view/addContactInfo";
+import EditContactInfoView from "@features/admin/contact-info/view/editContactInfo";
+
 export const router = createBrowserRouter([
   {
     path: "/admin/login",
@@ -204,6 +217,54 @@ export const router = createBrowserRouter([
       {
         path: "/admin/version",
         element: <VersionView />,
+      },
+      // Potential User Keys Routes
+      {
+        path: "/admin/potential-user-keys",
+        element: <PotentialUserKeysView />,
+      },
+      {
+        path: "/admin/potential-user-keys/create",
+        element: <AddPotentialUserKeyView />,
+      },
+      // Prodi Structural Routes
+      {
+        path: "/admin/prodi-structural",
+        element: <ProdiStructuralView />,
+      },
+      {
+        path: "/admin/prodi-structural/create",
+        element: <AddProdiStructuralView />,
+      },
+      {
+        path: "/admin/prodi-structural/edit/:id",
+        element: <EditProdiStructuralView />,
+      },
+      // Tenure Period Routes
+      {
+        path: "/admin/periode",
+        element: <PeriodeView />,
+      },
+      {
+        path: "/admin/periode/create",
+        element: <AddPeriodeView />,
+      },
+      {
+        path: "/admin/periode/edit/:id",
+        element: <EditPeriodeView />,
+      },
+      // Contact Info Routes
+      {
+        path: "/admin/contact-info",
+        element: <ContactInfoView />,
+      },
+      {
+        path: "/admin/contact-info/create",
+        element: <AddContactInfoView />,
+      },
+      {
+        path: "/admin/contact-info/edit/:id",
+        element: <EditContactInfoView />,
       },
     ],
   },

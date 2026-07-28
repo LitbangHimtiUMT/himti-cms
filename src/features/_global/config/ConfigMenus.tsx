@@ -1,6 +1,6 @@
 import { BiCategory, BiKey } from "react-icons/bi";
 import { BsCalendar2EventFill } from "react-icons/bs";
-import { FaCalendar, FaChalkboardTeacher, FaHistory, FaUser } from "react-icons/fa";
+import { FaCalendar, FaChalkboardTeacher, FaHistory, FaUser, FaGraduationCap, FaCalendarAlt, FaAddressBook } from "react-icons/fa";
 import { FaUserGroup } from "react-icons/fa6";
 import { GiTeacher } from "react-icons/gi";
 import { IoMdInformationCircleOutline } from "react-icons/io";
@@ -78,5 +78,25 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     icon: <IoMdInformationCircleOutline size={16} />,
     name: "Version",
     to: "/admin/version",
+  },
+  {
+    icon: <BiKey size={16} />,
+    name: "Potential Keys",
+    to: "/admin/potential-user-keys",
+  },
+  {
+    icon: <FaGraduationCap size={16} />,
+    name: "Prodi Structural",
+    to: "/admin/prodi-structural",
+  },
+  {
+    icon: <FaCalendarAlt size={16} />,
+    name: "Tenure Period",
+    to: "/admin/periode",
+  },
+  {
+    icon: <FaAddressBook size={16} />,
+    name: "Contact Info",
+    to: "/admin/contact-info",
   },
 ];
