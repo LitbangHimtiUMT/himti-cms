@@ -84,6 +84,23 @@ export const FormCreateRegistrationType: React.FC = () => {
     setErrors({});
   };
 
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setRegistrationTypeBody((prev) => ({
+        ...prev,
+        image: file,
+      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   return (
     <PageLayout
       title="Create Registration Type"
@@ -150,7 +167,7 @@ export const FormCreateRegistrationType: React.FC = () => {
         <div className="mb-4 my-2">
           <label className="block text-sm font-medium mb-2">Event (Optional)</label>
           <DropdownV2
-          searchInput
+            searchInput
             list={
               events?.data?.map((item) => ({
                 label: item.name,
@@ -164,6 +181,43 @@ export const FormCreateRegistrationType: React.FC = () => {
                 eventId: value.value as string,
               }))
             }
+          />
+        </div>
+
+        <div className="mb-4 my-2">
+          <InputGroup
+            disabled={mutation.isPending}
+            type="text"
+            label="Link Group WhatsApp (Optional)"
+            placeholder="https://chat.whatsapp.com/..."
+            variant="outlined"
+            value={registrationTypeBody.link || ""}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setRegistrationTypeBody((prev) => ({
+                ...prev,
+                link: e.target.value,
+              }))
+            }
+          />
+        </div>
+
+        <div className="mb-4 my-2">
+          <label className="block text-sm font-medium mb-2">Gambar / Poster Event (Optional)</label>
+          {imagePreview && (
+            <div className="mb-3">
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="max-w-[200px] h-[150px] object-cover rounded-md border border-gray-300"
+              />
+            </div>
+          )}
+          <input
+            type="file"
+            accept="image/*"
+            className="file-input w-full border border-solid border-gray-300 p-2 rounded-md"
+            onChange={handleImageChange}
+            disabled={mutation.isPending}
           />
         </div>
 

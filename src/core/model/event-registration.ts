@@ -9,6 +9,8 @@ export interface EventRegistrationModel {
     year: number;
   };
   class: string;
+  prodi?: string | null;
+  institution?: string | null;
   name: string;
   nim: string;
   phoneNumber: string;

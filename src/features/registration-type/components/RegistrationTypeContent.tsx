@@ -76,6 +76,21 @@ export const RegistrationTypeContent = () => {
           border
           columnTable={[
             {
+              return: (data) => (
+                <div className="w-12 h-12 flex items-center justify-center bg-gray-100 rounded overflow-hidden">
+                  {data.image ? (
+                    <img
+                      src={data.image}
+                      alt={data.name}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-xs text-gray-400">No Image</span>
+                  )}
+                </div>
+              ),
+            },
+            {
               return: (data) => <Poppins>{data.name}</Poppins>,
             },
             {
@@ -119,7 +134,7 @@ export const RegistrationTypeContent = () => {
           ]}
           data={registrationTypes?.data || []}
           isLoading={isFetching}
-          title={["Name", "Year", "Type", "Status", "Created At", ""]}
+          title={["Gambar", "Name", "Year", "Type", "Status", "Created At", ""]}
         />
       </PageLayout>
     </>

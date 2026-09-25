@@ -8,6 +8,8 @@ export interface RegistrationTypeModel {
   id: string;
   name: string;
   year: number;
+  image?: string | null;
+  link?: string | null;
   type: RegistrationEventTypeEnum;
   isActive: boolean;
   eventId?: string | null;
@@ -20,13 +22,18 @@ export interface RegistrationTypeCreation {
   year: number;
   type: RegistrationEventTypeEnum;
   isActive: boolean;
+  image?: File | string | null;
+  link?: string | null;
   eventId?: string | null;
 }
 
 export interface RegistrationTypeUpdate {
+  registrationTypeId?: string;
   name?: string;
   year?: number;
   type?: RegistrationEventTypeEnum;
   isActive?: boolean;
+  image?: File | string | null;
+  link?: string | null;
   eventId?: string | null;
 }

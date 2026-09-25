@@ -60,11 +60,17 @@ export const EventRegistrationContent = () => {
               return: (data) => <Poppins>{data.name}</Poppins>,
             },
             {
-              return: (data) => <Poppins>{data.class}</Poppins>,
+              return: (data) => <Poppins>{data.prodi || "-"}</Poppins>,
+            },
+            {
+              return: (data) => <Poppins>{data.institution || "-"}</Poppins>,
+            },
+            {
+              return: (data) => <Poppins>{data.class || "-"}</Poppins>,
             },
             {
               return: (data) => (
-                <Poppins>{`${data.registrationType.name} ${data.registrationType.year}`}</Poppins>
+                <Poppins>{`${data.registrationType?.name || ""} ${data.registrationType?.year || ""}`}</Poppins>
               ),
             },
             {
@@ -73,7 +79,7 @@ export const EventRegistrationContent = () => {
           ]}
           data={eventRegistrations?.data || []}
           isLoading={isFetching}
-          title={["Image", "Name", "Class", "Event", "Submit Time"]}
+          title={["Image", "Name", "Prodi", "Instansi", "Class", "Event", "Submit Time"]}
         />
       </PageLayout>
     </>

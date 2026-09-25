@@ -1,3 +1,4 @@
+import { ApiOption } from "@core/libs/api/types";
 import {
   RegistrationTypeCreation,
   RegistrationTypeUpdate,
@@ -14,10 +15,10 @@ interface Options {
   enabled?: boolean;
 }
 
-interface GeneralRegistrationTypeRequest {
+interface GeneralRegistrationTypeRequest
+  extends Partial<RegistrationTypeCreation>,
+    Partial<RegistrationTypeUpdate> {
   registrationTypeId?: string;
-  name?: string;
-  year?: number;
 }
 
 interface ModalCreationOption {
@@ -46,24 +47,49 @@ export const useRegistrationType = (options?: Options) => {
   return query;
 };
 
+const buildPayload = (data: Record<string, any>) => {
+  const hasFile = data.image instanceof File;
+  if (hasFile) {
+    const formData = new FormData();
+    Object.keys(data).forEach((key) => {
+      if (key === "registrationTypeId") return;
+      const val = data[key];
+      if (val !== undefined && val !== null) {
+        if (val instanceof File) {
+          formData.append(key, val);
+        } else {
+          formData.append(key, String(val));
+        }
+      }
+    });
+    return { payload: formData, isFormData: true };
+  }
+  const { registrationTypeId, ...rest } = data;
+  return { payload: rest, isFormData: false };
+};
+
 export const useRegistrationTypeCreation = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const mutation = useMutation({
-    mutationFn: ({ type, data }: ModalCreationOption) => {
+    mutationFn: ({ type, data = {} }: ModalCreationOption) => {
+      const { payload, isFormData } = buildPayload(data);
+      const apiOption: ApiOption | undefined = isFormData
+        ? { contentType: "form-data" }
+        : undefined;
+
       switch (type) {
         case "create":
           return registrationTypeService.create(
-            data as RegistrationTypeCreation
+            payload as any,
+            apiOption
           );
         case "update":
           return registrationTypeService.update(
-            {
-              name: data?.name,
-              year: data?.year,
-            } as RegistrationTypeUpdate,
+            payload as any,
             {
               path: data?.registrationTypeId,
+              ...apiOption,
             }
           );
         case "delete":
@@ -72,7 +98,8 @@ export const useRegistrationTypeCreation = () => {
           });
         default:
           return registrationTypeService.create(
-            data as RegistrationTypeCreation
+            payload as any,
+            apiOption
           );
       }
     },

@@ -10,6 +10,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { RegistrationEventTypeEnum } from "@core/model/registration-type";
 import { Badge } from "../../_global/components/Badges";
 import { Button } from "../../_global/components/Button";
+import { CONFIG_APP } from "@core/configs/app";
 
 export const RegistrationTypeDetailContent = () => {
   const { data: registrationType } = useRegistrationTypeById();
@@ -100,7 +101,17 @@ export const RegistrationTypeDetailContent = () => {
                 </Button>
               </div>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              {registrationType?.data?.image && (
+                <div className="col-span-1 md:col-span-2 lg:col-span-4 mb-2">
+                  <Poppins className="text-gray-600 text-sm mb-1">Banner / Image</Poppins>
+                  <img
+                    src={registrationType.data.image}
+                    alt={registrationType.data.name}
+                    className="w-48 h-32 object-cover rounded-lg border border-gray-200"
+                  />
+                </div>
+              )}
               <div>
                 <Poppins className="text-gray-600 text-sm">Year</Poppins>
                 <Poppins className="font-semibold">
@@ -142,12 +153,75 @@ export const RegistrationTypeDetailContent = () => {
                 </Poppins>
               </div>
               <div>
-                <Poppins className="text-gray-600 text-sm">
+                <Poppins className="text-gray-600 text-sm">Link WA Group</Poppins>
+                {registrationType?.data?.link ? (
+                  <a
+                    href={registrationType.data.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 underline font-semibold truncate block"
+                  >
+                    {registrationType.data.link}
+                  </a>
+                ) : (
+                  <Poppins className="font-semibold text-gray-400">-</Poppins>
+                )}
+              </div>
+              <div>
+                <Poppins className="text-gray-600 text-sm mb-1">
                   Total Registrations
                 </Poppins>
-                <Poppins className="font-semibold">
+                <Poppins className="font-semibold text-lg mb-2">
                   {eventRegistrations?.meta?.totalData || 0}
                 </Poppins>
+                
+                {/* Download Absensi Buttons */}
+                <div className="flex flex-col gap-1.5 mt-2">
+                  <span className="text-xs font-semibold text-gray-500">Download Absensi:</span>
+                  <div className="flex flex-wrap gap-2">
+                    <div className="inline-flex rounded-md shadow-sm" role="group">
+                      <a
+                        href={`${CONFIG_APP.BASE_URL}/event-registration/registration-type/${registrationType?.data?.id}/export-absensi?category=MAHASISWA&format=docx`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-2.5 py-1 text-xs font-medium bg-emerald-600 text-white rounded-l-lg hover:bg-emerald-700 transition-colors flex items-center gap-1"
+                        title="Download Absensi Mahasiswa UMT (.docx)"
+                      >
+                        📄 Mhs UMT (.docx)
+                      </a>
+                      <a
+                        href={`${CONFIG_APP.BASE_URL}/event-registration/registration-type/${registrationType?.data?.id}/export-absensi?category=MAHASISWA&format=pdf`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-2.5 py-1 text-xs font-medium bg-rose-600 text-white rounded-r-lg hover:bg-rose-700 transition-colors flex items-center gap-1 border-l border-emerald-700"
+                        title="Download Absensi Mahasiswa UMT (.pdf)"
+                      >
+                        📕 PDF
+                      </a>
+                    </div>
+
+                    <div className="inline-flex rounded-md shadow-sm" role="group">
+                      <a
+                        href={`${CONFIG_APP.BASE_URL}/event-registration/registration-type/${registrationType?.data?.id}/export-absensi?category=UMUM&format=docx`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-2.5 py-1 text-xs font-medium bg-blue-600 text-white rounded-l-lg hover:bg-blue-700 transition-colors flex items-center gap-1"
+                        title="Download Absensi Peserta Umum (.docx)"
+                      >
+                        📄 Umum (.docx)
+                      </a>
+                      <a
+                        href={`${CONFIG_APP.BASE_URL}/event-registration/registration-type/${registrationType?.data?.id}/export-absensi?category=UMUM&format=pdf`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-2.5 py-1 text-xs font-medium bg-indigo-600 text-white rounded-r-lg hover:bg-indigo-700 transition-colors flex items-center gap-1 border-l border-blue-700"
+                        title="Download Absensi Peserta Umum (.pdf)"
+                      >
+                        📕 PDF
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </CardBody>
@@ -188,13 +262,19 @@ export const RegistrationTypeDetailContent = () => {
                 return: (data) => <Poppins>{data.name}</Poppins>,
               },
               {
-                return: (data) => <Poppins>{data.nim}</Poppins>,
+                return: (data) => <Poppins>{data.nim || "-"}</Poppins>,
               },
               {
-                return: (data) => <Poppins>{data.phoneNumber}</Poppins>,
+                return: (data) => <Poppins>{data.prodi || "-"}</Poppins>,
               },
               {
-                return: (data) => <Poppins>{data.class}</Poppins>,
+                return: (data) => <Poppins>{data.institution || "-"}</Poppins>,
+              },
+              {
+                return: (data) => <Poppins>{data.phoneNumber || "-"}</Poppins>,
+              },
+              {
+                return: (data) => <Poppins>{data.class || "-"}</Poppins>,
               },
               {
                 return: (data) => (
@@ -209,7 +289,7 @@ export const RegistrationTypeDetailContent = () => {
             ]}
             data={eventRegistrations?.data || []}
             isLoading={isFetchingRegistrations}
-            title={["Image", "Name", "NIM", "Phone Number", "Class", "Event", "Submit Time"]}
+            title={["Image", "Name", "NIM", "Prodi", "Instansi", "Phone Number", "Class", "Event", "Submit Time"]}
           />
         </PageLayout>
       </div>

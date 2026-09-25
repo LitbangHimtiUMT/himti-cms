@@ -11,11 +11,11 @@ export const registrationTypeService = {
   get: request.get<ApiResponse<RegistrationTypeModel[]>>(
     API_ENDPOINT.registrationType
   ),
-  create: request.post<ApiResponse, RegistrationTypeCreation>(
+  create: request.post<ApiResponse, FormData | RegistrationTypeCreation>(
     API_ENDPOINT.registrationType
   ),
   delete: request.delete<ApiResponse>(API_ENDPOINT.registrationType),
-  update: request.put<ApiResponse, RegistrationTypeUpdate>(
+  update: request.put<ApiResponse, FormData | RegistrationTypeUpdate>(
     API_ENDPOINT.registrationType
   ),
   getById: request.get<ApiResponse<RegistrationTypeModel>>(
