@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 
-export type Role = "ADMIN" | "USER" | "ANGGOTA";
+export type Role = "SUPER_ADMIN" | "ADMIN" | "USER" | "ANGGOTA";
 
 export interface UserModel {
   id: string;
@@ -28,4 +28,9 @@ export interface CreateAdminUserBodyDTO {
   password?: string;
   nim?: string;
   code?: string;
+  role?: Role;
+}
+
+export interface UpdateUserRoleBodyDTO {
+  role: Role;
 }

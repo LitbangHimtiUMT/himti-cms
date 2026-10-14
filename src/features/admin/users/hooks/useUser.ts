@@ -1,5 +1,10 @@
 import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
-import { CreateAdminUserBodyDTO, Role, UserDTO } from "@core/model/user";
+import {
+  CreateAdminUserBodyDTO,
+  Role,
+  UpdateUserRoleBodyDTO,
+  UserDTO,
+} from "@core/model/user";
 import { userService } from "@core/services/user";
 import useDebounce from "@features/_global/hooks/useDebounce";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -20,12 +25,14 @@ type PayloadType =
   | "update"
   | "delete"
   | "admin-create"
-  | "admin-update";
+  | "admin-update"
+  | "update-role";
 
 interface UserCreation {
   type: PayloadType;
   data?: UserDTO;
   adminData?: CreateAdminUserBodyDTO;
+  roleData?: UpdateUserRoleBodyDTO;
   id?: string;
 }
 
@@ -61,7 +68,13 @@ export function useUserCreation() {
   const navigate = useNavigate();
   const params = useParams();
   const mutation = useMutation({
-    mutationFn: async ({ data, type, id, adminData }: UserCreation) => {
+    mutationFn: async ({
+      data,
+      type,
+      id,
+      adminData,
+      roleData,
+    }: UserCreation) => {
       switch (type) {
         case "create":
           return userService.post(data);
@@ -75,21 +88,28 @@ export function useUserCreation() {
           return userService.updateAdmin(adminData, {
             path: `admin/${params.id}`,
           });
+        case "update-role":
+          return userService.updateRole(roleData, {
+            path: `${id}/role`,
+          });
         default:
           return userService.post(data);
       }
     },
-    onSuccess: (res) => {
+    onSuccess: (res, variables) => {
       toast.success(res.message, {
         position: "top-right",
         autoClose: 3000,
         pauseOnHover: true,
         theme: "dark",
       });
-      navigate("/admin/user");
+      // Jangan navigate kalau cuma update-role dari list (biar user tetap di halaman)
+      if (variables.type !== "update-role") {
+        navigate("/admin/user");
+      }
 
-      queryClient.removeQueries({ queryKey: ["users"] });
-      queryClient.removeQueries({ queryKey: ["userById"] });
+      queryClient.invalidateQueries({ queryKey: ["users"] });
+      queryClient.invalidateQueries({ queryKey: ["userById"] });
       return;
     },
     onError: (err: ApiErrorResponse<ApiResponse>) => {

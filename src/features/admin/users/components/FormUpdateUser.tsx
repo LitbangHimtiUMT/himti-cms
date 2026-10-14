@@ -1,7 +1,7 @@
-import { Button } from "@material-tailwind/react";
-import React, { useState } from "react";
+import { Button, ButtonGroup, Typography } from "@material-tailwind/react";
+import React, { useEffect, useState } from "react";
 
-import { CreateAdminUserBodyDTO } from "@core/model/user";
+import { CreateAdminUserBodyDTO, Role } from "@core/model/user";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
@@ -11,16 +11,16 @@ import { useUserById, useUserCreation } from "../hooks/useUser";
 const InitialValue: CreateAdminUserBodyDTO = {
   name: "",
   email: "",
+  role: "ADMIN",
 };
+
+const ROLE_OPTIONS: Role[] = ["SUPER_ADMIN", "ADMIN", "USER", "ANGGOTA"];
 
 export const FormUpdateUserAdmin: React.FC = () => {
   const mutation = useUserCreation();
   const { data: user, isLoading } = useUserById();
 
-  const [userBody, setUserBody] = useState<CreateAdminUserBodyDTO>({
-    email: user?.data?.email as string,
-    name: user?.data?.name as string,
-  });
+  const [userBody, setUserBody] = useState<CreateAdminUserBodyDTO>(InitialValue);
 
   const [errors, setErrors] = useState<
     Partial<Record<keyof CreateAdminUserBodyDTO, string>>
@@ -28,10 +28,19 @@ export const FormUpdateUserAdmin: React.FC = () => {
 
   const navigate = useNavigate();
 
+  // Sync state saat data user ter-fetch
+  useEffect(() => {
+    if (user?.data) {
+      setUserBody({
+        name: user.data.name ?? "",
+        email: user.data.email ?? "",
+        role: (user.data.role as Role) ?? "ADMIN",
+      });
+    }
+  }, [user]);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // if (!validate()) return;
-    console.log(userBody);
     await mutation.mutateAsync({
       type: "admin-update",
       adminData: userBody,
@@ -39,10 +48,22 @@ export const FormUpdateUserAdmin: React.FC = () => {
   };
 
   const handleReset = () => {
-    setUserBody(InitialValue);
+    if (user?.data) {
+      setUserBody({
+        name: user.data.name ?? "",
+        email: user.data.email ?? "",
+        role: (user.data.role as Role) ?? "ADMIN",
+      });
+    } else {
+      setUserBody(InitialValue);
+    }
     setErrors({});
   };
-  console.log({ userBody });
+
+  const handleRoleChange = (role: Role) => {
+    setUserBody((prev) => ({ ...prev, role }));
+  };
+
   return (
     <PageLayout
       title="Update User"
@@ -66,8 +87,7 @@ export const FormUpdateUserAdmin: React.FC = () => {
               label="Name"
               variant="outlined"
               error={errors.name}
-              // value={userBody?.name}
-              defaultValue={user?.data?.name}
+              value={userBody.name}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setUserBody({ ...userBody, name: e.target.value })
               }
@@ -81,15 +101,45 @@ export const FormUpdateUserAdmin: React.FC = () => {
               label="Email"
               variant="outlined"
               error={errors.email}
-              value={user?.data?.email as string}
+              value={userBody.email}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setUserBody({ ...userBody, email: e.target.value })
               }
             />
           </div>
 
+          <div>
+            <Typography className="text-xs font-semibold text-blue-gray-600 mb-2">
+              Role:
+            </Typography>
+            <ButtonGroup variant="outlined" size="sm">
+              {ROLE_OPTIONS.map((role) => (
+                <Button
+                  key={role}
+                  type="button"
+                  disabled={mutation.isPending}
+                  className={`${
+                    userBody.role === role
+                      ? "bg-amber-500 text-white"
+                      : ""
+                  }`}
+                  onClick={() => handleRoleChange(role)}
+                >
+                  {role}
+                </Button>
+              ))}
+            </ButtonGroup>
+            {user?.data?.role && userBody.role !== user.data.role && (
+              <Typography className="text-xs text-amber-700 mt-2">
+                Role akan diubah dari{" "}
+                <b>{user.data.role}</b> menjadi <b>{userBody.role}</b>.
+              </Typography>
+            )}
+          </div>
+
           <div className="flex justify-center items-center gap-5">
             <Button
+              type="button"
               disabled={mutation.isPending}
               onClick={handleReset}
               variant="outlined"

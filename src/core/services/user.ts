@@ -1,7 +1,11 @@
 import { API_ENDPOINT } from "@core/configs/app";
 import { request } from "@core/libs/api/config";
 import { ApiResponse } from "@core/libs/api/types";
-import { CreateAdminUserBodyDTO, UserModel } from "@core/model/user";
+import {
+  CreateAdminUserBodyDTO,
+  UpdateUserRoleBodyDTO,
+  UserModel,
+} from "@core/model/user";
 
 export const userService = {
   get: request.get<ApiResponse<UserModel[]>>(API_ENDPOINT.users),
@@ -13,6 +17,9 @@ export const userService = {
     API_ENDPOINT.createUser
   ),
   updateAdmin: request.put<ApiResponse, CreateAdminUserBodyDTO>(
+    API_ENDPOINT.users
+  ),
+  updateRole: request.patch<ApiResponse<UserModel>, UpdateUserRoleBodyDTO>(
     API_ENDPOINT.users
   ),
 };
