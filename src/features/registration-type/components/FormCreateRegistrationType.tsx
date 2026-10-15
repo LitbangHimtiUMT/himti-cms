@@ -65,6 +65,11 @@ export const FormCreateRegistrationType: React.FC = () => {
       isValid = false;
     }
 
+    if (!registrationTypeBody.eventId) {
+      newErrors.eventId = "Event is required";
+      isValid = false;
+    }
+
     setErrors(newErrors);
     return isValid;
   };
@@ -165,7 +170,7 @@ export const FormCreateRegistrationType: React.FC = () => {
         </div>
 
         <div className="mb-4 my-2">
-          <label className="block text-sm font-medium mb-2">Event (Optional)</label>
+          <label className="block text-sm font-medium mb-2">Event <span className="text-red-500">*</span></label>
           <DropdownV2
             searchInput
             list={
@@ -174,7 +179,7 @@ export const FormCreateRegistrationType: React.FC = () => {
                 value: item.id,
               })) || []
             }
-            placeholder="Select Event (Optional)"
+            placeholder="Select Event"
             onChange={(value) =>
               setRegistrationTypeBody((prev) => ({
                 ...prev,
@@ -182,6 +187,9 @@ export const FormCreateRegistrationType: React.FC = () => {
               }))
             }
           />
+          {errors.eventId && (
+            <p className="text-red-500 text-xs mt-1">{errors.eventId}</p>
+          )}
         </div>
 
         <div className="mb-4 my-2">

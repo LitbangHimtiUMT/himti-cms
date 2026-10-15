@@ -18,6 +18,7 @@ import { Button } from "../../_global/components/Button";
 import { CONFIG_APP } from "@core/configs/app";
 import {
   Download,
+  FileSpreadsheet,
   FileText,
   FileType,
   GraduationCap,
@@ -29,6 +30,8 @@ import {
   Trash2,
   Users,
 } from "lucide-react";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
 
 type DownloadKey = `${"MAHASISWA" | "UMUM"}-${"docx" | "pdf"}`;
 
@@ -63,6 +66,201 @@ export const RegistrationTypeDetailContent = () => {
   const [downloadingKey, setDownloadingKey] = useState<DownloadKey | null>(
     null
   );
+
+  const isBootcamp =
+    registrationType?.data?.type === RegistrationEventTypeEnum.BOOTCAMP;
+
+  // Fetch ALL registrations for bootcamp Excel export (no pagination limit)
+  const { data: allRegistrations } = useEventRegistrationByRegistrationType({
+    page: 1,
+    perPage: 9999,
+    enabled: isBootcamp,
+  });
+
+  const [isExportingBootcamp, setIsExportingBootcamp] = useState(false);
+
+  const handleExportBootcampExcel = async () => {
+    if (!allRegistrations?.data?.length) return;
+    setIsExportingBootcamp(true);
+
+    try {
+      const workbook = new ExcelJS.Workbook();
+      workbook.creator = "HIMTI CMS";
+      workbook.created = new Date();
+
+      const sheetName =
+        `Pendaftaran ${registrationType?.data?.name ?? "Bootcamp"}`.slice(0, 31);
+      const worksheet = workbook.addWorksheet(sheetName);
+
+      // ── Column definitions ──
+      const columns = [
+        { header: "No", key: "no", width: 6 },
+        { header: "Nama", key: "nama", width: 28 },
+        { header: "NIM", key: "nim", width: 16 },
+        { header: "Prodi", key: "prodi", width: 22 },
+        { header: "Instansi", key: "instansi", width: 28 },
+        { header: "No. HP", key: "hp", width: 18 },
+        { header: "Kelas", key: "kelas", width: 14 },
+        { header: "Kategori", key: "kategori", width: 18 },
+        { header: "Link Bukti Transfer", key: "buktiTf", width: 45 },
+        { header: "Waktu Daftar", key: "waktu", width: 22 },
+      ];
+
+      // ── Title row (merged) ──
+      const eventTitle = `DATA PENDAFTARAN ${registrationType?.data?.name ?? "BOOTCAMP"} ${registrationType?.data?.year ?? ""}`.toUpperCase().trim();
+      worksheet.mergeCells(1, 1, 1, columns.length);
+      const titleCell = worksheet.getCell("A1");
+      titleCell.value = eventTitle;
+      titleCell.font = { name: "Calibri", size: 16, bold: true, color: { argb: "FFFFFFFF" } };
+      titleCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF1E3A8A" } }; // HIMTI Navy/Blue
+      titleCell.alignment = { horizontal: "center", vertical: "middle" };
+      worksheet.getRow(1).height = 40;
+
+      // ── Subtitle row (merged) ──
+      const subtitle = `HIMTI UMT • Diekspor pada: ${formatTime(new Date())} — Total: ${allRegistrations.data.length} pendaftar`;
+      worksheet.mergeCells(2, 1, 2, columns.length);
+      const subtitleCell = worksheet.getCell("A2");
+      subtitleCell.value = subtitle;
+      subtitleCell.font = { name: "Calibri", size: 11, bold: true, color: { argb: "FFFFFFFF" } };
+      subtitleCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFF97316" } }; // HIMTI Orange
+      subtitleCell.alignment = { horizontal: "center", vertical: "middle" };
+      worksheet.getRow(2).height = 24;
+
+      // ── Header row (row 3) ──
+      worksheet.columns = columns.map((col) => ({
+        key: col.key,
+        width: col.width,
+      }));
+
+      const headerRow = worksheet.getRow(3);
+      columns.forEach((col, idx) => {
+        const cell = headerRow.getCell(idx + 1);
+        cell.value = col.header;
+        cell.font = { name: "Calibri", size: 11, bold: true, color: { argb: "FFFFFFFF" } };
+        cell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF1E293B" } }; // Slate / Dark Navy
+        cell.alignment = { horizontal: "center", vertical: "middle", wrapText: true };
+        cell.border = {
+          top: { style: "medium", color: { argb: "FFF97316" } }, // Orange accent border
+          bottom: { style: "medium", color: { argb: "FF1E3A8A" } },
+          left: { style: "thin", color: { argb: "FFCBD5E1" } },
+          right: { style: "thin", color: { argb: "FFCBD5E1" } },
+        };
+      });
+      headerRow.height = 28;
+
+      // ── Data rows ──
+      const thinBorder: Partial<ExcelJS.Borders> = {
+        top: { style: "thin", color: { argb: "FFCBD5E1" } },
+        bottom: { style: "thin", color: { argb: "FFCBD5E1" } },
+        left: { style: "thin", color: { argb: "FFCBD5E1" } },
+        right: { style: "thin", color: { argb: "FFCBD5E1" } },
+      };
+
+      const evenFill: ExcelJS.FillPattern = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFFFF7ED" }, // Warm subtle orange tint
+      };
+
+      const oddFill: ExcelJS.FillPattern = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "FFFFFFFF" },
+      };
+
+      allRegistrations.data.forEach((reg, index) => {
+        const isUmum = isUmumRegistration(reg);
+        const rowData = {
+          no: index + 1,
+          nama: reg.name,
+          nim: reg.nim || "-",
+          prodi: reg.prodi || "-",
+          instansi: reg.institution || "-",
+          hp: reg.phoneNumber || "-",
+          kelas: reg.class || "-",
+          kategori: isUmum ? "Umum" : "Mahasiswa UMT",
+          buktiTf: reg.image || "-",
+          waktu: formatTime(reg.createdAt),
+        };
+
+        const row = worksheet.addRow(rowData);
+        const isEven = index % 2 === 0;
+
+        row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+          cell.font = { name: "Calibri", size: 10 };
+          cell.border = thinBorder;
+          cell.fill = isEven ? evenFill : oddFill;
+          cell.alignment = { vertical: "middle", wrapText: true };
+
+          // Center align No column
+          if (colNumber === 1) {
+            cell.alignment = { horizontal: "center", vertical: "middle" };
+          }
+
+          // Kategori badge coloring (Orange for Umum, Navy Blue for Mahasiswa UMT)
+          if (colNumber === 8) {
+            cell.font = {
+              name: "Calibri",
+              size: 10,
+              bold: true,
+              color: { argb: isUmum ? "FFEA580C" : "FF1D4ED8" },
+            };
+            cell.alignment = { horizontal: "center", vertical: "middle" };
+          }
+
+          // Make bukti TF link clickable
+          if (colNumber === 9 && reg.image) {
+            cell.value = {
+              text: reg.image,
+              hyperlink: reg.image,
+            };
+            cell.font = {
+              name: "Calibri",
+              size: 10,
+              color: { argb: "FF2563EB" },
+              underline: true,
+            };
+          }
+        });
+
+        row.height = 22;
+      });
+
+      // ── Summary footer ──
+      const lastDataRow = 3 + allRegistrations.data.length;
+      const mahasiswaTotal = allRegistrations.data.filter(
+        (r) => !isUmumRegistration(r)
+      ).length;
+      const umumTotal = allRegistrations.data.filter(isUmumRegistration).length;
+
+      worksheet.mergeCells(lastDataRow + 1, 1, lastDataRow + 1, columns.length);
+      const footerCell = worksheet.getCell(lastDataRow + 1, 1);
+      footerCell.value = `Total: ${allRegistrations.data.length} Pendaftar   |   Mahasiswa UMT: ${mahasiswaTotal}   |   Umum: ${umumTotal}`;
+      footerCell.font = { name: "Calibri", size: 11, bold: true, color: { argb: "FFFFFFFF" } };
+      footerCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FF1E3A8A" } }; // HIMTI Navy
+      footerCell.alignment = { horizontal: "center", vertical: "middle" };
+      footerCell.border = {
+        top: { style: "medium", color: { argb: "FFF97316" } }, // Orange line
+        bottom: { style: "medium", color: { argb: "FF1E3A8A" } },
+      };
+      worksheet.getRow(lastDataRow + 1).height = 28;
+
+      // ── Freeze header ──
+      worksheet.views = [{ state: "frozen", ySplit: 3 }];
+
+      // ── Export ──
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      const fileName = `pendaftaran-${(registrationType?.data?.name ?? "bootcamp")
+        .toLowerCase()
+        .replace(/\s+/g, "-")}.xlsx`;
+      saveAs(blob, fileName);
+    } finally {
+      setTimeout(() => setIsExportingBootcamp(false), 1500);
+    }
+  };
 
   const onPageChange = (page: number) => {
     setSearchParams({ ...queryParams, page: String(page) });
@@ -374,6 +572,62 @@ export const RegistrationTypeDetailContent = () => {
           </div>
         </CardBody>
       </Card>
+
+      {/* ==================== DOWNLOAD DATA PENDAFTARAN (BOOTCAMP ONLY) ==================== */}
+      {isBootcamp && (
+        <Card className="mb-4 sm:mb-6">
+          <CardBody className="!p-4 sm:!p-6">
+            <div className="rounded-xl border border-gray-100 bg-white p-4 sm:p-5">
+              <div className="mb-1 flex items-center gap-2">
+                <FileSpreadsheet className="h-5 w-5 text-green-700" />
+                <Poppins className="text-sm font-semibold text-gray-800 sm:text-base">
+                  Download Data Pendaftaran Bootcamp
+                </Poppins>
+              </div>
+              <Poppins className="mb-4 text-xs text-gray-500">
+                Download seluruh data pendaftaran bootcamp dalam format Excel
+                (.xlsx). Termasuk link gambar bukti transfer.
+              </Poppins>
+
+              <button
+                type="button"
+                disabled={
+                  isExportingBootcamp || !allRegistrations?.data?.length
+                }
+                onClick={handleExportBootcampExcel}
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                style={{ backgroundColor: "#059669" }}
+                onMouseEnter={(e) => {
+                  if (
+                    !isExportingBootcamp &&
+                    allRegistrations?.data?.length
+                  ) {
+                    (
+                      e.currentTarget as HTMLButtonElement
+                    ).style.backgroundColor = "#047857";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  (
+                    e.currentTarget as HTMLButtonElement
+                  ).style.backgroundColor = "#059669";
+                }}
+              >
+                {isExportingBootcamp ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <FileSpreadsheet className="h-4 w-4" />
+                )}
+                <span>
+                  {isExportingBootcamp
+                    ? "Memproses..."
+                    : `Download Excel (${allRegistrations?.data?.length ?? 0} pendaftar)`}
+                </span>
+              </button>
+            </div>
+          </CardBody>
+        </Card>
+      )}
 
       {/* ==================== REGISTRATIONS TABLE ==================== */}
       <PageLayout
