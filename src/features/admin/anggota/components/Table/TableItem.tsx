@@ -57,11 +57,6 @@ export const TableItem: React.FC<IAnggotaItemProps> = ({
           {generation?.year}
         </Typography>
       </td>
-      {/* <td className="py-3 px-5">
-        <Typography className="text-xs font-semibold text-blue-gray-600">
-          {email || "-"}
-        </Typography>
-      </td> */}
       <td className="py-3 px-5">
         <Chip
           variant="gradient"
