@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AdminNavbar from "@features/admin/components/AdminNavbar";
 import { PageLayout } from "@features/_global/components/PageLayout";
+import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 import InputGroup from "@features/_global/components/Input/InputGroup";
 import { Button } from "@material-tailwind/react";
 import { useContactInfoById, useContactInfoCreation } from "../hooks/useContactInfo";
@@ -77,7 +78,7 @@ const EditContactInfoView: React.FC = () => {
           }}
         >
           {isLoadingDetail ? (
-            <div className="text-center py-10">Loading contact details...</div>
+            <SimpleLoadingTable isTable={false} />
           ) : (
             <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-4">
               <InputGroup

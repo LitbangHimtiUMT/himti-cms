@@ -124,6 +124,7 @@ export const UserContent = () => {
         </div>
         <MasterTable
           title={["Name", "NIM", "Email", "Role", "Status", "Action"]}
+          isLoading={isLoading}
           data={users?.data || []}
           columnTable={[
             {

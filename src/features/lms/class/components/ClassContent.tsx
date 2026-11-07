@@ -1,4 +1,4 @@
-import { Loading } from "../../../_global/components/Loading";
+import { SimpleLoadingTable } from "../../../_global/components/SimpleLoadingTable";
 import { MasterTable } from "../../../_global/components/Table/Master";
 import { Poppins } from "../../../_global/components/Text";
 import { useClasses } from "../hooks/useClass";
@@ -10,11 +10,7 @@ export const ClassContent = () => {
   });
 
   if (isFetching) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <Loading />
-      </div>
-    );
+    return <SimpleLoadingTable isTable={false} />;
   }
 
   return (

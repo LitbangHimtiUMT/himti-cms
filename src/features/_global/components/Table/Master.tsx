@@ -1,6 +1,6 @@
 import { Button } from "../Button";
 import { EmptyState } from "../Empty";
-import { Loading } from "../Loading";
+import { SimpleLoadingTable } from "../SimpleLoadingTable";
 
 interface DefaultKey {
   id: number | string;
@@ -104,9 +104,9 @@ export const MasterTable = <T extends DefaultKey>({
               </tr>
             ))
           ) : isLoading ? (
-            <td colSpan={columnTable.length + (withAction ? 1 : 0)}>
-              <Loading />
-            </td>
+            <SimpleLoadingTable
+              ColSpan={columnTable.length + (withAction ? 1 : 0)}
+            />
           ) : (
             <EmptyState
               colspan={columnTable.length + (withAction ? 1 : 0)}

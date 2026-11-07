@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AdminNavbar from "@features/admin/components/AdminNavbar";
 import EmptyData from "@features/_global/components/EmptyData";
 import { PageLayout } from "@features/_global/components/PageLayout";
+import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
 import {
   Table,
   TableBody,
@@ -129,9 +130,7 @@ const ContactInfoView: React.FC = () => {
           </div>
 
           {isLoading ? (
-            <div className="flex justify-center py-10">
-              <span className="text-gray-500">Loading configurations...</span>
-            </div>
+            <SimpleLoadingTable isTable={false} />
           ) : activeTab === "list" ? (
             /* Tab 1: Grouped Configurations View */
             Object.keys(groupedContacts).length === 0 ? (
