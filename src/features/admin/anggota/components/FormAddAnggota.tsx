@@ -13,7 +13,6 @@ const InitialValue: AnggotaDTO = {
   nim: "",
   name: "",
   generationId: "",
-  email: "",
   facebook: "",
   instagram: "",
   linkedin: "",
@@ -73,7 +72,13 @@ const FormAddAnggota: React.FC = () => {
         nim: anggotaBody.nim,
         name: anggotaBody.name,
         generationId: anggotaBody.generationId,
-        email: anggotaBody.email,
+        // email sengaja tidak dikirim: model Member tidak punya kolom
+        // email dan service API membuangnya (schema API menoleransi
+        // email opsional, jadi urutan merge API/CMS bebas).
+        facebook: anggotaBody.facebook,
+        instagram: anggotaBody.instagram,
+        linkedin: anggotaBody.linkedin,
+        twitter: anggotaBody.twitter,
         isActive: anggotaBody.isActive,
       },
     });
@@ -147,19 +152,6 @@ const FormAddAnggota: React.FC = () => {
                 label: i.year,
                 value: i.id,
               }))}
-            />
-          </div>
-          <div className="mb-4 my-2">
-            <InputGroup
-              disabled={mutation.isPending}
-              type="email"
-              label="Email"
-              variant="outlined"
-              error={errors.email}
-              value={anggotaBody.email as string}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setAnggotaBody({ ...anggotaBody, email: e.target.value })
-              }
             />
           </div>
           <div className="mb-4 my-2">

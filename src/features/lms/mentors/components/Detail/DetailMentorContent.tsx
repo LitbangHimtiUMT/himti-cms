@@ -3,7 +3,7 @@ import {
   CardContent,
   CardTitle,
 } from "../../../../_global/components/Card";
-import { Loading } from "../../../../_global/components/Loading";
+import { SimpleLoadingTable } from "../../../../_global/components/SimpleLoadingTable";
 import { formatRupiah } from "../../../../_global/helper";
 import { useMentorById } from "../../hooks/useMentors";
 
@@ -11,11 +11,7 @@ export const DetailMentorContent = () => {
   const { data: mentor, isFetching } = useMentorById();
 
   if (isFetching) {
-    return (
-      <div className="w-full h-full flex justify-center items-center">
-        <Loading />
-      </div>
-    );
+    return <SimpleLoadingTable isTable={false} />;
   }
 
   return (

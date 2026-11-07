@@ -7,14 +7,12 @@ import { PageLayout } from "@features/_global/components/PageLayout";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useUserCreation } from "../hooks/useUser";
-import { Checkbox, FormControlLabel } from "@mui/material";
 
 const InitialValue: CreateAdminUserBodyDTO = {
   name: "",
   email: "",
   password: "",
   nim: "",
-  code: "",
 };
 
 export const FormCreateUserAdmin: React.FC = () => {
@@ -150,23 +148,6 @@ export const FormCreateUserAdmin: React.FC = () => {
             }
           />
         </div>
-        <div>
-          <FormControlLabel
-            control={
-              <Checkbox
-                value={userBody.code === "HIMTI091011"}
-                onChange={(e) =>
-                  setUserBody({
-                    ...userBody,
-                    code: e.target.checked ? "HIMTI091011" : "",
-                  })
-                }
-              />
-            }
-            label="Is Anggota HIMTI"
-          />
-        </div>
-
         <div className="flex justify-center items-center gap-5">
           <Button
             disabled={mutation.isPending}

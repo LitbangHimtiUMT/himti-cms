@@ -14,7 +14,7 @@ import { ModalDeleteMentor } from "./ModalDeleteMentor";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 export const MentorsTable = () => {
-  const { data: mentors, isFetching } = useMentors();
+  const { data: mentors, isFetching, isError, refetch } = useMentors();
   const navigate = useNavigate();
   const [show, setShow] = useState({
     drawer: false,
@@ -57,6 +57,8 @@ export const MentorsTable = () => {
     >
       <MasterTable
         isLoading={isFetching}
+        isError={isError}
+        onRetry={() => refetch()}
         data={mentors?.data || []}
         title={["NAMA", "EMAIL", "BALANCE", ""]}
         columnTable={[

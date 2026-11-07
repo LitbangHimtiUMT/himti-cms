@@ -25,7 +25,7 @@ export const UserContent = () => {
   const queryParams = convertQueryParamsToObject(searchParams.toString());
 
   const [filter, setFilter] = useState<UserFilter>("all");
-  const { data: users, isLoading } = useUser({
+  const { data: users, isLoading, isError, refetch } = useUser({
     ...(filter &&
       filter !== "all" && {
         roles: JSON.stringify(["ADMIN", "SUPER_ADMIN"]),
@@ -124,6 +124,9 @@ export const UserContent = () => {
         </div>
         <MasterTable
           title={["Name", "NIM", "Email", "Role", "Status", "Action"]}
+          isLoading={isLoading}
+          isError={isError}
+          onRetry={() => refetch()}
           data={users?.data || []}
           columnTable={[
             {
@@ -172,6 +175,11 @@ export const UserContent = () => {
                     id={item.id}
                     name={item.name}
                     role={item.role}
+                    // Profile tidak punya id, jadi akun sendiri dikenali
+                    // dari email (unik). Delete disembunyikan untuk akun
+                    // sendiri supaya admin tidak bisa menghapus dirinya
+                    // sendiri dari menu secara tidak sengaja.
+                    isSelf={item.email === profile?.data?.email}
                     canChangeRole={isSuperAdmin}
                     onChangeRole={(defaultRole) =>
                       openRoleModal(selected, defaultRole)

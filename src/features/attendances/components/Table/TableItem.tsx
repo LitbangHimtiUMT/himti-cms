@@ -88,18 +88,6 @@ export const TableItem: React.FC<ItemAttendProps> = ({
           </Typography>
         </div>
       </td>
-      {/* <td className="py-3 px-5">
-        <div className="flex items-center gap-2">
-          <Link to={`/admin/absensi/${id}`}>
-            <Typography
-              as="button"
-              className="text-xs font-semibold text-blue-600"
-            >
-              View
-            </Typography>
-          </Link>
-        </div>
-      </td> */}
     </tr>
   );
 };

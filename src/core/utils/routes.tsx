@@ -32,6 +32,7 @@ import { UpdateEventMeetingViews } from "@features/event-meeting/views/UpdateEve
 import { UpdateMeetingViews } from "@features/event-meeting/views/UpdateMeetingViews";
 import { RegistrationTypeView } from "@features/registration-type/views/RegistrationType";
 import { RegistrationTypeDetailView } from "@features/registration-type/views/RegistrationTypeDetail";
+import { EventRegistrationView } from "@features/event-registration/views/EventRegistration";
 import { CreateRegistrationTypeView } from "@features/registration-type/views/CreateRegistrationType";
 import { UpdateRegistrationTypeView } from "@features/registration-type/views/UpdateRegistrationType";
 import { VersionView } from "@features/version/view/version";
@@ -212,6 +213,14 @@ export const router = createBrowserRouter([
       {
         path: "/admin/registration-type/:registrationTypeId",
         element: <RegistrationTypeDetailView />,
+      },
+      // Event Registration: sebelumnya tidak ada route, jadi setelah
+      // mutasi sukses user dilempar ke halaman kosong. View create
+      // (/admin/event-registration/create) belum ada filenya, jadi
+      // hanya route list yang didaftarkan.
+      {
+        path: "/admin/event-registration",
+        element: <EventRegistrationView />,
       },
       {
         path: "/lms/categories",

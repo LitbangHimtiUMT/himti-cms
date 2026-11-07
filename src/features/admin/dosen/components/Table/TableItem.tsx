@@ -50,14 +50,6 @@ export const TableItem: React.FC<ITableItemProps> = ({
           {lesson || "-"}
         </Typography>
       </td>
-      {/* <td className="py-3 px-5">
-        <Chip
-          variant="gradient"
-          color={isActive ? "green" : "red"}
-          value={isActive ? "Active" : "Non-Active"}
-          className="py-0.5 px-2 text-[11px] font-medium w-fit"
-        />
-      </td> */}
 
       <td className="py-3 px-5">
         <div className="flex items-center gap-2">

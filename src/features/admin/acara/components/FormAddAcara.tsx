@@ -12,10 +12,7 @@ import { AcaraDTO, EventType } from "../model/acara";
 const InitialValue: AcaraDTO = {
   name: "",
   description: "",
-  // isOpen: undefined,
   image: undefined,
-  // startTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
-  // endTime: utcToZonedTime(new Date(), "Asia/Jakarta"),
   eventType: "COMMON",
   startTime: new Date(),
   endTime: new Date(),
@@ -28,9 +25,7 @@ interface ImageFile extends File {
 const FormAddAcara: React.FC = () => {
   const mutation = useAcaraCreation();
 
-  // const cropperRef = useRef<any>(null);
 
-  // const [isModal, setIsModal] = useState<boolean>(false);
   const [acaraBody, setAcaraBody] = useState<AcaraDTO>({ ...InitialValue });
   const [imageFile, setImageFile] = useState<
     ImageFile | ArrayBuffer | string | null
@@ -230,24 +225,6 @@ const FormAddAcara: React.FC = () => {
             />
           </div>
 
-          {/* <InputGroup
-            disabled={mutation.isPending}
-            id='image-input'
-            type='file'
-            label='Acara Image'
-            variant='outlined'
-            error={errors.image}
-            onChange={onChange}
-          /> */}
-          {/* <CropperImage
-            image={imageFile as ArrayBuffer}
-            isModal={isModal}
-            cropperRef={cropperRef}
-            getCropData={getCropData}
-            hanldeCancelCrop={handleCancelCrop}
-          /> */}
-        </div>
-        <div className="flex justify-center items-center gap-5">
           <Button
             disabled={mutation.isPending}
             onClick={handleReset}

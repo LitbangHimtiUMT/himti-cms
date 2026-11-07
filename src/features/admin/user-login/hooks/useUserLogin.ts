@@ -1,6 +1,8 @@
+import { ApiErrorResponse, ApiResponse } from "@core/libs/api/types";
 import { userLoginService } from "@core/services/user-login";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import useDebounce from "../../../_global/hooks/useDebounce";
 
 export function useUserLogin() {
@@ -25,4 +27,29 @@ export function useUserLogin() {
   });
 
   return query;
+}
+
+export function useUserLoginDeletion() {
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (id: string) => userLoginService.delete({ path: id }),
+    onSuccess: (res) => {
+      toast.success(res.message, {
+        position: "top-right",
+        autoClose: 2500,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+      queryClient.invalidateQueries({ queryKey: ["userLogin"] });
+    },
+    onError: (err: ApiErrorResponse<ApiResponse>) => {
+      toast.error(err.message, {
+        position: "top-right",
+        autoClose: 3000,
+        pauseOnHover: true,
+        theme: "dark",
+      });
+    },
+  });
+  return mutation;
 }

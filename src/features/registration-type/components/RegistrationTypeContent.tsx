@@ -11,7 +11,8 @@ import { Badge } from "../../_global/components/Badges";
 import { Switch } from "@material-tailwind/react";
 
 export const RegistrationTypeContent = () => {
-  const { data: registrationTypes, isFetching } = useRegistrationType();
+  const { data: registrationTypes, isFetching, isError, refetch } =
+    useRegistrationType();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
   const navigate = useNavigate();
@@ -134,6 +135,8 @@ export const RegistrationTypeContent = () => {
           ]}
           data={registrationTypes?.data || []}
           isLoading={isFetching}
+          isError={isError}
+          onRetry={() => refetch()}
           title={["Gambar", "Name", "Year", "Type", "Status", "Created At", ""]}
         />
       </PageLayout>

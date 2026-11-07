@@ -35,6 +35,11 @@ export const CONFIG_MENU_ADMIN: ItemMenuAdmin[] = [
     to: "/admin/registration-type",
   },
   {
+    icon: <HiClipboardDocumentList size={16} />,
+    name: "Event Registration",
+    to: "/admin/event-registration",
+  },
+  {
     icon: <FaUserGroup />,
     name: "Angkatan",
     to: "/admin/angkatan",

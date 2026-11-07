@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "../../../_global/components/Button";
-import { Loading } from "../../../_global/components/Loading";
+import { SimpleLoadingTable } from "../../../_global/components/SimpleLoadingTable";
 import { MasterTable } from "../../../_global/components/Table/Master";
 import { Poppins } from "../../../_global/components/Text";
 import { useCategories } from "../hooks/useCategories";
@@ -9,16 +9,12 @@ import { ModalDeleteCategory } from "./ModalDeleteCategory";
 import { CategoriesModel } from "../../../../core/model/categories";
 
 export const CategoryContent = () => {
-  const { data: categories, isFetching } = useCategories();
+  const { data: categories, isFetching, isError, refetch } = useCategories();
   const [editTarget, setEditTarget] = useState<CategoriesModel | undefined>();
   const [deleteTarget, setDeleteTarget] = useState<CategoriesModel | undefined>();
 
   if (isFetching) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <Loading />
-      </div>
-    );
+    return <SimpleLoadingTable isTable={false} />;
   }
 
   return (
@@ -26,6 +22,8 @@ export const CategoryContent = () => {
       <MasterTable
         title={["Name", "Class Count", ""]}
         data={categories?.data || []}
+        isError={isError}
+        onRetry={() => refetch()}
         columnTable={[
           {
             return: ({ name }) => (

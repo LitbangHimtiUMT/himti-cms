@@ -35,9 +35,7 @@ const FormAddAcara: React.FC = () => {
 
   const mutation = useStrukturalCreation();
 
-  // const cropperRef = useRef<any>(null);
 
-  // const [isModal, setIsModal] = useState<boolean>(false);
   const [strukturalBody, setStrukturalBody] = useState<StrukturalDTO>({
     ...InitialValue,
   });
@@ -100,19 +98,6 @@ const FormAddAcara: React.FC = () => {
     }
   };
 
-  // const getCropData = () => {
-  //   if (typeof cropperRef.current?.cropper !== "undefined") {
-  //     const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
-  //       width: 1080,
-  //       height: 1080,
-  //     });
-  //     croppedCanvas.toBlob((blob: File) => {
-  //       setStrukturalBody({ ...strukturalBody, image: blob });
-  //       setIsModal(false); // Close modal after cropping
-  //       setImageFile(URL.createObjectURL(blob) as string);
-  //     });
-  //   }
-  // };
 
   const handleReset = () => {
     setStrukturalBody(InitialValue);
@@ -126,16 +111,6 @@ const FormAddAcara: React.FC = () => {
     setErrors({});
   };
 
-  // const handleCancelCrop = () => {
-  //   setImageFile(DefaultImage);
-  //   const fileInput = document.getElementById(
-  //     "image-input"
-  //   ) as HTMLInputElement;
-  //   if (fileInput) {
-  //     fileInput.value = "";
-  //   }
-  //   setIsModal(false);
-  // };
 
   return (
     <PageLayout

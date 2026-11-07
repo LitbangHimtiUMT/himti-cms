@@ -1,6 +1,6 @@
 import { Button } from "../Button";
 import { EmptyState } from "../Empty";
-import { Loading } from "../Loading";
+import { SimpleLoadingTable } from "../SimpleLoadingTable";
 
 interface DefaultKey {
   id: number | string;
@@ -14,6 +14,8 @@ interface IMasterTableProps<T extends DefaultKey> {
   data?: T[];
   title: string[];
   isLoading?: boolean;
+  isError?: boolean;
+  onRetry?: () => void;
   withAction?: boolean;
   columnTable: ColumnTable<T>[];
   border?: boolean;
@@ -30,6 +32,8 @@ export const MasterTable = <T extends DefaultKey>({
   withAction,
   columnTable,
   isLoading,
+  isError,
+  onRetry,
   border,
   action,
 }: IMasterTableProps<T>) => {
@@ -104,9 +108,24 @@ export const MasterTable = <T extends DefaultKey>({
               </tr>
             ))
           ) : isLoading ? (
-            <td colSpan={columnTable.length + (withAction ? 1 : 0)}>
-              <Loading />
-            </td>
+            <SimpleLoadingTable
+              ColSpan={columnTable.length + (withAction ? 1 : 0)}
+            />
+          ) : isError ? (
+            <tr>
+              <td colSpan={columnTable.length + (withAction ? 1 : 0)}>
+                <div className="flex flex-col items-center justify-center gap-3 py-10">
+                  <p className="text-sm font-medium text-red-600">
+                    Gagal memuat data.
+                  </p>
+                  {onRetry && (
+                    <Button size="sm" onClick={onRetry}>
+                      Coba lagi
+                    </Button>
+                  )}
+                </div>
+              </td>
+            </tr>
           ) : (
             <EmptyState
               colspan={columnTable.length + (withAction ? 1 : 0)}

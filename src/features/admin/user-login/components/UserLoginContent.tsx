@@ -7,11 +7,10 @@ import {
   TableHead,
 } from "@features/_global/components/Table";
 import { convertQueryParamsToObject } from "@features/_global/helper";
-import { useAcaraCreation } from "@features/_global/hooks/useAcara";
 import { Button } from "@material-tailwind/react";
 import { useAtom } from "jotai";
 import { useSearchParams } from "react-router-dom";
-import { useUserLogin } from "../hooks/useUserLogin";
+import { useUserLogin, useUserLoginDeletion } from "../hooks/useUserLogin";
 import { SendAllState } from "../store/ModalNotificationState";
 import { ModalNotification } from "./ModalNotification";
 import { TableItem } from "./Table/TableItem";
@@ -26,13 +25,13 @@ export const UserLoginContent = () => {
     setSearchParams({ ...queryParams, page: String(page) });
   };
 
-  const mutation = useAcaraCreation();
+  // Dulu delete di sini memakai useAcaraCreation(), jadi yang terpanggil
+  // adalah DELETE /acara/:id dengan id user FCM — user FCM tidak pernah
+  // terhapus. Sekarang memakai DELETE /user-fcm/:fcmUserId.
+  const mutation = useUserLoginDeletion();
 
   const handleDelete = async (id: string) => {
-    await mutation.mutateAsync({
-      type: "delete",
-      id,
-    });
+    await mutation.mutateAsync(id);
   };
 
   const pagination = {

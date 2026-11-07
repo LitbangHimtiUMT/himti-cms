@@ -1,20 +1,16 @@
-import { Loading } from "../../../_global/components/Loading";
+import { SimpleLoadingTable } from "../../../_global/components/SimpleLoadingTable";
 import { MasterTable } from "../../../_global/components/Table/Master";
 import { Poppins } from "../../../_global/components/Text";
 import { useClasses } from "../hooks/useClass";
 import DefaultPhoto from '../../../../core/assets/default-photo.svg'
 
 export const ClassContent = () => {
-  const { data: classess, isFetching } = useClasses({
+  const { data: classess, isFetching, isError, refetch } = useClasses({
     ignoreUser: "true",
   });
 
   if (isFetching) {
-    return (
-      <div className="flex items-center justify-center w-full h-full">
-        <Loading />
-      </div>
-    );
+    return <SimpleLoadingTable isTable={false} />;
   }
 
   return (
@@ -32,6 +28,8 @@ export const ClassContent = () => {
           "Created At",
         ]}
         data={classess?.data || []}
+        isError={isError}
+        onRetry={() => refetch()}
         columnTable={[
           {
             return: ({ thumbnail }) => (

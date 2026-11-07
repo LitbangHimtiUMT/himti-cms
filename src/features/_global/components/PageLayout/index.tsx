@@ -3,7 +3,7 @@ import { Typography } from "@material-tailwind/react";
 import { ButtonHTMLAttributes, PropsWithChildren, useCallback } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination } from "../Pagination";
-import { FiPlus, FiSearch, FiClock } from "react-icons/fi";
+import { FiPlus, FiSearch, FiClock, FiX, FiArrowLeft } from "react-icons/fi";
 
 interface ButtonProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "className"> {}
@@ -45,40 +45,41 @@ export const PageLayout: React.FC<IPageLayoutProps> = ({
   onClickHistories,
 }) => {
   const renderAction = () => {
-    if (action?.show && action.link) {
-      return (
-        <Link to={action.link.to as string}>
-          <button
-            {...action?.buttonProps}
-            className="px-5 py-2.5 bg-white text-primary-700 rounded-lg font-semibold
-                     hover:bg-white/95 hover:shadow-lg hover:-translate-y-0.5
-                     transition-all duration-200 flex items-center gap-2
-                     focus:outline-none focus:ring-4 focus:ring-white/30
-                     border border-white/20 shadow-soft"
-          >
-            <FiPlus className="w-4 h-4 stroke-[3]" />
-            {action?.buttonTitle}
-          </button>
-        </Link>
-      );
+    if (!action?.show) return null;
+
+    // Tombol header tadinya selalu sama persis: putih + ikon "+",
+    // apa pun judulnya. Akibatnya "Cancel" di halaman Create/Update
+    // kelihatan identik dengan "Create ..." di halaman list, padahal
+    // 27 halaman Create/Update sudah mengoper colorButton: "red"
+    // untuk Cancel — prop itu selama ini tidak pernah dibaca di sini.
+    const isCancel =
+      action?.buttonTitle === "Cancel" || action?.colorButton === "red";
+    const isBack = action?.buttonTitle === "Back";
+    const Icon = isCancel ? FiX : isBack ? FiArrowLeft : FiPlus;
+    const buttonClassName = isCancel
+      ? `px-5 py-2.5 bg-red-500 text-white rounded-lg font-semibold
+         hover:bg-red-600 hover:shadow-lg hover:-translate-y-0.5
+         transition-all duration-200 flex items-center gap-2
+         focus:outline-none focus:ring-4 focus:ring-red-300/50
+         border border-red-400 shadow-soft`
+      : `px-5 py-2.5 bg-white text-primary-700 rounded-lg font-semibold
+         hover:bg-white/95 hover:shadow-lg hover:-translate-y-0.5
+         transition-all duration-200 flex items-center gap-2
+         focus:outline-none focus:ring-4 focus:ring-white/30
+         border border-white/20 shadow-soft`;
+
+    const button = (
+      <button {...action?.buttonProps} className={buttonClassName}>
+        <Icon className="w-4 h-4 stroke-[3]" />
+        {action?.buttonTitle}
+      </button>
+    );
+
+    if (action.link) {
+      return <Link to={action.link.to as string}>{button}</Link>;
     }
 
-    if (action?.show) {
-      return (
-        <button
-          {...action?.buttonProps}
-          className="px-5 py-2.5 bg-white text-primary-700 rounded-lg font-semibold
-                   hover:bg-white/95 hover:shadow-lg hover:-translate-y-0.5
-                   transition-all duration-200 flex items-center gap-2
-                   focus:outline-none focus:ring-4 focus:ring-white/30
-                   border border-white/20 shadow-soft"
-        >
-          <FiPlus className="w-4 h-4 stroke-[3]" />
-          {action?.buttonTitle}
-        </button>
-      );
-    }
-    return null;
+    return button;
   };
 
   const [searchParams, setSearchParams] = useSearchParams();

@@ -16,7 +16,8 @@ interface ListSubAcaraContentProps {
 const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
   acaraId,
 }) => {
-  const { data: subAcara, isLoading } = useSubAcaraList(acaraId);
+  const { data: subAcara, isLoading, isError, refetch } =
+    useSubAcaraList(acaraId);
   const mutation = useSubAcaraCreation();
   const navigate = useNavigate();
 
@@ -60,6 +61,8 @@ const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
           },
         ]}
         isLoading={isLoading}
+        isError={isError}
+        onRetry={() => refetch()}
         withAction
         action={{
           onDetail: (item) =>

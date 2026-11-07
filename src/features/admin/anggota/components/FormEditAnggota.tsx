@@ -15,7 +15,6 @@ const InitialValue: AnggotaDTO = {
   nim: "",
   name: "",
   generationId: "",
-  email: "",
   facebook: "",
   instagram: "",
   linkedin: "",
@@ -44,7 +43,6 @@ const FormEditAnggota: React.FC = () => {
         nim,
         name,
         Generation,
-        email,
         facebook,
         instagram,
         linkedin,
@@ -52,11 +50,12 @@ const FormEditAnggota: React.FC = () => {
         isActive,
       } = anggotaById.data;
       // const categoryId = category ? category.id : "";
+      // email sengaja tidak dimuat/dikirim: model Member tidak punya
+      // kolom email (lihat FormAddAnggota).
       setAnggotaBody({
         nim,
         name,
         generationId: Generation?.id,
-        email,
         facebook,
         instagram,
         linkedin,
@@ -86,11 +85,6 @@ const FormEditAnggota: React.FC = () => {
       newErrors.generationId = "Angkatan is required";
       isValid = false;
     }
-
-    // if (!anggotaBody.email) {
-    //   newErrors.email = "Email is required";
-    //   isValid = false;
-    // }
 
     if (!anggotaBody.isActive && typeof anggotaBody.isActive !== "boolean") {
       newErrors.isActive = "Status is required";
@@ -182,19 +176,6 @@ const FormEditAnggota: React.FC = () => {
                 label: i.year,
                 value: i.id,
               }))}
-            />
-          </div>
-          <div className="mb-4 my-2">
-            <InputGroup
-              disabled={mutation.isPending}
-              type="email"
-              label="Email"
-              variant="outlined"
-              error={errors.email}
-              value={anggotaBody.email as string}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setAnggotaBody({ ...anggotaBody, email: e.target.value })
-              }
             />
           </div>
           <div className="mb-4 my-2">

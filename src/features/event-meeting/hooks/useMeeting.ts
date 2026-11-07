@@ -6,6 +6,7 @@ import { meetingService } from "@core/services/meeting";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import useDebounce from "@features/_global/hooks/useDebounce";
 
 interface ModalCreationOption {
   type: "create" | "update" | "delete";
@@ -24,15 +25,18 @@ export const useMeeting = () => {
   const { eventMeetingId } = useParams();
   const page = searchParams.get("page") || 1;
   const perPage = searchParams.get("perPage") || 10;
+  const searchQuery = searchParams.get("search") || undefined;
+  const search = useDebounce(searchQuery as string, 500);
 
   const query = useQuery({
-    queryKey: ["meetings", eventMeetingId],
+    queryKey: ["meetings", eventMeetingId, { page, perPage, search }],
     queryFn: () =>
       meetingService.get({
         path: `event-meeting/${eventMeetingId}`,
         queryParams: {
           page: Number(page),
           perPage: Number(perPage),
+          search,
         },
       }),
   });
