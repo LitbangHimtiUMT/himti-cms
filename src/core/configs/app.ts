@@ -2,8 +2,6 @@ export const CONFIG_APP = {
   APP_NAME: import.meta.env.HIMTI_APP_NAME,
   BASE_URL: import.meta.env.HIMTI_BASE_URL,
   BASE_URL_LMS: `${import.meta.env.HIMTI_BASE_URL}/lms`,
-  HIMTI_SECRET_KEY: import.meta.env.HIMTI_SECRET_KEY ?? "",
-  HIMTI_HEADER_KEY: import.meta.env.HIMTI_HEADER_KEY ?? "",
 };
 
 export const API_ENDPOINT = {
