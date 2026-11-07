@@ -1,6 +1,27 @@
 import { convertObjectToQueryParams } from "@features/_global/helper";
 import { ApiOption, MethodTypes, getContentType } from "./types";
 
+const REQUEST_TIMEOUT_MS = 30000;
+
+let authRedirecting = false;
+
+function handleUnauthorized() {
+  localStorage.removeItem("token");
+  if (authRedirecting || window.location.pathname === "/admin/login") return;
+  authRedirecting = true;
+  window.location.replace("/admin/login");
+}
+
+async function parseBody(res: Response) {
+  const text = await res.text();
+  if (!text) return null;
+  try {
+    return JSON.parse(text);
+  } catch {
+    return null;
+  }
+}
+
 const generateEndpoint = (
   endpoint: string,
   path?: string,
@@ -31,32 +52,48 @@ async function createRequest<Res = unknown, Req = unknown>(
     defaultValue.bearerToken = token;
   }
 
-  const res: Response = await fetch(
-    generateEndpoint(endpoint as string, apiOption?.path || "", {
-      ...apiOption?.queryParams,
-      ...apiOption?.params,
-    }),
-    {
-      method,
-      headers: {
-        ...(defaultValue.contentType !== "form-data" && {
-          "Content-Type": getContentType(defaultValue?.contentType),
-        }),
-        ...(defaultValue?.bearerToken &&
-          typeof defaultValue.bearerToken !== "undefined" && {
-            Authorization: `Bearer ${defaultValue.bearerToken}`,
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  let res: Response;
+  try {
+    res = await fetch(
+      generateEndpoint(endpoint as string, apiOption?.path || "", {
+        ...apiOption?.queryParams,
+        ...apiOption?.params,
+      }),
+      {
+        method,
+        headers: {
+          ...(defaultValue.contentType !== "form-data" && {
+            "Content-Type": getContentType(defaultValue?.contentType),
           }),
-        ...defaultValue?.headers,
-      },
-      body:
-        getContentType(defaultValue?.contentType) === "application/json"
-          ? JSON.stringify(body)
-          : (body as BodyInit),
+          ...(defaultValue?.bearerToken &&
+            typeof defaultValue.bearerToken !== "undefined" && {
+              Authorization: `Bearer ${defaultValue.bearerToken}`,
+            }),
+          ...defaultValue?.headers,
+        },
+        body:
+          getContentType(defaultValue?.contentType) === "application/json"
+            ? JSON.stringify(body)
+            : (body as BodyInit),
+        signal: controller.signal,
+      }
+    );
+  } catch (err) {
+    if (controller.signal.aborted) {
+      throw { message: "Request timed out, please try again." };
     }
-  );
-  const data: Res = await res.json();
+    throw err;
+  } finally {
+    clearTimeout(timeout);
+  }
+
+  const data = await parseBody(res);
   if (!res.ok) {
-    throw data;
+    if (res.status === 401) handleUnauthorized();
+    throw data ?? { message: res.statusText || "Request failed" };
   }
   return data as Res;
 }

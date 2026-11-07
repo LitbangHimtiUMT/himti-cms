@@ -47,20 +47,15 @@ export function useAuth() {
     return undefined;
   }
 
-  if (
-    isLoading) {
-
+  if (isLoading) {
     return {
       isLoading
     };
   }
 
-  if (
-    data?.code === "UNAUTHORIZED" ||
-    data?.status === 401) {
-    localStorage.removeItem("token")
-    return undefined
-  }
+  // A failed token check throws in the api client, which clears the
+  // token and sends the user back to login, so there is nothing to
+  // handle here beyond the loading state.
   return {
     data,
   };
