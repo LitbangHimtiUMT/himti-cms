@@ -189,7 +189,6 @@ export const FormUpdateMeeting: React.FC = () => {
                 label="Start Time"
                 value={meetingBody.startTime}
                 onChange={(value: Date | null) => {
-                  console.log({ value });
                   setMeetingBody({
                     ...meetingBody,
                     startTime: value as Date,
