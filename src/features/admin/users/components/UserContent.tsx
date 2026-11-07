@@ -173,6 +173,11 @@ export const UserContent = () => {
                     id={item.id}
                     name={item.name}
                     role={item.role}
+                    // Profile tidak punya id, jadi akun sendiri dikenali
+                    // dari email (unik). Delete disembunyikan untuk akun
+                    // sendiri supaya admin tidak bisa menghapus dirinya
+                    // sendiri dari menu secara tidak sengaja.
+                    isSelf={item.email === profile?.data?.email}
                     canChangeRole={isSuperAdmin}
                     onChangeRole={(defaultRole) =>
                       openRoleModal(selected, defaultRole)

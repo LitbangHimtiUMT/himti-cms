@@ -15,6 +15,7 @@ interface UserActionMenuProps {
   name: string;
   role: Role;
   canChangeRole?: boolean;
+  isSelf?: boolean;
   onChangeRole: (defaultRole?: Role) => void;
   onDelete: () => void;
 }
@@ -32,6 +33,7 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
   id,
   role,
   canChangeRole = false,
+  isSelf = false,
   onChangeRole,
   onDelete,
 }) => {
@@ -46,8 +48,11 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
   // Tinggi menu dihitung dari jumlah item yang tampil, supaya flip ke atas
   // nempel ke tombol (bukan ngawang pakai perkiraan 200px).
   const itemCount =
-    1 + (canChangeRole && canMakeAdmin ? 1 : 0) + (canChangeRole ? 1 : 0) + 1;
-  const menuHeight = itemCount * ITEM_HEIGHT + 1; // +1 divider
+    1 +
+    (canChangeRole && canMakeAdmin ? 1 : 0) +
+    (canChangeRole ? 1 : 0) +
+    (isSelf ? 0 : 1);
+  const menuHeight = itemCount * ITEM_HEIGHT + (isSelf ? 0 : 1); // +1 divider, kecuali Delete disembunyikan
 
   // Tutup saat klik di luar (tombol + menu portal) / tekan Esc
   useEffect(() => {
@@ -198,16 +203,20 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
               </button>
             )}
 
-            <div className="h-px bg-gray-100" />
+            {!isSelf && (
+              <>
+                <div className="h-px bg-gray-100" />
 
-            <button
-              role="menuitem"
-              onClick={handleDelete}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition"
-            >
-              <FiTrash2 className="w-4 h-4" />
-              <span>Delete</span>
-            </button>
+                <button
+                  role="menuitem"
+                  onClick={handleDelete}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition"
+                >
+                  <FiTrash2 className="w-4 h-4" />
+                  <span>Delete</span>
+                </button>
+              </>
+            )}
           </div>,
           document.body
         )}
