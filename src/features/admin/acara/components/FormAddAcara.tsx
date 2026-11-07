@@ -185,7 +185,6 @@ const FormAddAcara: React.FC = () => {
               label="Start Time"
               value={acaraBody.startTime}
               onChange={(value: Date | null) => {
-                console.log({ value });
                 setAcaraBody({
                   ...acaraBody,
                   startTime: value as Date,

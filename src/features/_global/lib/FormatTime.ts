@@ -16,7 +16,6 @@ interface IFormatTime {
 
 export function formatDate(isoDate: Date) {
     const date = new Date(isoDate);
-    console.log({ isoDate })
 
     const optionsDate: IFormatDate = {
         year: 'numeric',
@@ -34,7 +33,6 @@ export function formatDate(isoDate: Date) {
     const formattedDate = date.toLocaleDateString('id-ID', optionsDate);
     const formattedTime = date.toLocaleString('id-ID', optionsTime);
 
-console.log(formattedDate, 'tes')
     return `${formattedDate}, ${formattedTime}`;
 }
 

@@ -18,7 +18,6 @@ const InitialValue: EventMeetingCreation = {
 export const FormUpdateEM: React.FC = () => {
   const mutation = useEventMeetingCreation();
   const { data: eventMeeting } = useEventMeetingById();
-  console.log(eventMeeting);
 
   const [eventMeetingBody, setEventMeetingBody] =
     useState<EventMeetingCreation>({

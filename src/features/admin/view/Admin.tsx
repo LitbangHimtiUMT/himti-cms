@@ -24,7 +24,6 @@ const AdminView: React.FC = () => {
   }, [window.innerWidth]);
 
   const handleOpenSidenav = () => setOpenSidenav(!openSidenav);
-  console.log(auth);
 
   if (auth?.isLoading) {
     return (
