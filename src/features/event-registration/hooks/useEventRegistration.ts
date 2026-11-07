@@ -6,6 +6,7 @@ import { eventRegistrationService } from "@core/services/event-registration";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import useDebounce from "@features/_global/hooks/useDebounce";
 
 interface Options {
   page?: number;
@@ -26,14 +27,17 @@ export const useEventRegistration = (options?: Options) => {
 
   const page = options?.page || searchParams.get("page") || 1;
   const perPage = options?.perPage || searchParams.get("perPage") || 10;
+  const searchQuery = searchParams.get("search") || undefined;
+  const search = useDebounce(searchQuery as string, 500);
 
   const query = useQuery({
-    queryKey: ["event-registration", { page, perPage }],
+    queryKey: ["event-registration", { page, perPage, search }],
     queryFn: () =>
       eventRegistrationService.get({
         queryParams: {
           page: Number(page),
           perPage: Number(perPage),
+          search,
         },
       }),
     enabled,
@@ -118,11 +122,13 @@ export const useEventRegistrationByRegistrationType = (options?: Options) => {
   const registrationTypeIdValue = options?.registrationTypeId || registrationTypeId;
   const page = options?.page || searchParams.get("page") || 1;
   const perPage = options?.perPage || searchParams.get("perPage") || 10;
+  const searchQuery = searchParams.get("search") || undefined;
+  const search = useDebounce(searchQuery as string, 500);
 
   const query = useQuery({
     queryKey: [
       "event-registration-by-registration-type",
-      { registrationTypeId: registrationTypeIdValue, page, perPage },
+      { registrationTypeId: registrationTypeIdValue, page, perPage, search },
     ],
     queryFn: () =>
       eventRegistrationService.getByRegistrationType({
@@ -130,6 +136,7 @@ export const useEventRegistrationByRegistrationType = (options?: Options) => {
         queryParams: {
           page: Number(page),
           perPage: Number(perPage),
+          search,
         },
       }),
     enabled: !!registrationTypeIdValue && enabled,

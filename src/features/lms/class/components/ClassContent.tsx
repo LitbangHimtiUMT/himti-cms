@@ -5,7 +5,7 @@ import { useClasses } from "../hooks/useClass";
 import DefaultPhoto from '../../../../core/assets/default-photo.svg'
 
 export const ClassContent = () => {
-  const { data: classess, isFetching } = useClasses({
+  const { data: classess, isFetching, isError, refetch } = useClasses({
     ignoreUser: "true",
   });
 
@@ -28,6 +28,8 @@ export const ClassContent = () => {
           "Created At",
         ]}
         data={classess?.data || []}
+        isError={isError}
+        onRetry={() => refetch()}
         columnTable={[
           {
             return: ({ thumbnail }) => (

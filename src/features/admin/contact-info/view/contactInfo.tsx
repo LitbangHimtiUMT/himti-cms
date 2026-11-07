@@ -70,13 +70,17 @@ const ContactInfoView: React.FC = () => {
       return;
     }
 
-    // Map items, remove temporary client-side IDs for new items so backend knows to insert them
-    const payload = batchItems.map((item) => {
-      if (item.id.startsWith("new-")) {
-        return { key: item.key.trim(), value: item.value.trim(), group: item.group.trim() } as unknown as ContactInfoModel;
-      }
-      return { id: item.id, key: item.key.trim(), value: item.value.trim(), group: item.group.trim() };
-    });
+    // Schema batch API hanya menerima key/value/group; mengirim id akan
+    // ditolak Joi dengan 400 ("id" is not allowed). Upsert dicocokkan
+    // dari key, jadi id tidak perlu dikirim untuk item lama maupun baru.
+    const payload = batchItems.map(
+      (item) =>
+        ({
+          key: item.key.trim(),
+          value: item.value.trim(),
+          group: item.group.trim(),
+        }) as unknown as ContactInfoModel
+    );
 
     await mutation.mutateAsync({
       type: "batch",

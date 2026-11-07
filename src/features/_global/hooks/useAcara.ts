@@ -12,7 +12,7 @@ import useDebounce from "./useDebounce";
 interface Options extends QueryParams {
   page?: number;
   perPage?: number;
-  name?: string;
+  search?: string;
   withDeleted?: string;
   onlyDeleted?: string;
 }
@@ -49,7 +49,8 @@ export function useAcara(options?: Options) {
         queryParams: {
           perPage: perPage ? Number(perPage) : undefined,
           page: page ? Number(page) : undefined,
-          name: search,
+          // API getEvents hanya membaca `search`, bukan `name`.
+          search,
           ...(options?.withDeleted && {
             withDeleted: options?.withDeleted,
           }),

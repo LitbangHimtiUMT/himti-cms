@@ -9,7 +9,7 @@ import { ModalDeleteCategory } from "./ModalDeleteCategory";
 import { CategoriesModel } from "../../../../core/model/categories";
 
 export const CategoryContent = () => {
-  const { data: categories, isFetching } = useCategories();
+  const { data: categories, isFetching, isError, refetch } = useCategories();
   const [editTarget, setEditTarget] = useState<CategoriesModel | undefined>();
   const [deleteTarget, setDeleteTarget] = useState<CategoriesModel | undefined>();
 
@@ -22,6 +22,8 @@ export const CategoryContent = () => {
       <MasterTable
         title={["Name", "Class Count", ""]}
         data={categories?.data || []}
+        isError={isError}
+        onRetry={() => refetch()}
         columnTable={[
           {
             return: ({ name }) => (

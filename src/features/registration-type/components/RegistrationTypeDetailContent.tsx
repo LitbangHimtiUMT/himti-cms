@@ -55,8 +55,12 @@ const isUmumRegistration = (reg: {
 
 export const RegistrationTypeDetailContent = () => {
   const { data: registrationType } = useRegistrationTypeById();
-  const { data: eventRegistrations, isFetching: isFetchingRegistrations } =
-    useEventRegistrationByRegistrationType();
+  const {
+    data: eventRegistrations,
+    isFetching: isFetchingRegistrations,
+    isError: isErrorRegistrations,
+    refetch: refetchRegistrations,
+  } = useEventRegistrationByRegistrationType();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
   const navigate = useNavigate();
@@ -703,6 +707,8 @@ export const RegistrationTypeDetailContent = () => {
           ]}
           data={tableRows}
           isLoading={isFetchingRegistrations}
+          isError={isErrorRegistrations}
+          onRetry={() => refetchRegistrations()}
           title={[
             "#",
             "Image",

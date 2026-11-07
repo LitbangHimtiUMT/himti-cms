@@ -18,7 +18,7 @@ import { formatTime } from "../../_global/lib/FormatTime";
 import AdminNavbar from "../../admin/components/AdminNavbar";
 
 export const HistoriesViews = () => {
-  const { data: histories, isFetching } = useHistories({});
+  const { data: histories, isFetching, isError, refetch } = useHistories({});
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queries = convertQueryParamsToObject(searchParams.toString());
@@ -132,6 +132,8 @@ export const HistoriesViews = () => {
             </div>
             <MasterTable
               isLoading={isFetching}
+              isError={isError}
+              onRetry={() => refetch()}
               data={histories?.data || []}
               title={[
                 "Title",

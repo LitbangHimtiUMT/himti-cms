@@ -53,13 +53,15 @@ const EditContactInfoView: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
 
+    // Schema update API hanya menerima value + group; mengirim key akan
+    // ditolak Joi dengan 400 ("key" is not allowed). Key tetap ditampilkan
+    // di form (disabled, immutable) tapi tidak ikut dikirim.
     await mutation.mutateAsync({
       type: "update",
       data: {
-        key: formBody.key.trim(),
         value: formBody.value.trim(),
         group: formBody.group.trim(),
-      },
+      } as ContactInfoDTO,
       id: contactDetail?.data?.id,
     });
   };

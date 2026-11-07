@@ -7,7 +7,8 @@ import { formatTime } from "../../_global/lib/FormatTime";
 import { useEventRegistration } from "../hooks/useEventRegistration";
 
 export const EventRegistrationContent = () => {
-  const { data: eventRegistrations, isFetching } = useEventRegistration();
+  const { data: eventRegistrations, isFetching, isError, refetch } =
+    useEventRegistration();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryParams = convertQueryParamsToObject(searchParams.toString());
 
@@ -79,6 +80,8 @@ export const EventRegistrationContent = () => {
           ]}
           data={eventRegistrations?.data || []}
           isLoading={isFetching}
+          isError={isError}
+          onRetry={() => refetch()}
           title={["Image", "Name", "Prodi", "Instansi", "Class", "Event", "Submit Time"]}
         />
       </PageLayout>

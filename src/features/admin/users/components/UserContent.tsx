@@ -25,7 +25,7 @@ export const UserContent = () => {
   const queryParams = convertQueryParamsToObject(searchParams.toString());
 
   const [filter, setFilter] = useState<UserFilter>("all");
-  const { data: users, isLoading } = useUser({
+  const { data: users, isLoading, isError, refetch } = useUser({
     ...(filter &&
       filter !== "all" && {
         roles: JSON.stringify(["ADMIN", "SUPER_ADMIN"]),
@@ -125,6 +125,8 @@ export const UserContent = () => {
         <MasterTable
           title={["Name", "NIM", "Email", "Role", "Status", "Action"]}
           isLoading={isLoading}
+          isError={isError}
+          onRetry={() => refetch()}
           data={users?.data || []}
           columnTable={[
             {
