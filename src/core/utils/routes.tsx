@@ -214,10 +214,9 @@ export const router = createBrowserRouter([
         path: "/admin/registration-type/:registrationTypeId",
         element: <RegistrationTypeDetailView />,
       },
-      // Event Registration: sebelumnya tidak ada route, jadi setelah
-      // mutasi sukses user dilempar ke halaman kosong. View create
-      // (/admin/event-registration/create) belum ada filenya, jadi
-      // hanya route list yang didaftarkan.
+      // Event Registration: hanya route list. Tidak ada create di
+      // sini — data pendaftaran berasal dari registrasi event, jenis
+      // registrasi diatur di halaman Registration.
       {
         path: "/admin/event-registration",
         element: <EventRegistrationView />,

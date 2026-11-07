@@ -24,11 +24,9 @@ export const EventRegistrationContent = () => {
   return (
     <>
       <PageLayout
-        action={{
-          show: true,
-          buttonTitle: "Create Registration",
-          link: { to: "/admin/event-registration/create" },
-        }}
+        // Sengaja tanpa tombol Create: halaman ini hanya menampilkan
+        // data pendaftaran yang masuk dari event. Jenis registrasi
+        // diatur di halaman Registration, bukan dari sini.
         title="Event Registration"
         showPagination={
           !!(
