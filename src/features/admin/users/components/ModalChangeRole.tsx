@@ -11,6 +11,7 @@ interface ModalChangeRoleProps {
   currentRole?: Role;
   /** Default role yang terpilih saat modal dibuka (misal: "ADMIN" dari tombol "Make Admin") */
   defaultRole?: Role;
+  canAssignSuperAdmin?: boolean;
 }
 
 const ROLE_OPTIONS: Role[] = ["SUPER_ADMIN", "ADMIN", "USER", "ANGGOTA"];
@@ -35,10 +36,17 @@ export const ModalChangeRole: React.FC<ModalChangeRoleProps> = ({
   name,
   currentRole,
   defaultRole,
+  canAssignSuperAdmin = false,
 }) => {
   const mutation = useUserCreation();
   const [selectedRole, setSelectedRole] = useState<Role>(
     defaultRole ?? currentRole ?? "ADMIN"
+  );
+
+  // Super admin is only offered when the caller can actually assign it,
+  // the server rejects the change otherwise.
+  const visibleRoles = ROLE_OPTIONS.filter(
+    (role) => role !== "SUPER_ADMIN" || canAssignSuperAdmin
   );
 
   // Reset selection setiap kali modal dibuka
@@ -99,7 +107,7 @@ export const ModalChangeRole: React.FC<ModalChangeRoleProps> = ({
               Pilih role baru:
             </p>
             <div className="grid grid-cols-2 gap-2">
-              {ROLE_OPTIONS.map((role) => {
+              {visibleRoles.map((role) => {
                 const isActive = selectedRole === role;
                 const isCurrent = currentRole === role;
                 return (

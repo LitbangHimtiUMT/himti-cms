@@ -13,6 +13,7 @@ interface UserActionMenuProps {
   id: string;
   name: string;
   role: Role;
+  canChangeRole?: boolean;
   onChangeRole: (defaultRole?: Role) => void;
   onDelete: () => void;
 }
@@ -20,6 +21,7 @@ interface UserActionMenuProps {
 export const UserActionMenu: React.FC<UserActionMenuProps> = ({
   id,
   role,
+  canChangeRole = false,
   onChangeRole,
   onDelete,
 }) => {
@@ -102,7 +104,7 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
             <span>Edit</span>
           </button>
 
-          {canMakeAdmin && (
+          {canChangeRole && canMakeAdmin && (
             <button
               role="menuitem"
               onClick={handleMakeAdmin}
@@ -113,14 +115,16 @@ export const UserActionMenu: React.FC<UserActionMenuProps> = ({
             </button>
           )}
 
-          <button
-            role="menuitem"
-            onClick={handleChangeRole}
-            className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
-          >
-            <FiShield className="w-4 h-4 text-indigo-700" />
-            <span>Change Role</span>
-          </button>
+          {canChangeRole && (
+            <button
+              role="menuitem"
+              onClick={handleChangeRole}
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition"
+            >
+              <FiShield className="w-4 h-4 text-indigo-700" />
+              <span>Change Role</span>
+            </button>
+          )}
 
           <div className="h-px bg-gray-100" />
 

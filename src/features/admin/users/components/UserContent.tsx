@@ -10,6 +10,7 @@ import { Role } from "@core/model/user";
 import { ModalChangeRole } from "./ModalChangeRole";
 import { ModalDeleteUser } from "./ModalDeleteUser";
 import { UserActionMenu } from "./UserActionMenu";
+import { useProfile } from "@features/auth/hooks/useProfile";
 
 type UserFilter = "all" | "pic";
 
@@ -30,6 +31,11 @@ export const UserContent = () => {
         roles: JSON.stringify(["ADMIN", "SUPER_ADMIN"]),
       }),
   });
+
+  // Only super admins can change roles on the server, so the menu
+  // entries are hidden for everyone else instead of failing on submit.
+  const { data: profile } = useProfile();
+  const isSuperAdmin = profile?.data?.role === "SUPER_ADMIN";
 
   // State modal
   const [roleModal, setRoleModal] = useState<{
@@ -166,6 +172,7 @@ export const UserContent = () => {
                     id={item.id}
                     name={item.name}
                     role={item.role}
+                    canChangeRole={isSuperAdmin}
                     onChangeRole={(defaultRole) =>
                       openRoleModal(selected, defaultRole)
                     }
@@ -185,6 +192,7 @@ export const UserContent = () => {
         name={roleModal.user?.name}
         currentRole={roleModal.user?.role}
         defaultRole={roleModal.defaultRole}
+        canAssignSuperAdmin={isSuperAdmin}
       />
 
       <ModalDeleteUser
