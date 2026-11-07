@@ -1,111 +1,76 @@
-// import EmptyData from "@features/_global/components/EmptyData";
-// import { PageLayout } from "@features/_global/components/PageLayout";
-// import { SimpleLoadingTable } from "@features/_global/components/SimpleLoadingTable";
-// import {
-//   Table,
-//   TableBody,
-//   TableHead,
-// } from "@features/_global/components/Table";
-// import { useAcaraById } from "@features/_global/hooks/useAcara";
-// import { useSubAcaraCreation } from "@features/_global/hooks/useSubAcara";
-// import { Drawer, IconButton, Typography } from "@material-tailwind/react";
-// import React from "react";
-// import { TableItem } from "../../Table/TableItem";
+import { PageLayout } from "@features/_global/components/PageLayout";
+import { MasterTable } from "@features/_global/components/Table/Master";
+import {
+  useSubAcaraCreation,
+  useSubAcaraList,
+} from "@features/_global/hooks/useSubAcara";
+import { formatTime } from "@features/_global/lib/FormatTime";
+import { Typography } from "@material-tailwind/react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 
-// interface ListSubAcaraContentProps {
-//   name: string;
-//   // subAcara: subAcara[];
-//   isDrawer: boolean;
-//   handleIsDrawer: () => void;
-//   isLoading: boolean;
-//   acaraId: string;
-// }
+interface ListSubAcaraContentProps {
+  acaraId: string;
+}
 
-// const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
-//   name,
-//   isDrawer,
-//   handleIsDrawer,
-//   isLoading,
-//   acaraId,
-// }) => {
-//   const mutation = useSubAcaraCreation();
-//   const { data: acara } = useAcaraById();
+const ListSubAcaraContent: React.FC<ListSubAcaraContentProps> = ({
+  acaraId,
+}) => {
+  const { data: subAcara, isLoading } = useSubAcaraList(acaraId);
+  const mutation = useSubAcaraCreation();
+  const navigate = useNavigate();
 
-//   const subacara = acara?.data?.subAcara;
+  const handleDelete = async (id: string) => {
+    await mutation.mutateAsync({
+      type: "delete",
+      id,
+    });
+  };
 
-//   const handleDelete = async (id: string) => {
-//     await mutation.mutateAsync({
-//       type: "delete",
-//       id,
-//     });
-//   };
+  return (
+    <PageLayout
+      title="Sub Acara"
+      action={{
+        show: true,
+        buttonTitle: "Create Sub Acara",
+        link: { to: `/admin/acara/${acaraId}/sub-acara/create` },
+      }}
+    >
+      <MasterTable
+        data={subAcara?.data}
+        title={["Name", "Time"]}
+        columnTable={[
+          {
+            return: (item) => (
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="font-semibold"
+              >
+                {item.name}
+              </Typography>
+            ),
+          },
+          {
+            return: (item) => (
+              <Typography variant="small" color="blue-gray">
+                {formatTime(item.startTime)} - {formatTime(item.endTime)}
+              </Typography>
+            ),
+          },
+        ]}
+        isLoading={isLoading}
+        withAction
+        action={{
+          onDetail: (item) =>
+            navigate(`/admin/acara/${acaraId}/sub-acara/${item.id}`),
+          onUpdate: (item) =>
+            navigate(`/admin/acara/${acaraId}/sub-acara/update/${item.id}`),
+          onDelete: (item) => handleDelete(item.id),
+        }}
+      />
+    </PageLayout>
+  );
+};
 
-//   return (
-//     <Drawer
-//       size={500}
-//       placement="bottom"
-//       open={isDrawer}
-//       onClose={handleIsDrawer}
-//       className="p-4 overflow-auto rounded-t-2xl"
-//     >
-//       <div className="mb-6 flex items-center justify-between">
-//         <Typography variant="h4" className="mb-2" color="blue-gray">
-//           Acara {name}
-//         </Typography>
-//         <IconButton variant="text" color="blue-gray" onClick={handleIsDrawer}>
-//           <svg
-//             xmlns="http://www.w3.org/2000/svg"
-//             fill="none"
-//             viewBox="0 0 24 24"
-//             strokeWidth={2}
-//             stroke="currentColor"
-//             className="h-5 w-5"
-//           >
-//             <path
-//               strokeLinecap="round"
-//               strokeLinejoin="round"
-//               d="M6 18L18 6M6 6l12 12"
-//             />
-//           </svg>
-//         </IconButton>
-//       </div>
-//       <PageLayout
-//         action={{
-//           show: true,
-//           buttonTitle: "Create Sub Acara",
-//           link: { to: `/admin/acara/${acaraId}/sub-acara/create` },
-//         }}
-//         title="Sub Acara"
-//       >
-//         <Table>
-//           <TableHead field={["Name", "Time", "Status", "Action"]} />
-//           <TableBody>
-//             {isLoading ? (
-//               <SimpleLoadingTable ColSpan={6} />
-//             ) : !subacara?.length ? (
-//               <tr>
-//                 <td colSpan={6}>
-//                   <EmptyData title="Sub Acara" action />
-//                 </td>
-//               </tr>
-//             ) : (
-//               subacara.map((item, index) => (
-//                 <TableItem
-//                   linkDetail={`/admin/sub-acara/${item.id}`}
-//                   linkUpdate={`/admin/acara/${acaraId}/sub-acara/update/${item.id}`}
-//                   key={index}
-//                   title="Sub Acara"
-//                   show={index !== (subacara.length as number) - 1}
-//                   {...item}
-//                   handleDelete={handleDelete}
-//                 />
-//               ))
-//             )}
-//           </TableBody>
-//         </Table>
-//       </PageLayout>
-//     </Drawer>
-//   );
-// };
-
-// export default ListSubAcaraContent;
+export default ListSubAcaraContent;

@@ -2,6 +2,9 @@ import AcaraView from "@features/admin/acara/view/acara";
 import AddAcaraView from "@features/admin/acara/view/addAcara";
 import DetailAcaraView from "@features/admin/acara/view/detailAcara";
 import EditAcaraView from "@features/admin/acara/view/editAcara";
+import AddSubAcaraView from "@features/admin/acara/components/SubAcara/view/addSubAcara";
+import DetailSubAcaraView from "@features/admin/acara/components/SubAcara/view/detailSubAcara";
+import EditSubAcaraView from "@features/admin/acara/components/SubAcara/view/editSubAcara";
 import AddAnggotaView from "@features/admin/anggota/view/addAnggota";
 import { AnggotaView } from "@features/admin/anggota/view/Anggotas";
 import EditAnggotaView from "@features/admin/anggota/view/editAnggota";
@@ -89,6 +92,18 @@ export const router = createBrowserRouter([
       {
         path: "/admin/acara/edit/:id",
         element: <EditAcaraView />,
+      },
+      {
+        path: "/admin/acara/:acaraId/sub-acara/create",
+        element: <AddSubAcaraView />,
+      },
+      {
+        path: "/admin/acara/:acaraId/sub-acara/update/:id",
+        element: <EditSubAcaraView />,
+      },
+      {
+        path: "/admin/acara/:acaraId/sub-acara/:id",
+        element: <DetailSubAcaraView />,
       },
       {
         path: "/admin/user",
