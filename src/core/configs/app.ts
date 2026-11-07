@@ -31,7 +31,6 @@ export const API_ENDPOINT = {
   lms: {
     class: `${CONFIG_APP.BASE_URL_LMS}/class`,
   },
-  potentialUser: `${CONFIG_APP.BASE_URL}/potential-user`,
   potentialUserKeys: `${CONFIG_APP.BASE_URL}/potential-user-keys`,
   prodiStructural: `${CONFIG_APP.BASE_URL}/prodi-structural`,
   periode: `${CONFIG_APP.BASE_URL}/periode`,
