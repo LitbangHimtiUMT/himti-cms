@@ -30,12 +30,20 @@ export const departmentOptions: { value: Department | ""; label: string }[] = [
 // signs only for PSDM, or when department is still unset. Unset is
 // treated as a possible PSDM signer so a missing signature is flagged
 // instead of silently skipped.
+//
+// Both values arrive as plain strings from the API and the forms, and
+// jabatan arrives in TWO shapes: the list API returns it with spaces
+// ("KETUA HIMPUNAN") while the detail API and the forms use underscores
+// ("KETUA_HIMPUNAN"). Normalize before comparing so the check works
+// for both.
 export function isStrukturalSigner(
-  jabatan: Jabatan | "",
-  department: Department | "" | null | undefined
+  jabatan: string,
+  department: string | null | undefined
 ): boolean {
-  if (jabatan === "KETUA_HIMPUNAN") return true;
-  if (jabatan === "KETUA_DEPARTMENT") return !department || department === "PSDM";
+  const normalized = jabatan.replace(/ /g, "_");
+  if (normalized === "KETUA_HIMPUNAN") return true;
+  if (normalized === "KETUA_DEPARTMENT")
+    return !department || department === "PSDM";
   return false;
 }
 
