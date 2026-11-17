@@ -3,6 +3,7 @@ import { strukturalService } from "@core/services/struktural";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isStrukturalSigner } from "../model/struktural";
 
 interface Options {
   page?: number;
@@ -34,6 +35,26 @@ export function useStruktural(options?: Options) {
   return query;
 }
 
+// The submitted FormData carries the whole answer: jabatan and
+// department say whether the row signs certificates, and
+// signatureImage is a File when a new signature was uploaded, the
+// stored URL when unchanged, or "" when the row has none.
+const isSignerWithoutSignature = (data: FormData): boolean => {
+  const jabatan = data.get("jabatan");
+  const department = data.get("department");
+  const signatureImage = data.get("signatureImage");
+  const hasSignature =
+    signatureImage instanceof File ||
+    (typeof signatureImage === "string" && signatureImage.length > 0);
+  return (
+    !hasSignature &&
+    isStrukturalSigner(
+      typeof jabatan === "string" ? jabatan : "",
+      typeof department === "string" ? department : null
+    )
+  );
+};
+
 export function useStrukturalCreation() {
 
   const queryClient = useQueryClient();
@@ -64,13 +85,28 @@ export function useStrukturalCreation() {
           });
       }
     },
-    onSuccess: (res) => {
-      toast.error(res.message, {
+    onSuccess: (res, variables) => {
+      toast.success(res.message, {
         position: "top-right",
         autoClose: 3000,
         pauseOnHover: true,
         theme: "dark",
       });
+      if (
+        (variables.type === "create" || variables.type === "update") &&
+        variables.data &&
+        isSignerWithoutSignature(variables.data)
+      ) {
+        toast.warn(
+          "TTD belum diupload — sertifikat akan terbit tanpa gambar tanda tangan.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+            pauseOnHover: true,
+            theme: "dark",
+          }
+        );
+      }
       navigate("/admin/struktural");
 
       queryClient.removeQueries({ queryKey: ["strukturals"] });

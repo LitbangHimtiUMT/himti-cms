@@ -93,6 +93,7 @@ const EditProdiStructuralView: React.FC = () => {
       type: "update",
       data: formData,
       id: memberDetail?.data?.id,
+      hasExistingSignature: !!memberDetail?.data?.signatureImage,
     });
   };
 

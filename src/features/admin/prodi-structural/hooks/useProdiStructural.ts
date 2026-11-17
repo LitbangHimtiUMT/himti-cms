@@ -3,11 +3,16 @@ import { prodiStructuralService } from "@core/services/prodiStructural";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { isProdiStructuralSigner } from "../model/prodiStructural";
 
 interface ProdiStructuralCreation {
   type: "create" | "update" | "delete";
   data?: FormData;
   id?: string;
+  // The form only sends signatureImage when a new file is chosen, so
+  // an update without a new file carries no trace of the stored
+  // signature: the edit form passes this from the loaded detail.
+  hasExistingSignature?: boolean;
 }
 
 export function useProdiStructural() {
@@ -27,6 +32,24 @@ export function useProdiStructuralById() {
   });
   return query;
 }
+
+// Only the Kaprodi row signs certificates. A signature counts when a
+// new file was uploaded in this save, or one was already stored.
+const isSignerWithoutSignature = (
+  data: FormData | undefined,
+  hasExistingSignature: boolean | undefined
+): boolean => {
+  if (!data) {
+    return false;
+  }
+  const role = data.get("role");
+  const signatureImage = data.get("signatureImage");
+  return (
+    isProdiStructuralSigner(typeof role === "string" ? role : "") &&
+    !(signatureImage instanceof File) &&
+    !hasExistingSignature
+  );
+};
 
 export function useProdiStructuralCreation() {
   const queryClient = useQueryClient();
@@ -58,6 +81,20 @@ export function useProdiStructuralCreation() {
         pauseOnHover: true,
         theme: "dark",
       });
+      if (
+        (variables.type === "create" || variables.type === "update") &&
+        isSignerWithoutSignature(variables.data, variables.hasExistingSignature)
+      ) {
+        toast.warn(
+          "TTD belum diupload — sertifikat akan terbit tanpa gambar tanda tangan.",
+          {
+            position: "top-right",
+            autoClose: 3000,
+            pauseOnHover: true,
+            theme: "dark",
+          }
+        );
+      }
       if (variables.type === "create" || variables.type === "update") {
         navigate("/admin/prodi-structural");
       }
