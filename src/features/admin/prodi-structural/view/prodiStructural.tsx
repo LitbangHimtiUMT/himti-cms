@@ -8,9 +8,10 @@ import {
   TableBody,
   TableHead,
 } from "@features/_global/components/Table";
-import { Typography } from "@material-tailwind/react";
+import { Typography, Chip } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { useProdiStructural, useProdiStructuralCreation } from "../hooks/useProdiStructural";
+import { isProdiStructuralSigner } from "../model/prodiStructural";
 
 const ProdiStructuralView: React.FC = () => {
   const { data: prodiData, isLoading } = useProdiStructural();
@@ -72,9 +73,19 @@ const ProdiStructuralView: React.FC = () => {
                       </Typography>
                     </td>
                     <td className="py-3 px-5">
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {item.role}
-                      </Typography>
+                      <div className="flex flex-col gap-1">
+                        <Typography className="text-xs font-semibold text-blue-gray-600">
+                          {item.role}
+                        </Typography>
+                        {isProdiStructuralSigner(item.role) && !item.signatureImage && (
+                          <Chip
+                            variant="gradient"
+                            color="red"
+                            value="TTD belum diupload"
+                            className="py-0.5 px-2 text-[11px] font-medium w-fit"
+                          />
+                        )}
+                      </div>
                     </td>
                     <td className="py-3 px-5">
                       <Typography className="text-xs text-blue-gray-600 max-w-xs truncate">
