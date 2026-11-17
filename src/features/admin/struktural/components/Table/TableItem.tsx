@@ -1,13 +1,19 @@
 import { AnggotaModel } from "@core/model/anggota";
-import { Typography } from "@material-tailwind/react";
+import { Chip, Typography } from "@material-tailwind/react";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Jabatan } from "../../model/struktural";
+import {
+  Department,
+  Jabatan,
+  isStrukturalSigner,
+} from "../../model/struktural";
 
 interface ItemAcaraProps {
   show?: boolean;
   id: string;
   jabatan: Jabatan;
+  department?: Department | null;
+  signatureImage?: string | null;
   image: string;
   memberId: string;
   isActive: boolean;
@@ -19,6 +25,8 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
   show,
   Member,
   jabatan,
+  department,
+  signatureImage,
   image,
   handleDelete,
   id,
@@ -49,9 +57,19 @@ export const TableItem: React.FC<ItemAcaraProps> = ({
         </Typography>
       </td>
       <td className="py-3 px-5">
-        <Typography className="text-xs font-semibold text-blue-gray-600">
-          {jabatan}
-        </Typography>
+        <div className="flex flex-col gap-1">
+          <Typography className="text-xs font-semibold text-blue-gray-600">
+            {jabatan}
+          </Typography>
+          {isStrukturalSigner(jabatan, department) && !signatureImage && (
+            <Chip
+              variant="gradient"
+              color="red"
+              value="TTD belum diupload"
+              className="py-0.5 px-2 text-[11px] font-medium w-fit"
+            />
+          )}
+        </div>
       </td>
       <td className="py-3 px-5">
         <div className="flex items-center gap-2">

@@ -1,6 +1,12 @@
 import { Button } from "@material-tailwind/react";
 import React, { useEffect, useRef, useState } from "react";
-import { Jabatan, StrukturalDTO } from "../model/struktural";
+import {
+  Department,
+  Jabatan,
+  StrukturalDTO,
+  departmentOptions,
+  isStrukturalSigner,
+} from "../model/struktural";
 import DefaultImage from "@core/assets/default-image.png";
 import { PageLayout } from "@features/_global/components/PageLayout";
 import { useNavigate, useParams } from "react-router-dom";
@@ -16,7 +22,9 @@ import { useAnggota } from "@features/admin/anggota/hooks/useAnggota";
 const InitialValue: StrukturalDTO = {
   memberId: "",
   jabatan: "",
+  department: "",
   image: "",
+  signatureImage: "",
 };
 
 interface ImageFile extends File {
@@ -47,12 +55,15 @@ const FormEditStruktural: React.FC = () => {
 
   useEffect(() => {
     if (strukturalById && strukturalById.data) {
-      const { memberId, jabatan, image } = strukturalById.data;
+      const { memberId, jabatan, department, image, signatureImage } =
+        strukturalById.data;
       // const categoryId = category ? category.id : "";
       setStrukturalBody({
         memberId,
         jabatan,
+        department: department ?? "",
         image,
+        signatureImage: signatureImage ?? "",
       });
     }
   }, [strukturalById]);
@@ -64,11 +75,23 @@ const FormEditStruktural: React.FC = () => {
   const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string>(
     DefaultImage
   );
+  const [signatureImageFile, setSignatureImageFile] = useState<
+    ImageFile | ArrayBuffer | string
+  >(DefaultImage);
   const [errors, setErrors] = useState<
     Partial<Record<keyof StrukturalDTO, string>>
   >({});
 
   const navigate = useNavigate();
+
+  const isSigner = isStrukturalSigner(
+    strukturalBody.jabatan as Jabatan | "",
+    strukturalBody.department as Department | ""
+  );
+  const signaturePreview =
+    signatureImageFile === DefaultImage
+      ? strukturalBody.signatureImage
+      : signatureImageFile;
 
   const validate = () => {
     const newErrors: Partial<Record<keyof StrukturalDTO, string>> = {};
@@ -95,6 +118,9 @@ const FormEditStruktural: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     const formData = new FormData();
+    // department (short code, "" when unset) and signatureImage (File, or
+    // the current URL/"" when unchanged) ride along through this loop
+    // exactly like image; see the model for the field contract.
     Object.entries(strukturalBody).forEach(([key, value]) => {
       formData.append(key, value as unknown as string);
     });
@@ -134,6 +160,46 @@ const FormEditStruktural: React.FC = () => {
     }
   };
 
+  // Unlike the profile photo, a signature is NOT cropped: the square
+  // 1080x1080 crop would cut it. The file is validated and sent as-is.
+  const onSignatureChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const file = e.target.files?.[0];
+    if (file && file.type.startsWith("image/")) {
+      const validExtensions = ["image/jpeg", "image/jpg", "image/png"];
+      if (!validExtensions.includes(file.type)) {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          signatureImage:
+            "Invalid image format. Please upload jpg, jpeg, or png files.",
+        }));
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setSignatureImageFile(reader.result as ArrayBuffer);
+        setStrukturalBody((prev) => ({ ...prev, signatureImage: file }));
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          signatureImage: undefined,
+        }));
+      };
+      reader.onerror = () => {
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          signatureImage: "Failed to read image file.",
+        }));
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        signatureImage: "Please upload a valid image file.",
+      }));
+    }
+  };
+
   const getCropData = () => {
     if (typeof cropperRef.current?.cropper !== "undefined") {
       const croppedCanvas = cropperRef.current.cropper.getCroppedCanvas({
@@ -151,11 +217,18 @@ const FormEditStruktural: React.FC = () => {
   const handleReset = () => {
     setStrukturalBody(InitialValue);
     setImageFile(DefaultImage);
+    setSignatureImageFile(DefaultImage);
     const fileInput = document.getElementById(
       "image-input"
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
+    }
+    const signatureFileInput = document.getElementById(
+      "signature-image-input"
+    ) as HTMLInputElement;
+    if (signatureFileInput) {
+      signatureFileInput.value = "";
     }
     setErrors({});
   };
@@ -262,6 +335,21 @@ const FormEditStruktural: React.FC = () => {
               }))}
             />
           </div>
+          <div className="mb-4">
+            <InputGroup
+              disabled={mutation.isPending}
+              type="select"
+              label="Department"
+              value={strukturalBody.department as string}
+              onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+                setStrukturalBody({
+                  ...strukturalBody,
+                  department: e,
+                });
+              }}
+              options={departmentOptions}
+            />
+          </div>
 
           <div className="flex justify-start items-center my-6">
             <img
@@ -291,6 +379,29 @@ const FormEditStruktural: React.FC = () => {
               getCropData={getCropData}
               hanldeCancelCrop={handleCancelCrop}
             />
+          </div>
+          {signaturePreview ? (
+            <div className="flex justify-start items-center my-6">
+              <img
+                src={signaturePreview as string}
+                alt="Signature Image"
+                className="max-w-[200px] h-[200px] max-h-[200px] rounded-md object-contain bg-white border border-solid border-black"
+              />
+            </div>
+          ) : null}
+          <div className="mb-4">
+            <InputGroup
+              disabled={mutation.isPending}
+              id="signature-image-input"
+              type="file"
+              label="Signature Image"
+              variant="outlined"
+              error={errors.signatureImage}
+              onChange={onSignatureChange}
+            />
+            {isSigner && !strukturalBody.signatureImage && (
+              <p className="text-red-500 text-xs mt-1">TTD belum diupload</p>
+            )}
           </div>
           <div className="flex justify-center items-center gap-5">
             <Button

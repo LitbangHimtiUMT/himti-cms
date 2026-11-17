@@ -6,12 +6,20 @@ import { Button } from "@material-tailwind/react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useStrukturalCreation } from "../hooks/useStruktural";
-import { Jabatan, StrukturalDTO } from "../model/struktural";
+import {
+  Department,
+  Jabatan,
+  StrukturalDTO,
+  departmentOptions,
+  isStrukturalSigner,
+} from "../model/struktural";
 
 const InitialValue: StrukturalDTO = {
   memberId: "",
   jabatan: "",
+  department: "",
   image: "",
+  signatureImage: "",
 };
 
 interface ImageFile extends File {
@@ -42,11 +50,20 @@ const FormAddAcara: React.FC = () => {
   const [imageFile, setImageFile] = useState<ImageFile | ArrayBuffer | string | null>(
     DefaultImage
   );
+  // No placeholder: the preview only appears once a file is chosen.
+  const [signatureImageFile, setSignatureImageFile] = useState<
+    ImageFile | ArrayBuffer | string | null
+  >(null);
   const [errors, setErrors] = useState<
     Partial<Record<keyof StrukturalDTO, string>>
   >({});
 
   const navigate = useNavigate();
+
+  const isSigner = isStrukturalSigner(
+    strukturalBody.jabatan as Jabatan | "",
+    strukturalBody.department as Department | ""
+  );
 
   const validate = () => {
     const newErrors: Partial<Record<keyof StrukturalDTO, string>> = {};
@@ -73,6 +90,9 @@ const FormAddAcara: React.FC = () => {
     e.preventDefault();
     if (!validate()) return;
     const formData = new FormData();
+    // department (short code, "" when unset) and signatureImage (File, or
+    // the current URL/"" when unchanged) ride along through this loop
+    // exactly like image; see the model for the field contract.
     Object.entries(strukturalBody).forEach(([key, value]) => {
       formData.append(key, value as unknown as string);
     });
@@ -98,15 +118,37 @@ const FormAddAcara: React.FC = () => {
     }
   };
 
+  const handleSignatureImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e?.target?.files?.[0];
+    if (file) {
+      setStrukturalBody((prev) => ({
+        ...prev,
+        signatureImage: file as File,
+      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSignatureImageFile(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
 
   const handleReset = () => {
     setStrukturalBody(InitialValue);
     setImageFile(DefaultImage);
+    setSignatureImageFile(null);
     const fileInput = document.getElementById(
       "image-input"
     ) as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
+    }
+    const signatureFileInput = document.getElementById(
+      "signature-image-input"
+    ) as HTMLInputElement;
+    if (signatureFileInput) {
+      signatureFileInput.value = "";
     }
     setErrors({});
   };
@@ -194,6 +236,21 @@ const FormAddAcara: React.FC = () => {
             }))}
           />
         </div>
+        <div className="mb-4">
+          <InputGroup
+            disabled={mutation.isPending}
+            type="select"
+            label="Department"
+            value={strukturalBody.department as string}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
+              setStrukturalBody({
+                ...strukturalBody,
+                department: e,
+              });
+            }}
+            options={departmentOptions}
+          />
+        </div>
 
         <div className="flex justify-start items-center my-6">
           <img
@@ -210,6 +267,31 @@ const FormAddAcara: React.FC = () => {
               onChange={handleImageChange}
             />
           </div>
+        </div>
+        {signatureImageFile && (
+          <div className="flex justify-start items-center my-6">
+            <img
+              src={signatureImageFile as string}
+              alt="Signature Image"
+              className="max-w-[200px] h-[200px] max-h-[200px] rounded-md object-contain bg-white border border-solid border-black"
+            />
+          </div>
+        )}
+        <div className='mb-4'>
+          <p className="block text-xs font-semibold text-gray-600 mb-1">
+            Signature Image (optional)
+          </p>
+          <div className='flex items-center w-full'>
+            <input
+              id='signature-image-input'
+              type='file'
+              className='file-input w-full border border-solid border-black'
+              onChange={handleSignatureImageChange}
+            />
+          </div>
+          {isSigner && !strukturalBody.signatureImage && (
+            <p className="text-red-500 text-xs mt-1">TTD belum diupload</p>
+          )}
         </div>
         <div className="flex justify-center items-center gap-5">
           <Button
