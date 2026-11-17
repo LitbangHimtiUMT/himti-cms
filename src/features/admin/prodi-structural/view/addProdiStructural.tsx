@@ -6,7 +6,10 @@ import InputGroup from "@features/_global/components/Input/InputGroup";
 import { Button } from "@material-tailwind/react";
 import DefaultImage from "@core/assets/default-image.png";
 import { useProdiStructuralCreation } from "../hooks/useProdiStructural";
-import { ProdiStructuralDTO } from "../model/prodiStructural";
+import {
+  ProdiStructuralDTO,
+  isProdiStructuralSigner,
+} from "../model/prodiStructural";
 
 const InitialValue: ProdiStructuralDTO = {
   name: "",
@@ -14,6 +17,7 @@ const InitialValue: ProdiStructuralDTO = {
   bio: "",
   sequence: 1,
   image: "",
+  signatureImage: "",
 };
 
 const AddProdiStructuralView: React.FC = () => {
@@ -22,6 +26,8 @@ const AddProdiStructuralView: React.FC = () => {
 
   const [formBody, setFormBody] = useState<ProdiStructuralDTO>({ ...InitialValue });
   const [imageFile, setImageFile] = useState<string | ArrayBuffer | null>(DefaultImage);
+  // No placeholder: the preview only appears once a file is chosen.
+  const [signatureImageFile, setSignatureImageFile] = useState<string | ArrayBuffer | null>(null);
   const [errors, setErrors] = useState<Partial<Record<keyof ProdiStructuralDTO, string>>>({});
 
   const validate = () => {
@@ -58,8 +64,12 @@ const AddProdiStructuralView: React.FC = () => {
     formData.append("role", formBody.role);
     formData.append("bio", formBody.bio);
     formData.append("sequence", String(formBody.sequence));
+    // Only newly chosen files are sent; otherwise the API keeps the stored values.
     if (formBody.image instanceof File) {
       formData.append("image", formBody.image);
+    }
+    if (formBody.signatureImage instanceof File) {
+      formData.append("signatureImage", formBody.signatureImage);
     }
 
     await mutation.mutateAsync({
@@ -80,12 +90,29 @@ const AddProdiStructuralView: React.FC = () => {
     }
   };
 
+  const handleSignatureImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormBody((prev) => ({ ...prev, signatureImage: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSignatureImageFile(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleReset = () => {
     setFormBody(InitialValue);
     setImageFile(DefaultImage);
+    setSignatureImageFile(null);
     const fileInput = document.getElementById("image-input") as HTMLInputElement;
     if (fileInput) {
       fileInput.value = "";
+    }
+    const signatureFileInput = document.getElementById("signature-image-input") as HTMLInputElement;
+    if (signatureFileInput) {
+      signatureFileInput.value = "";
     }
     setErrors({});
   };
@@ -169,6 +196,32 @@ const AddProdiStructuralView: React.FC = () => {
               />
               {errors.image && (
                 <p className="text-red-500 text-xs mt-1">{errors.image}</p>
+              )}
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="block text-xs font-semibold text-gray-600 mb-1">
+                Signature Image (optional)
+              </label>
+              {signatureImageFile && (
+                <div className="flex justify-start items-center my-2">
+                  <img
+                    src={signatureImageFile as string}
+                    alt="Signature Preview"
+                    className="w-[150px] h-[150px] rounded-md object-contain bg-white border shadow-sm"
+                  />
+                </div>
+              )}
+              <input
+                id="signature-image-input"
+                type="file"
+                accept="image/*"
+                className="file-input w-full border border-solid border-gray-300 rounded-lg p-1 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                onChange={handleSignatureImageChange}
+                disabled={mutation.isPending}
+              />
+              {isProdiStructuralSigner(formBody.role) && !formBody.signatureImage && (
+                <p className="text-red-500 text-xs mt-1">TTD belum diupload</p>
               )}
             </div>
 

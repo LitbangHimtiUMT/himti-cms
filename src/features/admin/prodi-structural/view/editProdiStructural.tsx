@@ -6,7 +6,10 @@ import InputGroup from "@features/_global/components/Input/InputGroup";
 import { Button } from "@material-tailwind/react";
 import DefaultImage from "@core/assets/default-image.png";
 import { useProdiStructuralById, useProdiStructuralCreation } from "../hooks/useProdiStructural";
-import { ProdiStructuralDTO } from "../model/prodiStructural";
+import {
+  ProdiStructuralDTO,
+  isProdiStructuralSigner,
+} from "../model/prodiStructural";
 
 const EditProdiStructuralView: React.FC = () => {
   const navigate = useNavigate();
@@ -19,23 +22,31 @@ const EditProdiStructuralView: React.FC = () => {
     bio: "",
     sequence: 1,
     image: "",
+    signatureImage: "",
   });
   const [imageFile, setImageFile] = useState<string | ArrayBuffer | null>(DefaultImage);
+  // No placeholder: the preview only appears once a file is chosen or a
+  // stored signature image is loaded.
+  const [signatureImageFile, setSignatureImageFile] = useState<string | ArrayBuffer | null>(null);
   const [errors, setErrors] = useState<Partial<Record<keyof ProdiStructuralDTO, string>>>({});
 
   // Populate data when loaded
   useEffect(() => {
     if (memberDetail?.data) {
-      const { name, role, bio, sequence, image } = memberDetail.data;
+      const { name, role, bio, sequence, image, signatureImage } = memberDetail.data;
       setFormBody({
         name: name || "",
         role: role || "",
         bio: bio || "",
         sequence: sequence || 1,
         image: "", // Don't set file, keep empty unless user uploads a new one
+        signatureImage: "", // Don't set file, keep empty unless user uploads a new one
       });
       if (image) {
         setImageFile(image);
+      }
+      if (signatureImage) {
+        setSignatureImageFile(signatureImage);
       }
     }
   }, [memberDetail]);
@@ -70,8 +81,12 @@ const EditProdiStructuralView: React.FC = () => {
     formData.append("role", formBody.role);
     formData.append("bio", formBody.bio);
     formData.append("sequence", String(formBody.sequence));
+    // Only newly chosen files are sent; otherwise the API keeps the stored values.
     if (formBody.image instanceof File) {
       formData.append("image", formBody.image);
+    }
+    if (formBody.signatureImage instanceof File) {
+      formData.append("signatureImage", formBody.signatureImage);
     }
 
     await mutation.mutateAsync({
@@ -88,6 +103,18 @@ const EditProdiStructuralView: React.FC = () => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setImageFile(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSignatureImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormBody((prev) => ({ ...prev, signatureImage: file }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSignatureImageFile(reader.result);
       };
       reader.readAsDataURL(file);
     }
@@ -173,6 +200,32 @@ const EditProdiStructuralView: React.FC = () => {
                   onChange={handleImageChange}
                   disabled={mutation.isPending}
                 />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="block text-xs font-semibold text-gray-600 mb-1">
+                  Signature Image (leave empty to keep current)
+                </label>
+                {signatureImageFile && (
+                  <div className="flex justify-start items-center my-2">
+                    <img
+                      src={signatureImageFile as string}
+                      alt="Signature Preview"
+                      className="w-[150px] h-[150px] rounded-md object-contain bg-white border shadow-sm"
+                    />
+                  </div>
+                )}
+                <input
+                  id="signature-image-input"
+                  type="file"
+                  accept="image/*"
+                  className="file-input w-full border border-solid border-gray-300 rounded-lg p-1 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                  onChange={handleSignatureImageChange}
+                  disabled={mutation.isPending}
+                />
+                {isProdiStructuralSigner(formBody.role) && !signatureImageFile && (
+                  <p className="text-red-500 text-xs mt-1">TTD belum diupload</p>
+                )}
               </div>
 
               <div className="flex justify-center items-center gap-5 pt-4">
